@@ -1,0 +1,57 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="mySignupLabel" jhiTranslate="lookbrbackendApp.signup.home.createOrEditLabel">Create or edit a Signup</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!signup.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="signup.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.loginType" for="field_loginType">Login Type</label>
+            <select class="form-control" name="loginType" [(ngModel)]="signup.loginType" id="field_loginType" >
+                <option value="FACEBOOK">{{'lookbrbackendApp.LoginType.FACEBOOK' | translate}}</option>
+                <option value="EMAIL">{{'lookbrbackendApp.LoginType.EMAIL' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.email" for="field_email">Email</label>
+            <input type="text" class="form-control" name="email" id="field_email"
+                [(ngModel)]="signup.email" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.profilePhotoUrl" for="field_profilePhotoUrl">Profile Photo Url</label>
+            <input type="text" class="form-control" name="profilePhotoUrl" id="field_profilePhotoUrl"
+                [(ngModel)]="signup.profilePhotoUrl" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.profilePhoto" for="field_profilePhoto">Profile Photo</label>
+            <input type="text" class="form-control" name="profilePhoto" id="field_profilePhoto"
+                [(ngModel)]="signup.profilePhoto" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.username" for="field_username">Username</label>
+            <input type="text" class="form-control" name="username" id="field_username"
+                [(ngModel)]="signup.username" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.signup.password" for="field_password">Password</label>
+            <input type="text" class="form-control" name="password" id="field_password"
+                [(ngModel)]="signup.password" />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

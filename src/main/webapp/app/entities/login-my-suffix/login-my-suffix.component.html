@@ -1,0 +1,62 @@
+<div>
+    <h2>
+        <span jhiTranslate="lookbrbackendApp.login.home.title">Logins</span>
+        <button class="btn btn-primary float-right jh-create-entity create-login-my-suffix" [routerLink]="['/', { outlets: { popup: ['login-my-suffix-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="lookbrbackendApp.login.home.createLabel">
+            Create new Login
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="logins">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.login.loginType">Login Type</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.login.username">Username</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.login.email">Email</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.login.password">Password</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let login of logins ;trackBy: trackId">
+                <td><a [routerLink]="['../login-my-suffix', login.id ]">{{login.id}}</a></td>
+                <td jhiTranslate="{{'lookbrbackendApp.LoginType.' + login.loginType}}">{{login.loginType}}</td>
+                <td>{{login.username}}</td>
+                <td>{{login.email}}</td>
+                <td>{{login.password}}</td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../login-my-suffix', login.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'login-my-suffix/'+ login.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'login-my-suffix/'+ login.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

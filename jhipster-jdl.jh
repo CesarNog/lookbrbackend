@@ -1,0 +1,53 @@
+entity Login {
+	loginType LoginType,
+    username String,
+    email String,
+    password String
+}
+
+entity Signup {
+  loginType LoginType, 
+  email String, 
+  profilePhotoUrl String,
+  profilePhoto String,
+  username String, 
+  email String, 
+  password String
+}
+
+entity Timeline {
+  page Integer
+}
+
+entity Consultants {
+  page Integer
+}
+
+entity Intention {
+  page Integer
+}
+
+entity Look {  
+  userId String,
+  temperature String, 
+  dayTime LocalDate
+}
+
+entity Closet {
+  page Integer
+}
+
+enum LoginType {
+    FACEBOOK, EMAIL
+}
+
+// Set pagination options
+paginate Closet, Timeline with infinite-scroll
+paginate Consultants, Closet with pagination
+
+dto * with mapstruct
+
+// Set service options to all
+service all with serviceImpl
+// Set an angular suffix
+angularSuffix * with mySuffix

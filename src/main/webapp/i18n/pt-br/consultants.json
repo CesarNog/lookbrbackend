@@ -1,0 +1,21 @@
+{
+    "lookbrbackendApp": {
+        "consultants" : {
+            "home": {
+                "title": "Consultants",
+                "createLabel": "Criar novo Consultants",
+                "createOrEditLabel": "Criar ou editar Consultants"
+            },
+            "created": "Um novo Consultants foi criado com o identificador {{ param }}",
+            "updated": "Um Consultants foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Consultants foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Consultants {{ id }}?"
+            },
+            "detail": {
+                "title": "Consultants"
+            },
+            "page": "Page"
+        }
+    }
+}

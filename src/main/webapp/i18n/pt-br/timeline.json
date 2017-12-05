@@ -1,0 +1,21 @@
+{
+    "lookbrbackendApp": {
+        "timeline" : {
+            "home": {
+                "title": "Timelines",
+                "createLabel": "Criar novo Timeline",
+                "createOrEditLabel": "Criar ou editar Timeline"
+            },
+            "created": "Um novo Timeline foi criado com o identificador {{ param }}",
+            "updated": "Um Timeline foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Timeline foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Timeline {{ id }}?"
+            },
+            "detail": {
+                "title": "Timeline"
+            },
+            "page": "Page"
+        }
+    }
+}

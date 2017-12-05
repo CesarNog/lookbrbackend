@@ -1,0 +1,33 @@
+
+<div *ngIf="look">
+    <h2><span jhiTranslate="lookbrbackendApp.look.detail.title">Look</span> {{look.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.look.userId">User Id</span></dt>
+        <dd>
+            <span>{{look.userId}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.look.temperature">Temperature</span></dt>
+        <dd>
+            <span>{{look.temperature}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.look.dayTime">Day Time</span></dt>
+        <dd>
+            <span>{{look.dayTime | date:'mediumDate'}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'look-my-suffix/'+ look.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

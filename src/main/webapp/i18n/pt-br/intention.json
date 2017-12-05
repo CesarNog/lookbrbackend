@@ -1,0 +1,21 @@
+{
+    "lookbrbackendApp": {
+        "intention" : {
+            "home": {
+                "title": "Intentions",
+                "createLabel": "Criar novo Intention",
+                "createOrEditLabel": "Criar ou editar Intention"
+            },
+            "created": "Um novo Intention foi criado com o identificador {{ param }}",
+            "updated": "Um Intention foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Intention foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Intention {{ id }}?"
+            },
+            "detail": {
+                "title": "Intention"
+            },
+            "page": "Page"
+        }
+    }
+}

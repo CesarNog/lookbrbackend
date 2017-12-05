@@ -42,6 +42,13 @@ public class CacheConfiguration {
             cm.createCache(com.lookbr.backend.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(com.lookbr.backend.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             cm.createCache(com.lookbr.backend.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Login.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Signup.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Timeline.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Consultants.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Intention.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Look.class.getName(), jcacheConfiguration);
+            cm.createCache(com.lookbr.backend.domain.Closet.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

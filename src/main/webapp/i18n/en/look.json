@@ -1,0 +1,23 @@
+{
+    "lookbrbackendApp": {
+        "look" : {
+            "home": {
+                "title": "Looks",
+                "createLabel": "Create a new Look",
+                "createOrEditLabel": "Create or edit a Look"
+            },
+            "created": "A new Look is created with identifier {{ param }}",
+            "updated": "A Look is updated with identifier {{ param }}",
+            "deleted": "A Look is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Look {{ id }}?"
+            },
+            "detail": {
+                "title": "Look"
+            },
+            "userId": "User Id",
+            "temperature": "Temperature",
+            "dayTime": "Day Time"
+        }
+    }
+}

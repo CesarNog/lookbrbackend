@@ -1,0 +1,37 @@
+
+<div *ngIf="login">
+    <h2><span jhiTranslate="lookbrbackendApp.login.detail.title">Login</span> {{login.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.login.loginType">Login Type</span></dt>
+        <dd>
+            <span jhiTranslate="{{'lookbrbackendApp.LoginType.' + login.loginType}}">{{login.loginType}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.login.username">Username</span></dt>
+        <dd>
+            <span>{{login.username}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.login.email">Email</span></dt>
+        <dd>
+            <span>{{login.email}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.login.password">Password</span></dt>
+        <dd>
+            <span>{{login.password}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'login-my-suffix/'+ login.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

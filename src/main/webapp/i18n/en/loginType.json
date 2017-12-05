@@ -1,0 +1,9 @@
+{
+    "lookbrbackendApp": {
+        "LoginType" : {
+            "null": "",
+            "FACEBOOK": "FACEBOOK",
+            "EMAIL": "EMAIL"
+        }
+    }
+}

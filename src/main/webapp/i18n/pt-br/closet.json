@@ -1,0 +1,21 @@
+{
+    "lookbrbackendApp": {
+        "closet" : {
+            "home": {
+                "title": "Closets",
+                "createLabel": "Criar novo Closet",
+                "createOrEditLabel": "Criar ou editar Closet"
+            },
+            "created": "Um novo Closet foi criado com o identificador {{ param }}",
+            "updated": "Um Closet foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Closet foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Closet {{ id }}?"
+            },
+            "detail": {
+                "title": "Closet"
+            },
+            "page": "Page"
+        }
+    }
+}
