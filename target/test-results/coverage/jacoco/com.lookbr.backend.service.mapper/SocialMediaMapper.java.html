@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocialMediaMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">SocialMediaMapper.java</span></div><h1>SocialMediaMapper.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.*;
+import com.lookbr.backend.service.dto.SocialMediaDTO;
+
+import org.mapstruct.*;
+
+/**
+ * Mapper for the entity SocialMedia and its DTO SocialMediaDTO.
+ */
+@Mapper(componentModel = &quot;spring&quot;, uses = {ConsultantMapper.class})
+public interface SocialMediaMapper extends EntityMapper&lt;SocialMediaDTO, SocialMedia&gt; {
+
+    @Mapping(source = &quot;consultant.id&quot;, target = &quot;consultantId&quot;)
+    SocialMediaDTO toDto(SocialMedia socialMedia); 
+
+    @Mapping(source = &quot;consultantId&quot;, target = &quot;consultant&quot;)
+    SocialMedia toEntity(SocialMediaDTO socialMediaDTO);
+
+    default SocialMedia fromId(Long id) {
+<span class="nc bnc" id="L21" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L22">            return null;</span>
+        }
+<span class="nc" id="L24">        SocialMedia socialMedia = new SocialMedia();</span>
+<span class="nc" id="L25">        socialMedia.setId(id);</span>
+<span class="nc" id="L26">        return socialMedia;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

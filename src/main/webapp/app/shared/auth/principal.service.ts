@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
+import { JhiTrackerService } from '../tracker/tracker.service'; // Barrel doesn't work here. No idea why!
 
 @Injectable()
 export class Principal {
@@ -10,7 +11,8 @@ export class Principal {
     private authenticationState = new Subject<any>();
 
     constructor(
-        private account: AccountService
+        private account: AccountService,
+        private trackerService: JhiTrackerService
     ) {}
 
     authenticate(identity) {
@@ -65,6 +67,7 @@ export class Principal {
             if (account) {
                 this.userIdentity = account;
                 this.authenticated = true;
+                this.trackerService.connect();
             } else {
                 this.userIdentity = null;
                 this.authenticated = false;
@@ -72,6 +75,9 @@ export class Principal {
             this.authenticationState.next(this.userIdentity);
             return this.userIdentity;
         }).catch((err) => {
+            if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
+                this.trackerService.disconnect();
+            }
             this.userIdentity = null;
             this.authenticated = false;
             this.authenticationState.next(this.userIdentity);

@@ -2,6 +2,8 @@ package com.lookbr.backend.service.dto;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 import com.lookbr.backend.domain.enumeration.LoginType;
 
@@ -14,11 +16,9 @@ public class LoginDTO implements Serializable {
 
     private LoginType loginType;
 
-    private String username;
+    private String token;
 
-    private String email;
-
-    private String password;
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -36,28 +36,20 @@ public class LoginDTO implements Serializable {
         this.loginType = loginType;
     }
 
-    public String getUsername() {
-        return username;
+    public String getToken() {
+        return token;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getEmail() {
-        return email;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -86,9 +78,7 @@ public class LoginDTO implements Serializable {
         return "LoginDTO{" +
             "id=" + getId() +
             ", loginType='" + getLoginType() + "'" +
-            ", username='" + getUsername() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", password='" + getPassword() + "'" +
+            ", token='" + getToken() + "'" +
             "}";
     }
 }

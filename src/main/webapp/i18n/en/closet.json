@@ -4,7 +4,8 @@
             "home": {
                 "title": "Closets",
                 "createLabel": "Create a new Closet",
-                "createOrEditLabel": "Create or edit a Closet"
+                "createOrEditLabel": "Create or edit a Closet",
+                "search": "Search for Closet"
             },
             "created": "A new Closet is created with identifier {{ param }}",
             "updated": "A Closet is updated with identifier {{ param }}",
@@ -15,7 +16,8 @@
             "detail": {
                 "title": "Closet"
             },
-            "page": "Page"
+            "page": "Page",
+            "look": "Look"
         }
     }
 }

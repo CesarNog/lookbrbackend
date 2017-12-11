@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CommentServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.impl</a> &gt; <span class="el_source">CommentServiceImpl.java</span></div><h1>CommentServiceImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.impl;
+
+import com.lookbr.backend.service.CommentService;
+import com.lookbr.backend.domain.Comment;
+import com.lookbr.backend.repository.CommentRepository;
+import com.lookbr.backend.repository.search.CommentSearchRepository;
+import com.lookbr.backend.service.dto.CommentDTO;
+import com.lookbr.backend.service.mapper.CommentMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * Service Implementation for managing Comment.
+ */
+@Service
+@Transactional
+public class CommentServiceImpl implements CommentService{
+
+<span class="nc" id="L28">    private final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);</span>
+
+    private final CommentRepository commentRepository;
+
+    private final CommentMapper commentMapper;
+
+    private final CommentSearchRepository commentSearchRepository;
+
+<span class="nc" id="L36">    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, CommentSearchRepository commentSearchRepository) {</span>
+<span class="nc" id="L37">        this.commentRepository = commentRepository;</span>
+<span class="nc" id="L38">        this.commentMapper = commentMapper;</span>
+<span class="nc" id="L39">        this.commentSearchRepository = commentSearchRepository;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Save a comment.
+     *
+     * @param commentDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public CommentDTO save(CommentDTO commentDTO) {
+<span class="nc" id="L50">        log.debug(&quot;Request to save Comment : {}&quot;, commentDTO);</span>
+<span class="nc" id="L51">        Comment comment = commentMapper.toEntity(commentDTO);</span>
+<span class="nc" id="L52">        comment = commentRepository.save(comment);</span>
+<span class="nc" id="L53">        CommentDTO result = commentMapper.toDto(comment);</span>
+<span class="nc" id="L54">        commentSearchRepository.save(comment);</span>
+<span class="nc" id="L55">        return result;</span>
+    }
+
+    /**
+     * Get all the comments.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CommentDTO&gt; findAll() {
+<span class="nc" id="L66">        log.debug(&quot;Request to get all Comments&quot;);</span>
+<span class="nc" id="L67">        return commentRepository.findAll().stream()</span>
+<span class="nc" id="L68">            .map(commentMapper::toDto)</span>
+<span class="nc" id="L69">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+    /**
+     * Get one comment by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public CommentDTO findOne(Long id) {
+<span class="nc" id="L81">        log.debug(&quot;Request to get Comment : {}&quot;, id);</span>
+<span class="nc" id="L82">        Comment comment = commentRepository.findOne(id);</span>
+<span class="nc" id="L83">        return commentMapper.toDto(comment);</span>
+    }
+
+    /**
+     * Delete the comment by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L93">        log.debug(&quot;Request to delete Comment : {}&quot;, id);</span>
+<span class="nc" id="L94">        commentRepository.delete(id);</span>
+<span class="nc" id="L95">        commentSearchRepository.delete(id);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Search for the comment corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;CommentDTO&gt; search(String query) {
+<span class="nc" id="L107">        log.debug(&quot;Request to search Comments for query {}&quot;, query);</span>
+<span class="nc" id="L108">        return StreamSupport</span>
+<span class="nc" id="L109">            .stream(commentSearchRepository.search(queryStringQuery(query)).spliterator(), false)</span>
+<span class="nc" id="L110">            .map(commentMapper::toDto)</span>
+<span class="nc" id="L111">            .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

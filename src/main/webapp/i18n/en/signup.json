@@ -4,7 +4,8 @@
             "home": {
                 "title": "Signups",
                 "createLabel": "Create a new Signup",
-                "createOrEditLabel": "Create or edit a Signup"
+                "createOrEditLabel": "Create or edit a Signup",
+                "search": "Search for Signup"
             },
             "created": "A new Signup is created with identifier {{ param }}",
             "updated": "A Signup is updated with identifier {{ param }}",
@@ -15,12 +16,13 @@
             "detail": {
                 "title": "Signup"
             },
-            "loginType": "Login Type",
             "email": "Email",
+            "loginType": "Login Type",
+            "password": "Password",
             "profilePhotoUrl": "Profile Photo Url",
             "profilePhoto": "Profile Photo",
             "username": "Username",
-            "password": "Password"
+            "token": "Token"
         }
     }
 }

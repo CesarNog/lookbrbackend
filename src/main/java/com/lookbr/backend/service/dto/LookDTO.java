@@ -3,6 +3,8 @@ package com.lookbr.backend.service.dto;
 
 import java.time.LocalDate;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -17,6 +19,12 @@ public class LookDTO implements Serializable {
     private String temperature;
 
     private LocalDate dayTime;
+
+    private Integer pictureIndex;
+
+    private String url;
+
+    private Long closetId;
 
     public Long getId() {
         return id;
@@ -50,6 +58,30 @@ public class LookDTO implements Serializable {
         this.dayTime = dayTime;
     }
 
+    public Integer getPictureIndex() {
+        return pictureIndex;
+    }
+
+    public void setPictureIndex(Integer pictureIndex) {
+        this.pictureIndex = pictureIndex;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Long getClosetId() {
+        return closetId;
+    }
+
+    public void setClosetId(Long closetId) {
+        this.closetId = closetId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,6 +110,8 @@ public class LookDTO implements Serializable {
             ", userId='" + getUserId() + "'" +
             ", temperature='" + getTemperature() + "'" +
             ", dayTime='" + getDayTime() + "'" +
+            ", pictureIndex=" + getPictureIndex() +
+            ", url='" + getUrl() + "'" +
             "}";
     }
 }

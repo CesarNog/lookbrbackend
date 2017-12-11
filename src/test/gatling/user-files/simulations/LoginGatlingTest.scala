@@ -68,7 +68,7 @@ class LoginGatlingTest extends Simulation {
             .exec(http("Create new login")
             .post("/api/logins")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "loginType":null, "username":"SAMPLE_TEXT", "email":"SAMPLE_TEXT", "password":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "loginType":null, "token":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_login_url"))).exitHereIfFailed
             .pause(10)

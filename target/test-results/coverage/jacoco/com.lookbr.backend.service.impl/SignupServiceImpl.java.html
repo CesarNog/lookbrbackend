@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.impl</a> &gt; <span class="el_source">SignupServiceImpl.java</span></div><h1>SignupServiceImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.impl;
+
+import com.lookbr.backend.service.SignupService;
+import com.lookbr.backend.domain.Signup;
+import com.lookbr.backend.repository.SignupRepository;
+import com.lookbr.backend.repository.search.SignupSearchRepository;
+import com.lookbr.backend.service.dto.SignupDTO;
+import com.lookbr.backend.service.mapper.SignupMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * Service Implementation for managing Signup.
+ */
+@Service
+@Transactional
+public class SignupServiceImpl implements SignupService{
+
+<span class="nc" id="L28">    private final Logger log = LoggerFactory.getLogger(SignupServiceImpl.class);</span>
+
+    private final SignupRepository signupRepository;
+
+    private final SignupMapper signupMapper;
+
+    private final SignupSearchRepository signupSearchRepository;
+
+<span class="nc" id="L36">    public SignupServiceImpl(SignupRepository signupRepository, SignupMapper signupMapper, SignupSearchRepository signupSearchRepository) {</span>
+<span class="nc" id="L37">        this.signupRepository = signupRepository;</span>
+<span class="nc" id="L38">        this.signupMapper = signupMapper;</span>
+<span class="nc" id="L39">        this.signupSearchRepository = signupSearchRepository;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Save a signup.
+     *
+     * @param signupDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public SignupDTO save(SignupDTO signupDTO) {
+<span class="nc" id="L50">        log.debug(&quot;Request to save Signup : {}&quot;, signupDTO);</span>
+<span class="nc" id="L51">        Signup signup = signupMapper.toEntity(signupDTO);</span>
+<span class="nc" id="L52">        signup = signupRepository.save(signup);</span>
+<span class="nc" id="L53">        SignupDTO result = signupMapper.toDto(signup);</span>
+<span class="nc" id="L54">        signupSearchRepository.save(signup);</span>
+<span class="nc" id="L55">        return result;</span>
+    }
+
+    /**
+     * Get all the signups.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;SignupDTO&gt; findAll() {
+<span class="nc" id="L66">        log.debug(&quot;Request to get all Signups&quot;);</span>
+<span class="nc" id="L67">        return signupRepository.findAll().stream()</span>
+<span class="nc" id="L68">            .map(signupMapper::toDto)</span>
+<span class="nc" id="L69">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+    /**
+     * Get one signup by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public SignupDTO findOne(Long id) {
+<span class="nc" id="L81">        log.debug(&quot;Request to get Signup : {}&quot;, id);</span>
+<span class="nc" id="L82">        Signup signup = signupRepository.findOne(id);</span>
+<span class="nc" id="L83">        return signupMapper.toDto(signup);</span>
+    }
+
+    /**
+     * Delete the signup by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L93">        log.debug(&quot;Request to delete Signup : {}&quot;, id);</span>
+<span class="nc" id="L94">        signupRepository.delete(id);</span>
+<span class="nc" id="L95">        signupSearchRepository.delete(id);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Search for the signup corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;SignupDTO&gt; search(String query) {
+<span class="nc" id="L107">        log.debug(&quot;Request to search Signups for query {}&quot;, query);</span>
+<span class="nc" id="L108">        return StreamSupport</span>
+<span class="nc" id="L109">            .stream(signupSearchRepository.search(queryStringQuery(query)).spliterator(), false)</span>
+<span class="nc" id="L110">            .map(signupMapper::toDto)</span>
+<span class="nc" id="L111">            .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

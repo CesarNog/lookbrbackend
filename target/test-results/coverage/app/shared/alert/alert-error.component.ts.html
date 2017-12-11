@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/shared/alert/alert-error.component.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/shared/alert/</a> alert-error.component.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">18.18% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>10/55</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">20% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/5</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">16% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>8/50</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component, OnDestroy } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+&nbsp;
+@Component({
+    selector: 'jhi-alert-error',
+    template: `
+        &lt;div class="alerts" role="alert"&gt;
+            &lt;div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}"&gt;
+                &lt;ngb-alert *ngIf="alert &amp;&amp; alert.type &amp;&amp; alert.msg" [type]="alert.type" (close)="alert.close(alerts)"&gt;
+                    &lt;pre [innerHTML]="alert.msg"&gt;&lt;/pre&gt;
+                &lt;/ngb-alert&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;`
+})
+export class JhiAlertErrorComponent implements OnDestroy {
+&nbsp;
+    alerts: any[];
+    cleanHttpErrorListener: Subscription;
+    // tslint:disable-next-line: no-unused-variable
+<span class="fstat-no" title="function not covered" >    constructor(private <span class="cstat-no" title="statement not covered" >alertService: JhiAlertService,</span> private <span class="cstat-no" title="statement not covered" >eventManager: JhiEventManager,</span> private <span class="cstat-no" title="statement not covered" >translateService: TranslateService)</span></span> {
+<span class="cstat-no" title="statement not covered" >        this.alerts = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.cleanHttpErrorListener = eventManager.subscribe('lookbrbackendApp.httpError', <span class="fstat-no" title="function not covered" >(response)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            let i;</span>
+<span class="cstat-no" title="statement not covered" >            const httpResponse = response.content;</span>
+<span class="cstat-no" title="statement not covered" >            switch (httpResponse.status) {</span>
+                // connection refused, server not reachable
+                case 0:
+<span class="cstat-no" title="statement not covered" >                    this.addErrorAlert('Server not reachable', 'error.server.not.reachable');</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 400:
+<span class="cstat-no" title="statement not covered" >                    const arr = Array.from(httpResponse.headers._headers);</span>
+<span class="cstat-no" title="statement not covered" >                    const headers = [];</span>
+<span class="cstat-no" title="statement not covered" >                    for (i = 0; i &lt; arr.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params')) {</span>
+<span class="cstat-no" title="statement not covered" >                            headers.push(arr[i][0]);</span>
+                        }
+                    }
+<span class="cstat-no" title="statement not covered" >                    headers.sort();</span>
+<span class="cstat-no" title="statement not covered" >                    let errorHeader = null;</span>
+<span class="cstat-no" title="statement not covered" >                    let entityKey = null;</span>
+<span class="cstat-no" title="statement not covered" >                    if (headers.length &gt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >                        errorHeader = httpResponse.headers.get(headers[0]);</span>
+<span class="cstat-no" title="statement not covered" >                        entityKey = httpResponse.headers.get(headers[1]);</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    if (errorHeader) {</span>
+<span class="cstat-no" title="statement not covered" >                        const entityName = translateService.instant('global.menu.entities.' + entityKey);</span>
+<span class="cstat-no" title="statement not covered" >                        this.addErrorAlert(errorHeader, errorHeader, { entityName });</span>
+                    } else <span class="cstat-no" title="statement not covered" >if (httpResponse.text() !== '' &amp;&amp; httpResponse.json() &amp;&amp; httpResponse.json().fieldErrors) {</span>
+<span class="cstat-no" title="statement not covered" >                        const fieldErrors = httpResponse.json().fieldErrors;</span>
+<span class="cstat-no" title="statement not covered" >                        for (i = 0; i &lt; fieldErrors.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                            const fieldError = fieldErrors[i];</span>
+                            // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+<span class="cstat-no" title="statement not covered" >                            const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');</span>
+<span class="cstat-no" title="statement not covered" >                            const fieldName = translateService.instant('lookbrbackendApp.' +</span>
+                                fieldError.objectName + '.' + convertedField);
+<span class="cstat-no" title="statement not covered" >                            this.addErrorAlert(</span>
+                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
+                        }
+                    } else <span class="cstat-no" title="statement not covered" >if (httpResponse.text() !== '' &amp;&amp; httpResponse.json() &amp;&amp; httpResponse.json().message) {</span>
+<span class="cstat-no" title="statement not covered" >                        this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json().params);</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        this.addErrorAlert(httpResponse.text());</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                case 404:
+<span class="cstat-no" title="statement not covered" >                    this.addErrorAlert('Not found', 'error.url.not.found');</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+&nbsp;
+                default:
+<span class="cstat-no" title="statement not covered" >                    if (httpResponse.text() !== '' &amp;&amp; httpResponse.json() &amp;&amp; httpResponse.json().message) {</span>
+<span class="cstat-no" title="statement not covered" >                        this.addErrorAlert(httpResponse.json().message);</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        this.addErrorAlert(httpResponse.text());</span>
+                    }
+            }
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    ngOnDestroy() {</span>
+<span class="cstat-no" title="statement not covered" >        if (this.cleanHttpErrorListener !== undefined &amp;&amp; this.cleanHttpErrorListener !== null) {</span>
+<span class="cstat-no" title="statement not covered" >            this.eventManager.destroy(this.cleanHttpErrorListener);</span>
+<span class="cstat-no" title="statement not covered" >            this.alerts = [];</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    addErrorAlert(message, key?, data?)</span> {
+<span class="cstat-no" title="statement not covered" >        key = (key &amp;&amp; key !== null) ? key : message;</span>
+<span class="cstat-no" title="statement not covered" >        this.alerts.push(</span>
+            this.alertService.addAlert(
+                {
+                    type: 'danger',
+                    msg: key,
+                    params: data,
+                    timeout: 5000,
+                    toast: this.alertService.isToast(),
+                    scoped: true
+                },
+                this.alerts
+            )
+        );
+    }
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 06 2017 12:39:09 GMT-0200 (-02)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

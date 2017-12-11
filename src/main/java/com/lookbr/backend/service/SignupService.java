@@ -37,4 +37,13 @@ public interface SignupService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    /**
+     * Search for the signup corresponding to the query.
+     *
+     * @param query the query of the search
+     * 
+     * @return the list of entities
+     */
+    List<SignupDTO> search(String query);
 }

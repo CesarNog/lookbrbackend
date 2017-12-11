@@ -1,6 +1,7 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
+import { WindowRef } from './tracker/window.service';
 import {
     LookbrbackendSharedLibsModule,
     JhiLanguageHelper,
@@ -20,10 +21,11 @@ import {
     ],
     providers: [
         JhiLanguageHelper,
+        WindowRef,
         Title,
         {
             provide: LOCALE_ID,
-            useValue: 'en'
+            useValue: 'pt-br'
         },
     ],
     exports: [

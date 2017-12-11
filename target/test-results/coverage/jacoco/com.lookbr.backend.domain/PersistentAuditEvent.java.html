@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersistentAuditEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">PersistentAuditEvent.java</span></div><h1>PersistentAuditEvent.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Persist AuditEvent managed by the Spring Boot actuator.
+ *
+ * @see org.springframework.boot.actuate.audit.AuditEvent
+ */
+@Entity
+@Table(name = &quot;jhi_persistent_audit_event&quot;)
+<span class="fc" id="L17">public class PersistentAuditEvent implements Serializable {</span>
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;event_id&quot;)
+    private Long id;
+
+    @NotNull
+    @Column(nullable = false)
+    private String principal;
+
+    @Column(name = &quot;event_date&quot;)
+    private Instant auditEventDate;
+
+    @Column(name = &quot;event_type&quot;)
+    private String auditEventType;
+
+<span class="fc" id="L34">    @ElementCollection</span>
+    @MapKeyColumn(name = &quot;name&quot;)
+    @Column(name = &quot;value&quot;)
+    @CollectionTable(name = &quot;jhi_persistent_audit_evt_data&quot;, joinColumns=@JoinColumn(name=&quot;event_id&quot;))
+    private Map&lt;String, String&gt; data = new HashMap&lt;&gt;();
+
+    public Long getId() {
+<span class="fc" id="L41">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L45">        this.id = id;</span>
+<span class="nc" id="L46">    }</span>
+
+    public String getPrincipal() {
+<span class="fc" id="L49">        return principal;</span>
+    }
+
+    public void setPrincipal(String principal) {
+<span class="fc" id="L53">        this.principal = principal;</span>
+<span class="fc" id="L54">    }</span>
+
+    public Instant getAuditEventDate() {
+<span class="fc" id="L57">        return auditEventDate;</span>
+    }
+
+    public void setAuditEventDate(Instant auditEventDate) {
+<span class="fc" id="L61">        this.auditEventDate = auditEventDate;</span>
+<span class="fc" id="L62">    }</span>
+
+    public String getAuditEventType() {
+<span class="fc" id="L65">        return auditEventType;</span>
+    }
+
+    public void setAuditEventType(String auditEventType) {
+<span class="fc" id="L69">        this.auditEventType = auditEventType;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Map&lt;String, String&gt; getData() {
+<span class="fc" id="L73">        return data;</span>
+    }
+
+    public void setData(Map&lt;String, String&gt; data) {
+<span class="fc" id="L77">        this.data = data;</span>
+<span class="fc" id="L78">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

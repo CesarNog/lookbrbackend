@@ -3,6 +3,7 @@ package com.lookbr.backend.service.impl;
 import com.lookbr.backend.service.LoginService;
 import com.lookbr.backend.domain.Login;
 import com.lookbr.backend.repository.LoginRepository;
+import com.lookbr.backend.repository.search.LoginSearchRepository;
 import com.lookbr.backend.service.dto.LoginDTO;
 import com.lookbr.backend.service.mapper.LoginMapper;
 import org.slf4j.Logger;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Login.
@@ -27,9 +31,12 @@ public class LoginServiceImpl implements LoginService{
 
     private final LoginMapper loginMapper;
 
-    public LoginServiceImpl(LoginRepository loginRepository, LoginMapper loginMapper) {
+    private final LoginSearchRepository loginSearchRepository;
+
+    public LoginServiceImpl(LoginRepository loginRepository, LoginMapper loginMapper, LoginSearchRepository loginSearchRepository) {
         this.loginRepository = loginRepository;
         this.loginMapper = loginMapper;
+        this.loginSearchRepository = loginSearchRepository;
     }
 
     /**
@@ -43,7 +50,9 @@ public class LoginServiceImpl implements LoginService{
         log.debug("Request to save Login : {}", loginDTO);
         Login login = loginMapper.toEntity(loginDTO);
         login = loginRepository.save(login);
-        return loginMapper.toDto(login);
+        LoginDTO result = loginMapper.toDto(login);
+        loginSearchRepository.save(login);
+        return result;
     }
 
     /**
@@ -83,5 +92,22 @@ public class LoginServiceImpl implements LoginService{
     public void delete(Long id) {
         log.debug("Request to delete Login : {}", id);
         loginRepository.delete(id);
+        loginSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the login corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<LoginDTO> search(String query) {
+        log.debug("Request to search Logins for query {}", query);
+        return StreamSupport
+            .stream(loginSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .map(loginMapper::toDto)
+            .collect(Collectors.toList());
     }
 }

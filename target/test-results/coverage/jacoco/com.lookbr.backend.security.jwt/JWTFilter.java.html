@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JWTFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.security.jwt</a> &gt; <span class="el_source">JWTFilter.java</span></div><h1>JWTFilter.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.security.jwt;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
+/**
+ * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
+ * found.
+ */
+public class JWTFilter extends GenericFilterBean {
+
+    private TokenProvider tokenProvider;
+
+<span class="fc" id="L23">    public JWTFilter(TokenProvider tokenProvider) {</span>
+<span class="fc" id="L24">        this.tokenProvider = tokenProvider;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+        throws IOException, ServletException {
+<span class="fc" id="L30">        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;</span>
+<span class="fc" id="L31">        String jwt = resolveToken(httpServletRequest);</span>
+<span class="fc bfc" id="L32" title="All 4 branches covered.">        if (StringUtils.hasText(jwt) &amp;&amp; this.tokenProvider.validateToken(jwt)) {</span>
+<span class="fc" id="L33">            Authentication authentication = this.tokenProvider.getAuthentication(jwt);</span>
+<span class="fc" id="L34">            SecurityContextHolder.getContext().setAuthentication(authentication);</span>
+        }
+<span class="fc" id="L36">        filterChain.doFilter(servletRequest, servletResponse);</span>
+<span class="fc" id="L37">    }</span>
+
+    private String resolveToken(HttpServletRequest request){
+<span class="fc" id="L40">        String bearerToken = request.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);</span>
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        if (StringUtils.hasText(bearerToken) &amp;&amp; bearerToken.startsWith(&quot;Bearer &quot;)) {</span>
+<span class="fc" id="L42">            return bearerToken.substring(7, bearerToken.length());</span>
+        }
+<span class="fc" id="L44">        String jwt = request.getParameter(JWTConfigurer.AUTHORIZATION_TOKEN);</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        if (StringUtils.hasText(jwt)) {</span>
+<span class="nc" id="L46">            return jwt;</span>
+        }
+<span class="fc" id="L48">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

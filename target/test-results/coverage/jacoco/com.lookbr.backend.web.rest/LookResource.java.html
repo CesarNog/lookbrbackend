@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LookResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">LookResource.java</span></div><h1>LookResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.LookService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.LookDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Look.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class LookResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(LookResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;look&quot;;
+
+    private final LookService lookService;
+
+<span class="nc" id="L36">    public LookResource(LookService lookService) {</span>
+<span class="nc" id="L37">        this.lookService = lookService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /looks : Create a new look.
+     *
+     * @param lookDTO the lookDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new lookDTO, or with status 400 (Bad Request) if the look has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/looks&quot;)
+    @Timed
+    public ResponseEntity&lt;LookDTO&gt; createLook(@RequestBody LookDTO lookDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Look : {}&quot;, lookDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (lookDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new look cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        LookDTO result = lookService.save(lookDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/looks/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /looks : Updates an existing look.
+     *
+     * @param lookDTO the lookDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated lookDTO,
+     * or with status 400 (Bad Request) if the lookDTO is not valid,
+     * or with status 500 (Internal Server Error) if the lookDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/looks&quot;)
+    @Timed
+    public ResponseEntity&lt;LookDTO&gt; updateLook(@RequestBody LookDTO lookDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Look : {}&quot;, lookDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (lookDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createLook(lookDTO);</span>
+        }
+<span class="nc" id="L76">        LookDTO result = lookService.save(lookDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, lookDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /looks : get all the looks.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of looks in body
+     */
+    @GetMapping(&quot;/looks&quot;)
+    @Timed
+    public List&lt;LookDTO&gt; getAllLooks() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Looks&quot;);</span>
+<span class="nc" id="L91">        return lookService.findAll();</span>
+        }
+
+    /**
+     * GET  /looks/:id : get the &quot;id&quot; look.
+     *
+     * @param id the id of the lookDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the lookDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/looks/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;LookDTO&gt; getLook(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Look : {}&quot;, id);</span>
+<span class="nc" id="L104">        LookDTO lookDTO = lookService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(lookDTO));</span>
+    }
+
+    /**
+     * DELETE  /looks/:id : delete the &quot;id&quot; look.
+     *
+     * @param id the id of the lookDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/looks/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteLook(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Look : {}&quot;, id);</span>
+<span class="nc" id="L118">        lookService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/looks?query=:query : search for the look corresponding
+     * to the query.
+     *
+     * @param query the query of the look search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/looks&quot;)
+    @Timed
+    public List&lt;LookDTO&gt; searchLooks(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Looks for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return lookService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

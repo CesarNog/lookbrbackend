@@ -4,7 +4,8 @@
             "home": {
                 "title": "Logins",
                 "createLabel": "Create a new Login",
-                "createOrEditLabel": "Create or edit a Login"
+                "createOrEditLabel": "Create or edit a Login",
+                "search": "Search for Login"
             },
             "created": "A new Login is created with identifier {{ param }}",
             "updated": "A Login is updated with identifier {{ param }}",
@@ -16,9 +17,8 @@
                 "title": "Login"
             },
             "loginType": "Login Type",
-            "username": "Username",
-            "email": "Email",
-            "password": "Password"
+            "token": "Token",
+            "user": "User"
         }
     }
 }

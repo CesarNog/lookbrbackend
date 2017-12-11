@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Look.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">Look.java</span></div><h1>Look.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
+
+/**
+ * A Look.
+ */
+@Entity
+@Table(name = &quot;look&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = &quot;look&quot;)
+<span class="nc" id="L23">public class Look implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;user_id&quot;)
+    private String userId;
+
+    @Column(name = &quot;temperature&quot;)
+    private String temperature;
+
+    @Column(name = &quot;day_time&quot;)
+    private LocalDate dayTime;
+
+    @Column(name = &quot;picture_index&quot;)
+    private Integer pictureIndex;
+
+    @Column(name = &quot;url&quot;)
+    private String url;
+
+<span class="nc" id="L46">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;ConsultantVote&gt; consultantsVotes = new HashSet&lt;&gt;();
+
+<span class="nc" id="L51">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Comment&gt; comments = new HashSet&lt;&gt;();
+
+<span class="nc" id="L56">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Intention&gt; intentions = new HashSet&lt;&gt;();
+
+<span class="nc" id="L61">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Occasion&gt; occasions = new HashSet&lt;&gt;();
+
+<span class="nc" id="L66">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Temperature&gt; temperatures = new HashSet&lt;&gt;();
+
+<span class="nc" id="L71">    @OneToMany(mappedBy = &quot;look&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Consultant&gt; consultants = new HashSet&lt;&gt;();
+
+    @ManyToOne
+    private Closet closet;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="nc" id="L81">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L85">        this.id = id;</span>
+<span class="nc" id="L86">    }</span>
+
+    public String getUserId() {
+<span class="nc" id="L89">        return userId;</span>
+    }
+
+    public Look userId(String userId) {
+<span class="nc" id="L93">        this.userId = userId;</span>
+<span class="nc" id="L94">        return this;</span>
+    }
+
+    public void setUserId(String userId) {
+<span class="nc" id="L98">        this.userId = userId;</span>
+<span class="nc" id="L99">    }</span>
+
+    public String getTemperature() {
+<span class="nc" id="L102">        return temperature;</span>
+    }
+
+    public Look temperature(String temperature) {
+<span class="nc" id="L106">        this.temperature = temperature;</span>
+<span class="nc" id="L107">        return this;</span>
+    }
+
+    public void setTemperature(String temperature) {
+<span class="nc" id="L111">        this.temperature = temperature;</span>
+<span class="nc" id="L112">    }</span>
+
+    public LocalDate getDayTime() {
+<span class="nc" id="L115">        return dayTime;</span>
+    }
+
+    public Look dayTime(LocalDate dayTime) {
+<span class="nc" id="L119">        this.dayTime = dayTime;</span>
+<span class="nc" id="L120">        return this;</span>
+    }
+
+    public void setDayTime(LocalDate dayTime) {
+<span class="nc" id="L124">        this.dayTime = dayTime;</span>
+<span class="nc" id="L125">    }</span>
+
+    public Integer getPictureIndex() {
+<span class="nc" id="L128">        return pictureIndex;</span>
+    }
+
+    public Look pictureIndex(Integer pictureIndex) {
+<span class="nc" id="L132">        this.pictureIndex = pictureIndex;</span>
+<span class="nc" id="L133">        return this;</span>
+    }
+
+    public void setPictureIndex(Integer pictureIndex) {
+<span class="nc" id="L137">        this.pictureIndex = pictureIndex;</span>
+<span class="nc" id="L138">    }</span>
+
+    public String getUrl() {
+<span class="nc" id="L141">        return url;</span>
+    }
+
+    public Look url(String url) {
+<span class="nc" id="L145">        this.url = url;</span>
+<span class="nc" id="L146">        return this;</span>
+    }
+
+    public void setUrl(String url) {
+<span class="nc" id="L150">        this.url = url;</span>
+<span class="nc" id="L151">    }</span>
+
+    public Set&lt;ConsultantVote&gt; getConsultantsVotes() {
+<span class="nc" id="L154">        return consultantsVotes;</span>
+    }
+
+    public Look consultantsVotes(Set&lt;ConsultantVote&gt; consultantVotes) {
+<span class="nc" id="L158">        this.consultantsVotes = consultantVotes;</span>
+<span class="nc" id="L159">        return this;</span>
+    }
+
+    public Look addConsultantsVotes(ConsultantVote consultantVote) {
+<span class="nc" id="L163">        this.consultantsVotes.add(consultantVote);</span>
+<span class="nc" id="L164">        consultantVote.setLook(this);</span>
+<span class="nc" id="L165">        return this;</span>
+    }
+
+    public Look removeConsultantsVotes(ConsultantVote consultantVote) {
+<span class="nc" id="L169">        this.consultantsVotes.remove(consultantVote);</span>
+<span class="nc" id="L170">        consultantVote.setLook(null);</span>
+<span class="nc" id="L171">        return this;</span>
+    }
+
+    public void setConsultantsVotes(Set&lt;ConsultantVote&gt; consultantVotes) {
+<span class="nc" id="L175">        this.consultantsVotes = consultantVotes;</span>
+<span class="nc" id="L176">    }</span>
+
+    public Set&lt;Comment&gt; getComments() {
+<span class="nc" id="L179">        return comments;</span>
+    }
+
+    public Look comments(Set&lt;Comment&gt; comments) {
+<span class="nc" id="L183">        this.comments = comments;</span>
+<span class="nc" id="L184">        return this;</span>
+    }
+
+    public Look addComments(Comment comment) {
+<span class="nc" id="L188">        this.comments.add(comment);</span>
+<span class="nc" id="L189">        comment.setLook(this);</span>
+<span class="nc" id="L190">        return this;</span>
+    }
+
+    public Look removeComments(Comment comment) {
+<span class="nc" id="L194">        this.comments.remove(comment);</span>
+<span class="nc" id="L195">        comment.setLook(null);</span>
+<span class="nc" id="L196">        return this;</span>
+    }
+
+    public void setComments(Set&lt;Comment&gt; comments) {
+<span class="nc" id="L200">        this.comments = comments;</span>
+<span class="nc" id="L201">    }</span>
+
+    public Set&lt;Intention&gt; getIntentions() {
+<span class="nc" id="L204">        return intentions;</span>
+    }
+
+    public Look intentions(Set&lt;Intention&gt; intentions) {
+<span class="nc" id="L208">        this.intentions = intentions;</span>
+<span class="nc" id="L209">        return this;</span>
+    }
+
+    public Look addIntentions(Intention intention) {
+<span class="nc" id="L213">        this.intentions.add(intention);</span>
+<span class="nc" id="L214">        intention.setLook(this);</span>
+<span class="nc" id="L215">        return this;</span>
+    }
+
+    public Look removeIntentions(Intention intention) {
+<span class="nc" id="L219">        this.intentions.remove(intention);</span>
+<span class="nc" id="L220">        intention.setLook(null);</span>
+<span class="nc" id="L221">        return this;</span>
+    }
+
+    public void setIntentions(Set&lt;Intention&gt; intentions) {
+<span class="nc" id="L225">        this.intentions = intentions;</span>
+<span class="nc" id="L226">    }</span>
+
+    public Set&lt;Occasion&gt; getOccasions() {
+<span class="nc" id="L229">        return occasions;</span>
+    }
+
+    public Look occasions(Set&lt;Occasion&gt; occasions) {
+<span class="nc" id="L233">        this.occasions = occasions;</span>
+<span class="nc" id="L234">        return this;</span>
+    }
+
+    public Look addOccasions(Occasion occasion) {
+<span class="nc" id="L238">        this.occasions.add(occasion);</span>
+<span class="nc" id="L239">        occasion.setLook(this);</span>
+<span class="nc" id="L240">        return this;</span>
+    }
+
+    public Look removeOccasions(Occasion occasion) {
+<span class="nc" id="L244">        this.occasions.remove(occasion);</span>
+<span class="nc" id="L245">        occasion.setLook(null);</span>
+<span class="nc" id="L246">        return this;</span>
+    }
+
+    public void setOccasions(Set&lt;Occasion&gt; occasions) {
+<span class="nc" id="L250">        this.occasions = occasions;</span>
+<span class="nc" id="L251">    }</span>
+
+    public Set&lt;Temperature&gt; getTemperatures() {
+<span class="nc" id="L254">        return temperatures;</span>
+    }
+
+    public Look temperatures(Set&lt;Temperature&gt; temperatures) {
+<span class="nc" id="L258">        this.temperatures = temperatures;</span>
+<span class="nc" id="L259">        return this;</span>
+    }
+
+    public Look addTemperature(Temperature temperature) {
+<span class="nc" id="L263">        this.temperatures.add(temperature);</span>
+<span class="nc" id="L264">        temperature.setLook(this);</span>
+<span class="nc" id="L265">        return this;</span>
+    }
+
+    public Look removeTemperature(Temperature temperature) {
+<span class="nc" id="L269">        this.temperatures.remove(temperature);</span>
+<span class="nc" id="L270">        temperature.setLook(null);</span>
+<span class="nc" id="L271">        return this;</span>
+    }
+
+    public void setTemperatures(Set&lt;Temperature&gt; temperatures) {
+<span class="nc" id="L275">        this.temperatures = temperatures;</span>
+<span class="nc" id="L276">    }</span>
+
+    public Set&lt;Consultant&gt; getConsultants() {
+<span class="nc" id="L279">        return consultants;</span>
+    }
+
+    public Look consultants(Set&lt;Consultant&gt; consultants) {
+<span class="nc" id="L283">        this.consultants = consultants;</span>
+<span class="nc" id="L284">        return this;</span>
+    }
+
+    public Look addConsultants(Consultant consultant) {
+<span class="nc" id="L288">        this.consultants.add(consultant);</span>
+<span class="nc" id="L289">        consultant.setLook(this);</span>
+<span class="nc" id="L290">        return this;</span>
+    }
+
+    public Look removeConsultants(Consultant consultant) {
+<span class="nc" id="L294">        this.consultants.remove(consultant);</span>
+<span class="nc" id="L295">        consultant.setLook(null);</span>
+<span class="nc" id="L296">        return this;</span>
+    }
+
+    public void setConsultants(Set&lt;Consultant&gt; consultants) {
+<span class="nc" id="L300">        this.consultants = consultants;</span>
+<span class="nc" id="L301">    }</span>
+
+    public Closet getCloset() {
+<span class="nc" id="L304">        return closet;</span>
+    }
+
+    public Look closet(Closet closet) {
+<span class="nc" id="L308">        this.closet = closet;</span>
+<span class="nc" id="L309">        return this;</span>
+    }
+
+    public void setCloset(Closet closet) {
+<span class="nc" id="L313">        this.closet = closet;</span>
+<span class="nc" id="L314">    }</span>
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L319" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L320">            return true;</span>
+        }
+<span class="nc bnc" id="L322" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L323">            return false;</span>
+        }
+<span class="nc" id="L325">        Look look = (Look) o;</span>
+<span class="nc bnc" id="L326" title="All 4 branches missed.">        if (look.getId() == null || getId() == null) {</span>
+<span class="nc" id="L327">            return false;</span>
+        }
+<span class="nc" id="L329">        return Objects.equals(getId(), look.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L334">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L339">        return &quot;Look{&quot; +</span>
+<span class="nc" id="L340">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L341">            &quot;, userId='&quot; + getUserId() + &quot;'&quot; +</span>
+<span class="nc" id="L342">            &quot;, temperature='&quot; + getTemperature() + &quot;'&quot; +</span>
+<span class="nc" id="L343">            &quot;, dayTime='&quot; + getDayTime() + &quot;'&quot; +</span>
+<span class="nc" id="L344">            &quot;, pictureIndex=&quot; + getPictureIndex() +</span>
+<span class="nc" id="L345">            &quot;, url='&quot; + getUrl() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

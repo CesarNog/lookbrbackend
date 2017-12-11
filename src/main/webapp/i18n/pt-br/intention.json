@@ -4,7 +4,8 @@
             "home": {
                 "title": "Intentions",
                 "createLabel": "Criar novo Intention",
-                "createOrEditLabel": "Criar ou editar Intention"
+                "createOrEditLabel": "Criar ou editar Intention",
+                "search": "Pesquisar por Intention"
             },
             "created": "Um novo Intention foi criado com o identificador {{ param }}",
             "updated": "Um Intention foi atualizado com o identificador {{ param }}",
@@ -15,7 +16,9 @@
             "detail": {
                 "title": "Intention"
             },
-            "page": "Page"
+            "page": "Page",
+            "inspiration": "Inspiration",
+            "look": "Look"
         }
     }
 }

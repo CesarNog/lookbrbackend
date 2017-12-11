@@ -6,6 +6,7 @@ import com.lookbr.backend.domain.User;
 import com.lookbr.backend.repository.AuthorityRepository;
 import com.lookbr.backend.repository.UserRepository;
 import com.lookbr.backend.security.AuthoritiesConstants;
+import com.lookbr.backend.repository.search.UserSearchRepository;
 import com.lookbr.backend.service.MailService;
 
 import org.junit.Before;
@@ -40,6 +41,9 @@ public class SocialServiceIntTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserSearchRepository userSearchRepository;
+
 
     @Mock
     private MailService mockMailService;
@@ -60,7 +64,7 @@ public class SocialServiceIntTest {
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
-                passwordEncoder, userRepository, mockMailService);
+                passwordEncoder, userRepository, mockMailService, userSearchRepository);
     }
 
     @Test

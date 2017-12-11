@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">LoginResource.java</span></div><h1>LoginResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.LoginService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.LoginDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Login.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class LoginResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(LoginResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;login&quot;;
+
+    private final LoginService loginService;
+
+<span class="nc" id="L36">    public LoginResource(LoginService loginService) {</span>
+<span class="nc" id="L37">        this.loginService = loginService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /logins : Create a new login.
+     *
+     * @param loginDTO the loginDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new loginDTO, or with status 400 (Bad Request) if the login has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/logins&quot;)
+    @Timed
+    public ResponseEntity&lt;LoginDTO&gt; createLogin(@RequestBody LoginDTO loginDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Login : {}&quot;, loginDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (loginDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new login cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        LoginDTO result = loginService.save(loginDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/logins/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /logins : Updates an existing login.
+     *
+     * @param loginDTO the loginDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated loginDTO,
+     * or with status 400 (Bad Request) if the loginDTO is not valid,
+     * or with status 500 (Internal Server Error) if the loginDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/logins&quot;)
+    @Timed
+    public ResponseEntity&lt;LoginDTO&gt; updateLogin(@RequestBody LoginDTO loginDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Login : {}&quot;, loginDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (loginDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createLogin(loginDTO);</span>
+        }
+<span class="nc" id="L76">        LoginDTO result = loginService.save(loginDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, loginDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /logins : get all the logins.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of logins in body
+     */
+    @GetMapping(&quot;/logins&quot;)
+    @Timed
+    public List&lt;LoginDTO&gt; getAllLogins() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Logins&quot;);</span>
+<span class="nc" id="L91">        return loginService.findAll();</span>
+        }
+
+    /**
+     * GET  /logins/:id : get the &quot;id&quot; login.
+     *
+     * @param id the id of the loginDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the loginDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/logins/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;LoginDTO&gt; getLogin(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Login : {}&quot;, id);</span>
+<span class="nc" id="L104">        LoginDTO loginDTO = loginService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(loginDTO));</span>
+    }
+
+    /**
+     * DELETE  /logins/:id : delete the &quot;id&quot; login.
+     *
+     * @param id the id of the loginDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/logins/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteLogin(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Login : {}&quot;, id);</span>
+<span class="nc" id="L118">        loginService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/logins?query=:query : search for the login corresponding
+     * to the query.
+     *
+     * @param query the query of the login search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/logins&quot;)
+    @Timed
+    public List&lt;LoginDTO&gt; searchLogins(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Logins for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return loginService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

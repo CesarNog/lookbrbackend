@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">LoginMapperImpl.java</span></div><h1>LoginMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Login;
+
+import com.lookbr.backend.domain.User;
+
+import com.lookbr.backend.service.dto.LoginDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L31">public class LoginMapperImpl implements LoginMapper {</span>
+
+    @Autowired
+
+    private UserMapper userMapper;
+
+    @Override
+
+    public List&lt;Login&gt; toEntity(List&lt;LoginDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L43">            return null;</span>
+        }
+
+<span class="nc" id="L46">        List&lt;Login&gt; list = new ArrayList&lt;Login&gt;();</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for ( LoginDTO loginDTO : dtoList ) {</span>
+
+<span class="nc" id="L50">            list.add( toEntity( loginDTO ) );</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;LoginDTO&gt; toDto(List&lt;Login&gt; entityList) {
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L62">            return null;</span>
+        }
+
+<span class="nc" id="L65">        List&lt;LoginDTO&gt; list = new ArrayList&lt;LoginDTO&gt;();</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for ( Login login : entityList ) {</span>
+
+<span class="nc" id="L69">            list.add( toDto( login ) );</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return list;</span>
+    }
+
+    @Override
+
+    public LoginDTO toDto(Login login) {
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if ( login == null ) {</span>
+
+<span class="nc" id="L81">            return null;</span>
+        }
+
+<span class="nc" id="L84">        LoginDTO loginDTO_ = new LoginDTO();</span>
+
+<span class="nc" id="L86">        loginDTO_.setUserId( loginUserId( login ) );</span>
+
+<span class="nc" id="L88">        loginDTO_.setId( login.getId() );</span>
+
+<span class="nc" id="L90">        loginDTO_.setLoginType( login.getLoginType() );</span>
+
+<span class="nc" id="L92">        loginDTO_.setToken( login.getToken() );</span>
+
+<span class="nc" id="L94">        return loginDTO_;</span>
+    }
+
+    @Override
+
+    public Login toEntity(LoginDTO loginDTO) {
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if ( loginDTO == null ) {</span>
+
+<span class="nc" id="L103">            return null;</span>
+        }
+
+<span class="nc" id="L106">        Login login_ = new Login();</span>
+
+<span class="nc" id="L108">        login_.setUser( userMapper.userFromId( loginDTO.getUserId() ) );</span>
+
+<span class="nc" id="L110">        login_.setId( loginDTO.getId() );</span>
+
+<span class="nc" id="L112">        login_.setLoginType( loginDTO.getLoginType() );</span>
+
+<span class="nc" id="L114">        login_.setToken( loginDTO.getToken() );</span>
+
+<span class="nc" id="L116">        return login_;</span>
+    }
+
+    private Long loginUserId(Login login) {
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if ( login == null ) {</span>
+
+<span class="nc" id="L123">            return null;</span>
+        }
+
+<span class="nc" id="L126">        User user = login.getUser();</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if ( user == null ) {</span>
+
+<span class="nc" id="L130">            return null;</span>
+        }
+
+<span class="nc" id="L133">        Long id = user.getId();</span>
+
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L137">            return null;</span>
+        }
+
+<span class="nc" id="L140">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

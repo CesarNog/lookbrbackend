@@ -3,6 +3,7 @@ package com.lookbr.backend.service.impl;
 import com.lookbr.backend.service.IntentionService;
 import com.lookbr.backend.domain.Intention;
 import com.lookbr.backend.repository.IntentionRepository;
+import com.lookbr.backend.repository.search.IntentionSearchRepository;
 import com.lookbr.backend.service.dto.IntentionDTO;
 import com.lookbr.backend.service.mapper.IntentionMapper;
 import org.slf4j.Logger;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Intention.
@@ -27,9 +31,12 @@ public class IntentionServiceImpl implements IntentionService{
 
     private final IntentionMapper intentionMapper;
 
-    public IntentionServiceImpl(IntentionRepository intentionRepository, IntentionMapper intentionMapper) {
+    private final IntentionSearchRepository intentionSearchRepository;
+
+    public IntentionServiceImpl(IntentionRepository intentionRepository, IntentionMapper intentionMapper, IntentionSearchRepository intentionSearchRepository) {
         this.intentionRepository = intentionRepository;
         this.intentionMapper = intentionMapper;
+        this.intentionSearchRepository = intentionSearchRepository;
     }
 
     /**
@@ -43,7 +50,9 @@ public class IntentionServiceImpl implements IntentionService{
         log.debug("Request to save Intention : {}", intentionDTO);
         Intention intention = intentionMapper.toEntity(intentionDTO);
         intention = intentionRepository.save(intention);
-        return intentionMapper.toDto(intention);
+        IntentionDTO result = intentionMapper.toDto(intention);
+        intentionSearchRepository.save(intention);
+        return result;
     }
 
     /**
@@ -83,5 +92,22 @@ public class IntentionServiceImpl implements IntentionService{
     public void delete(Long id) {
         log.debug("Request to delete Intention : {}", id);
         intentionRepository.delete(id);
+        intentionSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the intention corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<IntentionDTO> search(String query) {
+        log.debug("Request to search Intentions for query {}", query);
+        return StreamSupport
+            .stream(intentionSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+            .map(intentionMapper::toDto)
+            .collect(Collectors.toList());
     }
 }

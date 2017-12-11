@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">SecurityConfiguration.java</span></div><h1>SecurityConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import com.lookbr.backend.security.*;
+import com.lookbr.backend.security.jwt.*;
+
+import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+
+import javax.annotation.PostConstruct;
+
+@Configuration
+@Import(SecurityProblemSupport.class)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final UserDetailsService userDetailsService;
+
+    private final TokenProvider tokenProvider;
+
+    private final CorsFilter corsFilter;
+
+    private final SecurityProblemSupport problemSupport;
+
+<span class="fc" id="L44">    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService,TokenProvider tokenProvider,CorsFilter corsFilter, SecurityProblemSupport problemSupport) {</span>
+<span class="fc" id="L45">        this.authenticationManagerBuilder = authenticationManagerBuilder;</span>
+<span class="fc" id="L46">        this.userDetailsService = userDetailsService;</span>
+<span class="fc" id="L47">        this.tokenProvider = tokenProvider;</span>
+<span class="fc" id="L48">        this.corsFilter = corsFilter;</span>
+<span class="fc" id="L49">        this.problemSupport = problemSupport;</span>
+<span class="fc" id="L50">    }</span>
+
+    @PostConstruct
+    public void init() {
+        try {
+<span class="fc" id="L55">            authenticationManagerBuilder</span>
+<span class="fc" id="L56">                .userDetailsService(userDetailsService)</span>
+<span class="fc" id="L57">                .passwordEncoder(passwordEncoder());</span>
+<span class="nc" id="L58">        } catch (Exception e) {</span>
+<span class="nc" id="L59">            throw new BeanInitializationException(&quot;Security configuration failed&quot;, e);</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+<span class="fc" id="L65">        return new BCryptPasswordEncoder();</span>
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+<span class="fc" id="L70">        web.ignoring()</span>
+<span class="fc" id="L71">            .antMatchers(HttpMethod.OPTIONS, &quot;/**&quot;)</span>
+<span class="fc" id="L72">            .antMatchers(&quot;/app/**/*.{js,html}&quot;)</span>
+<span class="fc" id="L73">            .antMatchers(&quot;/i18n/**&quot;)</span>
+<span class="fc" id="L74">            .antMatchers(&quot;/content/**&quot;)</span>
+<span class="fc" id="L75">            .antMatchers(&quot;/swagger-ui/index.html&quot;)</span>
+<span class="fc" id="L76">            .antMatchers(&quot;/test/**&quot;)</span>
+<span class="fc" id="L77">            .antMatchers(&quot;/h2-console/**&quot;);</span>
+<span class="fc" id="L78">    }</span>
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+<span class="fc" id="L82">        http</span>
+<span class="fc" id="L83">            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="fc" id="L84">            .exceptionHandling()</span>
+<span class="fc" id="L85">            .authenticationEntryPoint(problemSupport)</span>
+<span class="fc" id="L86">            .accessDeniedHandler(problemSupport)</span>
+<span class="fc" id="L87">        .and()</span>
+<span class="fc" id="L88">            .csrf()</span>
+<span class="fc" id="L89">            .disable()</span>
+<span class="fc" id="L90">            .headers()</span>
+<span class="fc" id="L91">            .frameOptions()</span>
+<span class="fc" id="L92">            .disable()</span>
+<span class="fc" id="L93">        .and()</span>
+<span class="fc" id="L94">            .sessionManagement()</span>
+<span class="fc" id="L95">            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+<span class="fc" id="L96">        .and()</span>
+<span class="fc" id="L97">            .authorizeRequests()</span>
+<span class="fc" id="L98">            .antMatchers(&quot;/api/register&quot;).permitAll()</span>
+<span class="fc" id="L99">            .antMatchers(&quot;/api/activate&quot;).permitAll()</span>
+<span class="fc" id="L100">            .antMatchers(&quot;/api/authenticate&quot;).permitAll()</span>
+<span class="fc" id="L101">            .antMatchers(&quot;/api/account/reset-password/init&quot;).permitAll()</span>
+<span class="fc" id="L102">            .antMatchers(&quot;/api/account/reset-password/finish&quot;).permitAll()</span>
+<span class="fc" id="L103">            .antMatchers(&quot;/api/profile-info&quot;).permitAll()</span>
+<span class="fc" id="L104">            .antMatchers(&quot;/api/**&quot;).authenticated()</span>
+<span class="fc" id="L105">            .antMatchers(&quot;/websocket/tracker&quot;).hasAuthority(AuthoritiesConstants.ADMIN)</span>
+<span class="fc" id="L106">            .antMatchers(&quot;/websocket/**&quot;).permitAll()</span>
+<span class="fc" id="L107">            .antMatchers(&quot;/management/health&quot;).permitAll()</span>
+<span class="fc" id="L108">            .antMatchers(&quot;/management/**&quot;).hasAuthority(AuthoritiesConstants.ADMIN)</span>
+<span class="fc" id="L109">            .antMatchers(&quot;/v2/api-docs/**&quot;).permitAll()</span>
+<span class="fc" id="L110">            .antMatchers(&quot;/swagger-resources/configuration/ui&quot;).permitAll()</span>
+<span class="fc" id="L111">            .antMatchers(&quot;/swagger-ui/index.html&quot;).hasAuthority(AuthoritiesConstants.ADMIN)</span>
+<span class="fc" id="L112">        .and()</span>
+<span class="fc" id="L113">            .apply(securityConfigurerAdapter());</span>
+
+<span class="fc" id="L115">    }</span>
+
+    private JWTConfigurer securityConfigurerAdapter() {
+<span class="fc" id="L118">        return new JWTConfigurer(tokenProvider);</span>
+    }
+
+    @Bean
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+<span class="fc" id="L123">        return new SecurityEvaluationContextExtension();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

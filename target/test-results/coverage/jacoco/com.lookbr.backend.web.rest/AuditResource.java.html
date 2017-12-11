@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuditResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">AuditResource.java</span></div><h1>AuditResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.lookbr.backend.service.AuditEventService;
+import com.lookbr.backend.web.rest.util.PaginationUtil;
+
+import io.github.jhipster.web.util.ResponseUtil;
+import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+
+/**
+ * REST controller for getting the audit events.
+ */
+@RestController
+@RequestMapping(&quot;/management/audits&quot;)
+public class AuditResource {
+
+    private final AuditEventService auditEventService;
+
+<span class="fc" id="L28">    public AuditResource(AuditEventService auditEventService) {</span>
+<span class="fc" id="L29">        this.auditEventService = auditEventService;</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * GET /audits : get a page of AuditEvents.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
+     */
+    @GetMapping
+    public ResponseEntity&lt;List&lt;AuditEvent&gt;&gt; getAll(Pageable pageable) {
+<span class="fc" id="L40">        Page&lt;AuditEvent&gt; page = auditEventService.findAll(pageable);</span>
+<span class="fc" id="L41">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, &quot;/management/audits&quot;);</span>
+<span class="fc" id="L42">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+    /**
+     * GET  /audits : get a page of AuditEvents between the fromDate and toDate.
+     *
+     * @param fromDate the start of the time period of AuditEvents to get
+     * @param toDate the end of the time period of AuditEvents to get
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
+     */
+    @GetMapping(params = {&quot;fromDate&quot;, &quot;toDate&quot;})
+    public ResponseEntity&lt;List&lt;AuditEvent&gt;&gt; getByDates(
+        @RequestParam(value = &quot;fromDate&quot;) LocalDate fromDate,
+        @RequestParam(value = &quot;toDate&quot;) LocalDate toDate,
+        Pageable pageable) {
+
+<span class="fc" id="L59">        Page&lt;AuditEvent&gt; page = auditEventService.findByDates(</span>
+<span class="fc" id="L60">            fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),</span>
+<span class="fc" id="L61">            toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(),</span>
+            pageable);
+<span class="fc" id="L63">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, &quot;/management/audits&quot;);</span>
+<span class="fc" id="L64">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+    /**
+     * GET  /audits/:id : get an AuditEvent by id.
+     *
+     * @param id the id of the entity to get
+     * @return the ResponseEntity with status 200 (OK) and the AuditEvent in body, or status 404 (Not Found)
+     */
+    @GetMapping(&quot;/{id:.+}&quot;)
+    public ResponseEntity&lt;AuditEvent&gt; get(@PathVariable Long id) {
+<span class="fc" id="L75">        return ResponseUtil.wrapOrNotFound(auditEventService.find(id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

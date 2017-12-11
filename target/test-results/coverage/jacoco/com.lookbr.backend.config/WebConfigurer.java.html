@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebConfigurer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">WebConfigurer.java</span></div><h1>WebConfigurer.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.servlet.InstrumentedFilter;
+import com.codahale.metrics.servlets.MetricsServlet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.*;
+import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
+import io.undertow.UndertowOptions;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.http.MediaType;
+
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.*;
+import javax.servlet.*;
+
+/**
+ * Configuration of web application with Servlet 3.0 APIs.
+ */
+@Configuration
+public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
+
+<span class="fc" id="L37">    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);</span>
+
+    private final Environment env;
+
+    private final JHipsterProperties jHipsterProperties;
+
+    private MetricRegistry metricRegistry;
+
+<span class="fc" id="L45">    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {</span>
+
+<span class="fc" id="L47">        this.env = env;</span>
+<span class="fc" id="L48">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        if (env.getActiveProfiles().length != 0) {</span>
+<span class="fc" id="L54">            log.info(&quot;Web application configuration, using profiles: {}&quot;, (Object[]) env.getActiveProfiles());</span>
+        }
+<span class="fc" id="L56">        EnumSet&lt;DispatcherType&gt; disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);</span>
+<span class="fc" id="L57">        initMetrics(servletContext, disps);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {</span>
+<span class="fc" id="L59">            initCachingHttpHeadersFilter(servletContext, disps);</span>
+        }
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {</span>
+<span class="fc" id="L62">            initH2Console(servletContext);</span>
+        }
+<span class="fc" id="L64">        log.info(&quot;Web application fully configured&quot;);</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Customize the Servlet engine: Mime types, the document root, the cache.
+     */
+    @Override
+    public void customize(ConfigurableEmbeddedServletContainer container) {
+<span class="fc" id="L72">        MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);</span>
+        // IE issue, see https://github.com/jhipster/generator-jhipster/pull/711
+<span class="fc" id="L74">        mappings.add(&quot;html&quot;, MediaType.TEXT_HTML_VALUE + &quot;;charset=utf-8&quot;);</span>
+        // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
+<span class="fc" id="L76">        mappings.add(&quot;json&quot;, MediaType.TEXT_HTML_VALUE + &quot;;charset=utf-8&quot;);</span>
+<span class="fc" id="L77">        container.setMimeMappings(mappings);</span>
+        // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
+<span class="fc" id="L79">        setLocationForStaticAssets(container);</span>
+
+        /*
+         * Enable HTTP/2 for Undertow - https://twitter.com/ankinson/status/829256167700492288
+         * HTTP/2 requires HTTPS, so HTTP requests will fallback to HTTP/1.1.
+         * See the JHipsterProperties class and your application-*.yml configuration files
+         * for more information.
+         */
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">        if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0) &amp;&amp;</span>
+            container instanceof UndertowEmbeddedServletContainerFactory) {
+
+<span class="fc" id="L90">            ((UndertowEmbeddedServletContainerFactory) container)</span>
+<span class="fc" id="L91">                .addBuilderCustomizers(builder -&gt;</span>
+<span class="fc" id="L92">                    builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
+        File root;
+<span class="fc" id="L98">        String prefixPath = resolvePathPrefix();</span>
+<span class="fc" id="L99">        root = new File(prefixPath + &quot;target/www/&quot;);</span>
+<span class="pc bpc" id="L100" title="2 of 4 branches missed.">        if (root.exists() &amp;&amp; root.isDirectory()) {</span>
+<span class="fc" id="L101">            container.setDocumentRoot(root);</span>
+        }
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Resolve path prefix to static resources.
+     */
+    private String resolvePathPrefix() {
+<span class="fc" id="L109">        String fullExecutablePath = this.getClass().getResource(&quot;&quot;).getPath();</span>
+<span class="fc" id="L110">        String rootPath = Paths.get(&quot;.&quot;).toUri().normalize().getPath();</span>
+<span class="fc" id="L111">        String extractedPath = fullExecutablePath.replace(rootPath, &quot;&quot;);</span>
+<span class="fc" id="L112">        int extractionEndIndex = extractedPath.indexOf(&quot;target/&quot;);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        if (extractionEndIndex &lt;= 0) {</span>
+<span class="fc" id="L114">            return &quot;&quot;;</span>
+        }
+<span class="nc" id="L116">        return extractedPath.substring(0, extractionEndIndex);</span>
+    }
+
+    /**
+     * Initializes the caching HTTP Headers Filter.
+     */
+    private void initCachingHttpHeadersFilter(ServletContext servletContext,
+                                              EnumSet&lt;DispatcherType&gt; disps) {
+<span class="fc" id="L124">        log.debug(&quot;Registering Caching HTTP Headers Filter&quot;);</span>
+<span class="fc" id="L125">        FilterRegistration.Dynamic cachingHttpHeadersFilter =</span>
+<span class="fc" id="L126">            servletContext.addFilter(&quot;cachingHttpHeadersFilter&quot;,</span>
+                new CachingHttpHeadersFilter(jHipsterProperties));
+
+<span class="fc" id="L129">        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, &quot;/content/*&quot;);</span>
+<span class="fc" id="L130">        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, &quot;/app/*&quot;);</span>
+<span class="fc" id="L131">        cachingHttpHeadersFilter.setAsyncSupported(true);</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Initializes Metrics.
+     */
+    private void initMetrics(ServletContext servletContext, EnumSet&lt;DispatcherType&gt; disps) {
+<span class="fc" id="L138">        log.debug(&quot;Initializing Metrics registries&quot;);</span>
+<span class="fc" id="L139">        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,</span>
+            metricRegistry);
+<span class="fc" id="L141">        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,</span>
+            metricRegistry);
+
+<span class="fc" id="L144">        log.debug(&quot;Registering Metrics Filter&quot;);</span>
+<span class="fc" id="L145">        FilterRegistration.Dynamic metricsFilter = servletContext.addFilter(&quot;webappMetricsFilter&quot;,</span>
+            new InstrumentedFilter());
+
+<span class="fc" id="L148">        metricsFilter.addMappingForUrlPatterns(disps, true, &quot;/*&quot;);</span>
+<span class="fc" id="L149">        metricsFilter.setAsyncSupported(true);</span>
+
+<span class="fc" id="L151">        log.debug(&quot;Registering Metrics Servlet&quot;);</span>
+<span class="fc" id="L152">        ServletRegistration.Dynamic metricsAdminServlet =</span>
+<span class="fc" id="L153">            servletContext.addServlet(&quot;metricsServlet&quot;, new MetricsServlet());</span>
+
+<span class="fc" id="L155">        metricsAdminServlet.addMapping(&quot;/management/metrics/*&quot;);</span>
+<span class="fc" id="L156">        metricsAdminServlet.setAsyncSupported(true);</span>
+<span class="fc" id="L157">        metricsAdminServlet.setLoadOnStartup(2);</span>
+<span class="fc" id="L158">    }</span>
+
+    @Bean
+    public CorsFilter corsFilter() {
+<span class="fc" id="L162">        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();</span>
+<span class="fc" id="L163">        CorsConfiguration config = jHipsterProperties.getCors();</span>
+<span class="fc bfc" id="L164" title="All 4 branches covered.">        if (config.getAllowedOrigins() != null &amp;&amp; !config.getAllowedOrigins().isEmpty()) {</span>
+<span class="fc" id="L165">            log.debug(&quot;Registering CORS filter&quot;);</span>
+<span class="fc" id="L166">            source.registerCorsConfiguration(&quot;/api/**&quot;, config);</span>
+<span class="fc" id="L167">            source.registerCorsConfiguration(&quot;/v2/api-docs&quot;, config);</span>
+        }
+<span class="fc" id="L169">        return new CorsFilter(source);</span>
+    }
+
+    /**
+     * Initializes H2 console.
+     */
+    private void initH2Console(ServletContext servletContext) {
+<span class="fc" id="L176">        log.debug(&quot;Initialize H2 console&quot;);</span>
+        try {
+            // We don't want to include H2 when we are packaging for the &quot;prod&quot; profile and won't
+            // actually need it, so we have to load / invoke things at runtime through reflection.
+<span class="fc" id="L180">            ClassLoader loader = Thread.currentThread().getContextClassLoader();</span>
+<span class="fc" id="L181">            Class&lt;?&gt; servletClass = Class.forName(&quot;org.h2.server.web.WebServlet&quot;, true, loader);</span>
+<span class="fc" id="L182">            Servlet servlet = (Servlet) servletClass.newInstance();</span>
+
+<span class="fc" id="L184">            ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet(&quot;H2Console&quot;, servlet);</span>
+<span class="fc" id="L185">            h2ConsoleServlet.addMapping(&quot;/h2-console/*&quot;);</span>
+<span class="fc" id="L186">            h2ConsoleServlet.setInitParameter(&quot;-properties&quot;, &quot;src/main/resources/&quot;);</span>
+<span class="fc" id="L187">            h2ConsoleServlet.setLoadOnStartup(1);</span>
+
+<span class="nc" id="L189">        } catch (ClassNotFoundException | LinkageError  e) {</span>
+<span class="nc" id="L190">            throw new RuntimeException(&quot;Failed to load and initialize org.h2.server.web.WebServlet&quot;, e);</span>
+
+<span class="nc" id="L192">        } catch (IllegalAccessException | InstantiationException e) {</span>
+<span class="nc" id="L193">            throw new RuntimeException(&quot;Failed to instantiate org.h2.server.web.WebServlet&quot;, e);</span>
+<span class="fc" id="L194">        }</span>
+<span class="fc" id="L195">    }</span>
+
+    @Autowired(required = false)
+    public void setMetricRegistry(MetricRegistry metricRegistry) {
+<span class="fc" id="L199">        this.metricRegistry = metricRegistry;</span>
+<span class="fc" id="L200">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

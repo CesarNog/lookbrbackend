@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Login;
 import com.lookbr.backend.repository.LoginRepository;
 import com.lookbr.backend.service.LoginService;
+import com.lookbr.backend.repository.search.LoginSearchRepository;
 import com.lookbr.backend.service.dto.LoginDTO;
 import com.lookbr.backend.service.mapper.LoginMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -45,14 +46,8 @@ public class LoginResourceIntTest {
     private static final LoginType DEFAULT_LOGIN_TYPE = LoginType.FACEBOOK;
     private static final LoginType UPDATED_LOGIN_TYPE = LoginType.EMAIL;
 
-    private static final String DEFAULT_USERNAME = "AAAAAAAAAA";
-    private static final String UPDATED_USERNAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
-    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
-
-    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
-    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
+    private static final String DEFAULT_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_TOKEN = "BBBBBBBBBB";
 
     @Autowired
     private LoginRepository loginRepository;
@@ -62,6 +57,9 @@ public class LoginResourceIntTest {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private LoginSearchRepository loginSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -99,14 +97,13 @@ public class LoginResourceIntTest {
     public static Login createEntity(EntityManager em) {
         Login login = new Login()
             .loginType(DEFAULT_LOGIN_TYPE)
-            .username(DEFAULT_USERNAME)
-            .email(DEFAULT_EMAIL)
-            .password(DEFAULT_PASSWORD);
+            .token(DEFAULT_TOKEN);
         return login;
     }
 
     @Before
     public void initTest() {
+        loginSearchRepository.deleteAll();
         login = createEntity(em);
     }
 
@@ -127,9 +124,11 @@ public class LoginResourceIntTest {
         assertThat(loginList).hasSize(databaseSizeBeforeCreate + 1);
         Login testLogin = loginList.get(loginList.size() - 1);
         assertThat(testLogin.getLoginType()).isEqualTo(DEFAULT_LOGIN_TYPE);
-        assertThat(testLogin.getUsername()).isEqualTo(DEFAULT_USERNAME);
-        assertThat(testLogin.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testLogin.getPassword()).isEqualTo(DEFAULT_PASSWORD);
+        assertThat(testLogin.getToken()).isEqualTo(DEFAULT_TOKEN);
+
+        // Validate the Login in Elasticsearch
+        Login loginEs = loginSearchRepository.findOne(testLogin.getId());
+        assertThat(loginEs).isEqualToComparingFieldByField(testLogin);
     }
 
     @Test
@@ -164,9 +163,7 @@ public class LoginResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(login.getId().intValue())))
             .andExpect(jsonPath("$.[*].loginType").value(hasItem(DEFAULT_LOGIN_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME.toString())))
-            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
-            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())));
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN.toString())));
     }
 
     @Test
@@ -181,9 +178,7 @@ public class LoginResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(login.getId().intValue()))
             .andExpect(jsonPath("$.loginType").value(DEFAULT_LOGIN_TYPE.toString()))
-            .andExpect(jsonPath("$.username").value(DEFAULT_USERNAME.toString()))
-            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
-            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()));
+            .andExpect(jsonPath("$.token").value(DEFAULT_TOKEN.toString()));
     }
 
     @Test
@@ -199,6 +194,7 @@ public class LoginResourceIntTest {
     public void updateLogin() throws Exception {
         // Initialize the database
         loginRepository.saveAndFlush(login);
+        loginSearchRepository.save(login);
         int databaseSizeBeforeUpdate = loginRepository.findAll().size();
 
         // Update the login
@@ -207,9 +203,7 @@ public class LoginResourceIntTest {
         em.detach(updatedLogin);
         updatedLogin
             .loginType(UPDATED_LOGIN_TYPE)
-            .username(UPDATED_USERNAME)
-            .email(UPDATED_EMAIL)
-            .password(UPDATED_PASSWORD);
+            .token(UPDATED_TOKEN);
         LoginDTO loginDTO = loginMapper.toDto(updatedLogin);
 
         restLoginMockMvc.perform(put("/api/logins")
@@ -222,9 +216,11 @@ public class LoginResourceIntTest {
         assertThat(loginList).hasSize(databaseSizeBeforeUpdate);
         Login testLogin = loginList.get(loginList.size() - 1);
         assertThat(testLogin.getLoginType()).isEqualTo(UPDATED_LOGIN_TYPE);
-        assertThat(testLogin.getUsername()).isEqualTo(UPDATED_USERNAME);
-        assertThat(testLogin.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testLogin.getPassword()).isEqualTo(UPDATED_PASSWORD);
+        assertThat(testLogin.getToken()).isEqualTo(UPDATED_TOKEN);
+
+        // Validate the Login in Elasticsearch
+        Login loginEs = loginSearchRepository.findOne(testLogin.getId());
+        assertThat(loginEs).isEqualToComparingFieldByField(testLogin);
     }
 
     @Test
@@ -251,6 +247,7 @@ public class LoginResourceIntTest {
     public void deleteLogin() throws Exception {
         // Initialize the database
         loginRepository.saveAndFlush(login);
+        loginSearchRepository.save(login);
         int databaseSizeBeforeDelete = loginRepository.findAll().size();
 
         // Get the login
@@ -258,9 +255,29 @@ public class LoginResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean loginExistsInEs = loginSearchRepository.exists(login.getId());
+        assertThat(loginExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Login> loginList = loginRepository.findAll();
         assertThat(loginList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchLogin() throws Exception {
+        // Initialize the database
+        loginRepository.saveAndFlush(login);
+        loginSearchRepository.save(login);
+
+        // Search the login
+        restLoginMockMvc.perform(get("/api/_search/logins?query=id:" + login.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(login.getId().intValue())))
+            .andExpect(jsonPath("$.[*].loginType").value(hasItem(DEFAULT_LOGIN_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN.toString())));
     }
 
     @Test

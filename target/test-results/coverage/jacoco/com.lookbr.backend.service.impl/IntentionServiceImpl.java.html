@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntentionServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.impl</a> &gt; <span class="el_source">IntentionServiceImpl.java</span></div><h1>IntentionServiceImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.impl;
+
+import com.lookbr.backend.service.IntentionService;
+import com.lookbr.backend.domain.Intention;
+import com.lookbr.backend.repository.IntentionRepository;
+import com.lookbr.backend.repository.search.IntentionSearchRepository;
+import com.lookbr.backend.service.dto.IntentionDTO;
+import com.lookbr.backend.service.mapper.IntentionMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * Service Implementation for managing Intention.
+ */
+@Service
+@Transactional
+public class IntentionServiceImpl implements IntentionService{
+
+<span class="nc" id="L28">    private final Logger log = LoggerFactory.getLogger(IntentionServiceImpl.class);</span>
+
+    private final IntentionRepository intentionRepository;
+
+    private final IntentionMapper intentionMapper;
+
+    private final IntentionSearchRepository intentionSearchRepository;
+
+<span class="nc" id="L36">    public IntentionServiceImpl(IntentionRepository intentionRepository, IntentionMapper intentionMapper, IntentionSearchRepository intentionSearchRepository) {</span>
+<span class="nc" id="L37">        this.intentionRepository = intentionRepository;</span>
+<span class="nc" id="L38">        this.intentionMapper = intentionMapper;</span>
+<span class="nc" id="L39">        this.intentionSearchRepository = intentionSearchRepository;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Save a intention.
+     *
+     * @param intentionDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public IntentionDTO save(IntentionDTO intentionDTO) {
+<span class="nc" id="L50">        log.debug(&quot;Request to save Intention : {}&quot;, intentionDTO);</span>
+<span class="nc" id="L51">        Intention intention = intentionMapper.toEntity(intentionDTO);</span>
+<span class="nc" id="L52">        intention = intentionRepository.save(intention);</span>
+<span class="nc" id="L53">        IntentionDTO result = intentionMapper.toDto(intention);</span>
+<span class="nc" id="L54">        intentionSearchRepository.save(intention);</span>
+<span class="nc" id="L55">        return result;</span>
+    }
+
+    /**
+     * Get all the intentions.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;IntentionDTO&gt; findAll() {
+<span class="nc" id="L66">        log.debug(&quot;Request to get all Intentions&quot;);</span>
+<span class="nc" id="L67">        return intentionRepository.findAll().stream()</span>
+<span class="nc" id="L68">            .map(intentionMapper::toDto)</span>
+<span class="nc" id="L69">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+    /**
+     * Get one intention by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public IntentionDTO findOne(Long id) {
+<span class="nc" id="L81">        log.debug(&quot;Request to get Intention : {}&quot;, id);</span>
+<span class="nc" id="L82">        Intention intention = intentionRepository.findOne(id);</span>
+<span class="nc" id="L83">        return intentionMapper.toDto(intention);</span>
+    }
+
+    /**
+     * Delete the intention by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L93">        log.debug(&quot;Request to delete Intention : {}&quot;, id);</span>
+<span class="nc" id="L94">        intentionRepository.delete(id);</span>
+<span class="nc" id="L95">        intentionSearchRepository.delete(id);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Search for the intention corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;IntentionDTO&gt; search(String query) {
+<span class="nc" id="L107">        log.debug(&quot;Request to search Intentions for query {}&quot;, query);</span>
+<span class="nc" id="L108">        return StreamSupport</span>
+<span class="nc" id="L109">            .stream(intentionSearchRepository.search(queryStringQuery(query)).spliterator(), false)</span>
+<span class="nc" id="L110">            .map(intentionMapper::toDto)</span>
+<span class="nc" id="L111">            .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.dto</a> &gt; <span class="el_source">UserDTO.java</span></div><h1>UserDTO.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.dto;
+
+import com.lookbr.backend.config.Constants;
+
+import com.lookbr.backend.domain.Authority;
+import com.lookbr.backend.domain.User;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.*;
+import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * A DTO representing a user, with his authorities.
+ */
+public class UserDTO {
+
+    private Long id;
+
+    @NotBlank
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 100)
+    private String login;
+
+    @Size(max = 50)
+    private String firstName;
+
+    @Size(max = 50)
+    private String lastName;
+
+    @Email
+    @Size(min = 5, max = 100)
+    private String email;
+
+    @Size(max = 256)
+    private String imageUrl;
+
+<span class="fc" id="L41">    private boolean activated = false;</span>
+
+    @Size(min = 2, max = 6)
+    private String langKey;
+
+    private String createdBy;
+
+    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+    private Instant lastModifiedDate;
+
+    private Set&lt;String&gt; authorities;
+
+<span class="fc" id="L56">    public UserDTO() {</span>
+        // Empty constructor needed for Jackson.
+<span class="fc" id="L58">    }</span>
+
+<span class="fc" id="L60">    public UserDTO(User user) {</span>
+<span class="fc" id="L61">        this.id = user.getId();</span>
+<span class="fc" id="L62">        this.login = user.getLogin();</span>
+<span class="fc" id="L63">        this.firstName = user.getFirstName();</span>
+<span class="fc" id="L64">        this.lastName = user.getLastName();</span>
+<span class="fc" id="L65">        this.email = user.getEmail();</span>
+<span class="fc" id="L66">        this.activated = user.getActivated();</span>
+<span class="fc" id="L67">        this.imageUrl = user.getImageUrl();</span>
+<span class="fc" id="L68">        this.langKey = user.getLangKey();</span>
+<span class="fc" id="L69">        this.createdBy = user.getCreatedBy();</span>
+<span class="fc" id="L70">        this.createdDate = user.getCreatedDate();</span>
+<span class="fc" id="L71">        this.lastModifiedBy = user.getLastModifiedBy();</span>
+<span class="fc" id="L72">        this.lastModifiedDate = user.getLastModifiedDate();</span>
+<span class="fc" id="L73">        this.authorities = user.getAuthorities().stream()</span>
+<span class="fc" id="L74">            .map(Authority::getName)</span>
+<span class="fc" id="L75">            .collect(Collectors.toSet());</span>
+<span class="fc" id="L76">    }</span>
+
+    public Long getId() {
+<span class="fc" id="L79">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="fc" id="L83">        this.id = id;</span>
+<span class="fc" id="L84">    }</span>
+
+    public String getLogin() {
+<span class="fc" id="L87">        return login;</span>
+    }
+
+    public void setLogin(String login) {
+<span class="fc" id="L91">        this.login = login;</span>
+<span class="fc" id="L92">    }</span>
+
+    public String getFirstName() {
+<span class="fc" id="L95">        return firstName;</span>
+    }
+
+    public void setFirstName(String firstName) {
+<span class="fc" id="L99">        this.firstName = firstName;</span>
+<span class="fc" id="L100">    }</span>
+
+    public String getLastName() {
+<span class="fc" id="L103">        return lastName;</span>
+    }
+
+    public void setLastName(String lastName) {
+<span class="fc" id="L107">        this.lastName = lastName;</span>
+<span class="fc" id="L108">    }</span>
+
+    public String getEmail() {
+<span class="fc" id="L111">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L115">        this.email = email;</span>
+<span class="fc" id="L116">    }</span>
+
+    public String getImageUrl() {
+<span class="fc" id="L119">        return imageUrl;</span>
+    }
+
+    public void setImageUrl(String imageUrl) {
+<span class="fc" id="L123">        this.imageUrl = imageUrl;</span>
+<span class="fc" id="L124">    }</span>
+
+    public boolean isActivated() {
+<span class="fc" id="L127">        return activated;</span>
+    }
+
+    public void setActivated(boolean activated) {
+<span class="fc" id="L131">        this.activated = activated;</span>
+<span class="fc" id="L132">    }</span>
+
+    public String getLangKey() {
+<span class="fc" id="L135">        return langKey;</span>
+    }
+
+    public void setLangKey(String langKey) {
+<span class="fc" id="L139">        this.langKey = langKey;</span>
+<span class="fc" id="L140">    }</span>
+
+    public String getCreatedBy() {
+<span class="fc" id="L143">        return createdBy;</span>
+    }
+
+    public void setCreatedBy(String createdBy) {
+<span class="fc" id="L147">        this.createdBy = createdBy;</span>
+<span class="fc" id="L148">    }</span>
+
+    public Instant getCreatedDate() {
+<span class="fc" id="L151">        return createdDate;</span>
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+<span class="fc" id="L155">        this.createdDate = createdDate;</span>
+<span class="fc" id="L156">    }</span>
+
+    public String getLastModifiedBy() {
+<span class="fc" id="L159">        return lastModifiedBy;</span>
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+<span class="fc" id="L163">        this.lastModifiedBy = lastModifiedBy;</span>
+<span class="fc" id="L164">    }</span>
+
+    public Instant getLastModifiedDate() {
+<span class="fc" id="L167">        return lastModifiedDate;</span>
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+<span class="fc" id="L171">        this.lastModifiedDate = lastModifiedDate;</span>
+<span class="fc" id="L172">    }</span>
+
+    public Set&lt;String&gt; getAuthorities() {
+<span class="fc" id="L175">        return authorities;</span>
+    }
+
+    public void setAuthorities(Set&lt;String&gt; authorities) {
+<span class="fc" id="L179">        this.authorities = authorities;</span>
+<span class="fc" id="L180">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L184">        return &quot;UserDTO{&quot; +</span>
+            &quot;login='&quot; + login + '\'' +
+            &quot;, firstName='&quot; + firstName + '\'' +
+            &quot;, lastName='&quot; + lastName + '\'' +
+            &quot;, email='&quot; + email + '\'' +
+            &quot;, imageUrl='&quot; + imageUrl + '\'' +
+            &quot;, activated=&quot; + activated +
+            &quot;, langKey='&quot; + langKey + '\'' +
+            &quot;, createdBy=&quot; + createdBy +
+            &quot;, createdDate=&quot; + createdDate +
+            &quot;, lastModifiedBy='&quot; + lastModifiedBy + '\'' +
+            &quot;, lastModifiedDate=&quot; + lastModifiedDate +
+            &quot;, authorities=&quot; + authorities +
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

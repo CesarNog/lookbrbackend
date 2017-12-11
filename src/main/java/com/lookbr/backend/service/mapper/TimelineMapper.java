@@ -13,7 +13,8 @@ public interface TimelineMapper extends EntityMapper<TimelineDTO, Timeline> {
 
     
 
-    
+    @Mapping(target = "inspirations", ignore = true)
+    Timeline toEntity(TimelineDTO timelineDTO);
 
     default Timeline fromId(Long id) {
         if (id == null) {

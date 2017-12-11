@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JacksonConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">JacksonConfiguration.java</span></div><h1>JacksonConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.zalando.problem.ProblemModule;
+import org.zalando.problem.validation.ConstraintViolationProblemModule;
+
+@Configuration
+<span class="fc" id="L12">public class JacksonConfiguration {</span>
+
+    /*
+     * Support for Hibernate types in Jackson.
+     */
+    @Bean
+    public Hibernate5Module hibernate5Module() {
+<span class="fc" id="L19">        return new Hibernate5Module();</span>
+    }
+
+    /*
+     * Jackson Afterburner module to speed up serialization/deserialization.
+     */
+    @Bean
+    public AfterburnerModule afterburnerModule() {
+<span class="fc" id="L27">        return new AfterburnerModule();</span>
+    }
+
+    /*
+     * Module for serialization/deserialization of RFC7807 Problem.
+     */
+    @Bean
+    ProblemModule problemModule() {
+<span class="fc" id="L35">        return new ProblemModule();</span>
+    }
+
+    /*
+     * Module for serialization/deserialization of ConstraintViolationProblem.
+     */
+    @Bean
+    ConstraintViolationProblemModule constraintViolationProblemModule() {
+<span class="fc" id="L43">        return new ConstraintViolationProblemModule();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

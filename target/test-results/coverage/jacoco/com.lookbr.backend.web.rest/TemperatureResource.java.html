@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">TemperatureResource.java</span></div><h1>TemperatureResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.TemperatureService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.TemperatureDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Temperature.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class TemperatureResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(TemperatureResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;temperature&quot;;
+
+    private final TemperatureService temperatureService;
+
+<span class="nc" id="L36">    public TemperatureResource(TemperatureService temperatureService) {</span>
+<span class="nc" id="L37">        this.temperatureService = temperatureService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /temperatures : Create a new temperature.
+     *
+     * @param temperatureDTO the temperatureDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new temperatureDTO, or with status 400 (Bad Request) if the temperature has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/temperatures&quot;)
+    @Timed
+    public ResponseEntity&lt;TemperatureDTO&gt; createTemperature(@RequestBody TemperatureDTO temperatureDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Temperature : {}&quot;, temperatureDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (temperatureDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new temperature cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        TemperatureDTO result = temperatureService.save(temperatureDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/temperatures/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /temperatures : Updates an existing temperature.
+     *
+     * @param temperatureDTO the temperatureDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated temperatureDTO,
+     * or with status 400 (Bad Request) if the temperatureDTO is not valid,
+     * or with status 500 (Internal Server Error) if the temperatureDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/temperatures&quot;)
+    @Timed
+    public ResponseEntity&lt;TemperatureDTO&gt; updateTemperature(@RequestBody TemperatureDTO temperatureDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Temperature : {}&quot;, temperatureDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (temperatureDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createTemperature(temperatureDTO);</span>
+        }
+<span class="nc" id="L76">        TemperatureDTO result = temperatureService.save(temperatureDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, temperatureDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /temperatures : get all the temperatures.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of temperatures in body
+     */
+    @GetMapping(&quot;/temperatures&quot;)
+    @Timed
+    public List&lt;TemperatureDTO&gt; getAllTemperatures() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Temperatures&quot;);</span>
+<span class="nc" id="L91">        return temperatureService.findAll();</span>
+        }
+
+    /**
+     * GET  /temperatures/:id : get the &quot;id&quot; temperature.
+     *
+     * @param id the id of the temperatureDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the temperatureDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/temperatures/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;TemperatureDTO&gt; getTemperature(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Temperature : {}&quot;, id);</span>
+<span class="nc" id="L104">        TemperatureDTO temperatureDTO = temperatureService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(temperatureDTO));</span>
+    }
+
+    /**
+     * DELETE  /temperatures/:id : delete the &quot;id&quot; temperature.
+     *
+     * @param id the id of the temperatureDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/temperatures/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteTemperature(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Temperature : {}&quot;, id);</span>
+<span class="nc" id="L118">        temperatureService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/temperatures?query=:query : search for the temperature corresponding
+     * to the query.
+     *
+     * @param query the query of the temperature search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/temperatures&quot;)
+    @Timed
+    public List&lt;TemperatureDTO&gt; searchTemperatures(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Temperatures for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return temperatureService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Look;
 import com.lookbr.backend.repository.LookRepository;
 import com.lookbr.backend.service.LookService;
+import com.lookbr.backend.repository.search.LookSearchRepository;
 import com.lookbr.backend.service.dto.LookDTO;
 import com.lookbr.backend.service.mapper.LookMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -52,6 +53,12 @@ public class LookResourceIntTest {
     private static final LocalDate DEFAULT_DAY_TIME = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DAY_TIME = LocalDate.now(ZoneId.systemDefault());
 
+    private static final Integer DEFAULT_PICTURE_INDEX = 1;
+    private static final Integer UPDATED_PICTURE_INDEX = 2;
+
+    private static final String DEFAULT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_URL = "BBBBBBBBBB";
+
     @Autowired
     private LookRepository lookRepository;
 
@@ -60,6 +67,9 @@ public class LookResourceIntTest {
 
     @Autowired
     private LookService lookService;
+
+    @Autowired
+    private LookSearchRepository lookSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -98,12 +108,15 @@ public class LookResourceIntTest {
         Look look = new Look()
             .userId(DEFAULT_USER_ID)
             .temperature(DEFAULT_TEMPERATURE)
-            .dayTime(DEFAULT_DAY_TIME);
+            .dayTime(DEFAULT_DAY_TIME)
+            .pictureIndex(DEFAULT_PICTURE_INDEX)
+            .url(DEFAULT_URL);
         return look;
     }
 
     @Before
     public void initTest() {
+        lookSearchRepository.deleteAll();
         look = createEntity(em);
     }
 
@@ -126,6 +139,12 @@ public class LookResourceIntTest {
         assertThat(testLook.getUserId()).isEqualTo(DEFAULT_USER_ID);
         assertThat(testLook.getTemperature()).isEqualTo(DEFAULT_TEMPERATURE);
         assertThat(testLook.getDayTime()).isEqualTo(DEFAULT_DAY_TIME);
+        assertThat(testLook.getPictureIndex()).isEqualTo(DEFAULT_PICTURE_INDEX);
+        assertThat(testLook.getUrl()).isEqualTo(DEFAULT_URL);
+
+        // Validate the Look in Elasticsearch
+        Look lookEs = lookSearchRepository.findOne(testLook.getId());
+        assertThat(lookEs).isEqualToComparingFieldByField(testLook);
     }
 
     @Test
@@ -161,7 +180,9 @@ public class LookResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(look.getId().intValue())))
             .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.toString())))
             .andExpect(jsonPath("$.[*].temperature").value(hasItem(DEFAULT_TEMPERATURE.toString())))
-            .andExpect(jsonPath("$.[*].dayTime").value(hasItem(DEFAULT_DAY_TIME.toString())));
+            .andExpect(jsonPath("$.[*].dayTime").value(hasItem(DEFAULT_DAY_TIME.toString())))
+            .andExpect(jsonPath("$.[*].pictureIndex").value(hasItem(DEFAULT_PICTURE_INDEX)))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
 
     @Test
@@ -177,7 +198,9 @@ public class LookResourceIntTest {
             .andExpect(jsonPath("$.id").value(look.getId().intValue()))
             .andExpect(jsonPath("$.userId").value(DEFAULT_USER_ID.toString()))
             .andExpect(jsonPath("$.temperature").value(DEFAULT_TEMPERATURE.toString()))
-            .andExpect(jsonPath("$.dayTime").value(DEFAULT_DAY_TIME.toString()));
+            .andExpect(jsonPath("$.dayTime").value(DEFAULT_DAY_TIME.toString()))
+            .andExpect(jsonPath("$.pictureIndex").value(DEFAULT_PICTURE_INDEX))
+            .andExpect(jsonPath("$.url").value(DEFAULT_URL.toString()));
     }
 
     @Test
@@ -193,6 +216,7 @@ public class LookResourceIntTest {
     public void updateLook() throws Exception {
         // Initialize the database
         lookRepository.saveAndFlush(look);
+        lookSearchRepository.save(look);
         int databaseSizeBeforeUpdate = lookRepository.findAll().size();
 
         // Update the look
@@ -202,7 +226,9 @@ public class LookResourceIntTest {
         updatedLook
             .userId(UPDATED_USER_ID)
             .temperature(UPDATED_TEMPERATURE)
-            .dayTime(UPDATED_DAY_TIME);
+            .dayTime(UPDATED_DAY_TIME)
+            .pictureIndex(UPDATED_PICTURE_INDEX)
+            .url(UPDATED_URL);
         LookDTO lookDTO = lookMapper.toDto(updatedLook);
 
         restLookMockMvc.perform(put("/api/looks")
@@ -217,6 +243,12 @@ public class LookResourceIntTest {
         assertThat(testLook.getUserId()).isEqualTo(UPDATED_USER_ID);
         assertThat(testLook.getTemperature()).isEqualTo(UPDATED_TEMPERATURE);
         assertThat(testLook.getDayTime()).isEqualTo(UPDATED_DAY_TIME);
+        assertThat(testLook.getPictureIndex()).isEqualTo(UPDATED_PICTURE_INDEX);
+        assertThat(testLook.getUrl()).isEqualTo(UPDATED_URL);
+
+        // Validate the Look in Elasticsearch
+        Look lookEs = lookSearchRepository.findOne(testLook.getId());
+        assertThat(lookEs).isEqualToComparingFieldByField(testLook);
     }
 
     @Test
@@ -243,6 +275,7 @@ public class LookResourceIntTest {
     public void deleteLook() throws Exception {
         // Initialize the database
         lookRepository.saveAndFlush(look);
+        lookSearchRepository.save(look);
         int databaseSizeBeforeDelete = lookRepository.findAll().size();
 
         // Get the look
@@ -250,9 +283,32 @@ public class LookResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean lookExistsInEs = lookSearchRepository.exists(look.getId());
+        assertThat(lookExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Look> lookList = lookRepository.findAll();
         assertThat(lookList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchLook() throws Exception {
+        // Initialize the database
+        lookRepository.saveAndFlush(look);
+        lookSearchRepository.save(look);
+
+        // Search the look
+        restLookMockMvc.perform(get("/api/_search/looks?query=id:" + look.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(look.getId().intValue())))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(DEFAULT_USER_ID.toString())))
+            .andExpect(jsonPath("$.[*].temperature").value(hasItem(DEFAULT_TEMPERATURE.toString())))
+            .andExpect(jsonPath("$.[*].dayTime").value(hasItem(DEFAULT_DAY_TIME.toString())))
+            .andExpect(jsonPath("$.[*].pictureIndex").value(hasItem(DEFAULT_PICTURE_INDEX)))
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL.toString())));
     }
 
     @Test

@@ -4,7 +4,8 @@
             "home": {
                 "title": "Intentions",
                 "createLabel": "Create a new Intention",
-                "createOrEditLabel": "Create or edit a Intention"
+                "createOrEditLabel": "Create or edit a Intention",
+                "search": "Search for Intention"
             },
             "created": "A new Intention is created with identifier {{ param }}",
             "updated": "A Intention is updated with identifier {{ param }}",
@@ -15,7 +16,9 @@
             "detail": {
                 "title": "Intention"
             },
-            "page": "Page"
+            "page": "Page",
+            "inspiration": "Inspiration",
+            "look": "Look"
         }
     }
 }

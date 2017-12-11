@@ -2,6 +2,7 @@ package com.lookbr.backend.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import com.lookbr.backend.domain.enumeration.LoginType;
 @Entity
 @Table(name = "login")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "login")
 public class Login implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,14 +30,12 @@ public class Login implements Serializable {
     @Column(name = "login_type")
     private LoginType loginType;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "token")
+    private String token;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "jhi_password")
-    private String password;
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -59,43 +59,30 @@ public class Login implements Serializable {
         this.loginType = loginType;
     }
 
-    public String getUsername() {
-        return username;
+    public String getToken() {
+        return token;
     }
 
-    public Login username(String username) {
-        this.username = username;
+    public Login token(String token) {
+        this.token = token;
         return this;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getEmail() {
-        return email;
+    public User getUser() {
+        return user;
     }
 
-    public Login email(String email) {
-        this.email = email;
+    public Login user(User user) {
+        this.user = user;
         return this;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Login password(String password) {
-        this.password = password;
-        return this;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -124,9 +111,7 @@ public class Login implements Serializable {
         return "Login{" +
             "id=" + getId() +
             ", loginType='" + getLoginType() + "'" +
-            ", username='" + getUsername() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", password='" + getPassword() + "'" +
+            ", token='" + getToken() + "'" +
             "}";
     }
 }

@@ -12,9 +12,11 @@ public class SignupDTO implements Serializable {
 
     private Long id;
 
+    private String email;
+
     private LoginType loginType;
 
-    private String email;
+    private String password;
 
     private String profilePhotoUrl;
 
@@ -22,7 +24,7 @@ public class SignupDTO implements Serializable {
 
     private String username;
 
-    private String password;
+    private String token;
 
     public Long getId() {
         return id;
@@ -30,6 +32,14 @@ public class SignupDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LoginType getLoginType() {
@@ -40,12 +50,12 @@ public class SignupDTO implements Serializable {
         this.loginType = loginType;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getProfilePhotoUrl() {
@@ -72,12 +82,12 @@ public class SignupDTO implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
@@ -105,12 +115,13 @@ public class SignupDTO implements Serializable {
     public String toString() {
         return "SignupDTO{" +
             "id=" + getId() +
-            ", loginType='" + getLoginType() + "'" +
             ", email='" + getEmail() + "'" +
+            ", loginType='" + getLoginType() + "'" +
+            ", password='" + getPassword() + "'" +
             ", profilePhotoUrl='" + getProfilePhotoUrl() + "'" +
             ", profilePhoto='" + getProfilePhoto() + "'" +
             ", username='" + getUsername() + "'" +
-            ", password='" + getPassword() + "'" +
+            ", token='" + getToken() + "'" +
             "}";
     }
 }

@@ -1,0 +1,35 @@
+
+<div *ngIf="socialMedia">
+    <h2><span jhiTranslate="lookbrbackendApp.socialMedia.detail.title">Social Media</span> {{socialMedia.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.socialMedia.type">Type</span></dt>
+        <dd>
+            <span>{{socialMedia.type}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.socialMedia.url">Url</span></dt>
+        <dd>
+            <span>{{socialMedia.url}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.socialMedia.consultant">Consultant</span></dt>
+        <dd>
+            <div *ngIf="socialMedia.consultantId">
+                <a [routerLink]="['/consultant', socialMedia.consultantId]">{{socialMedia.consultantId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'social-media/'+ socialMedia.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

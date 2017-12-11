@@ -1,0 +1,25 @@
+{
+    "lookbrbackendApp": {
+        "temperature" : {
+            "home": {
+                "title": "Temperatures",
+                "createLabel": "Create a new Temperature",
+                "createOrEditLabel": "Create or edit a Temperature",
+                "search": "Search for Temperature"
+            },
+            "created": "A new Temperature is created with identifier {{ param }}",
+            "updated": "A Temperature is updated with identifier {{ param }}",
+            "deleted": "A Temperature is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Temperature {{ id }}?"
+            },
+            "detail": {
+                "title": "Temperature"
+            },
+            "value": "Value",
+            "type": "Type",
+            "inspiration": "Inspiration",
+            "look": "Look"
+        }
+    }
+}

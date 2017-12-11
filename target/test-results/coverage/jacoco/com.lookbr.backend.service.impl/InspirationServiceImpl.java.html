@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InspirationServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.impl</a> &gt; <span class="el_source">InspirationServiceImpl.java</span></div><h1>InspirationServiceImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.impl;
+
+import com.lookbr.backend.service.InspirationService;
+import com.lookbr.backend.domain.Inspiration;
+import com.lookbr.backend.repository.InspirationRepository;
+import com.lookbr.backend.repository.search.InspirationSearchRepository;
+import com.lookbr.backend.service.dto.InspirationDTO;
+import com.lookbr.backend.service.mapper.InspirationMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * Service Implementation for managing Inspiration.
+ */
+@Service
+@Transactional
+public class InspirationServiceImpl implements InspirationService{
+
+<span class="nc" id="L28">    private final Logger log = LoggerFactory.getLogger(InspirationServiceImpl.class);</span>
+
+    private final InspirationRepository inspirationRepository;
+
+    private final InspirationMapper inspirationMapper;
+
+    private final InspirationSearchRepository inspirationSearchRepository;
+
+<span class="nc" id="L36">    public InspirationServiceImpl(InspirationRepository inspirationRepository, InspirationMapper inspirationMapper, InspirationSearchRepository inspirationSearchRepository) {</span>
+<span class="nc" id="L37">        this.inspirationRepository = inspirationRepository;</span>
+<span class="nc" id="L38">        this.inspirationMapper = inspirationMapper;</span>
+<span class="nc" id="L39">        this.inspirationSearchRepository = inspirationSearchRepository;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Save a inspiration.
+     *
+     * @param inspirationDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public InspirationDTO save(InspirationDTO inspirationDTO) {
+<span class="nc" id="L50">        log.debug(&quot;Request to save Inspiration : {}&quot;, inspirationDTO);</span>
+<span class="nc" id="L51">        Inspiration inspiration = inspirationMapper.toEntity(inspirationDTO);</span>
+<span class="nc" id="L52">        inspiration = inspirationRepository.save(inspiration);</span>
+<span class="nc" id="L53">        InspirationDTO result = inspirationMapper.toDto(inspiration);</span>
+<span class="nc" id="L54">        inspirationSearchRepository.save(inspiration);</span>
+<span class="nc" id="L55">        return result;</span>
+    }
+
+    /**
+     * Get all the inspirations.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;InspirationDTO&gt; findAll() {
+<span class="nc" id="L66">        log.debug(&quot;Request to get all Inspirations&quot;);</span>
+<span class="nc" id="L67">        return inspirationRepository.findAll().stream()</span>
+<span class="nc" id="L68">            .map(inspirationMapper::toDto)</span>
+<span class="nc" id="L69">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+    /**
+     * Get one inspiration by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public InspirationDTO findOne(Long id) {
+<span class="nc" id="L81">        log.debug(&quot;Request to get Inspiration : {}&quot;, id);</span>
+<span class="nc" id="L82">        Inspiration inspiration = inspirationRepository.findOne(id);</span>
+<span class="nc" id="L83">        return inspirationMapper.toDto(inspiration);</span>
+    }
+
+    /**
+     * Delete the inspiration by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L93">        log.debug(&quot;Request to delete Inspiration : {}&quot;, id);</span>
+<span class="nc" id="L94">        inspirationRepository.delete(id);</span>
+<span class="nc" id="L95">        inspirationSearchRepository.delete(id);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Search for the inspiration corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;InspirationDTO&gt; search(String query) {
+<span class="nc" id="L107">        log.debug(&quot;Request to search Inspirations for query {}&quot;, query);</span>
+<span class="nc" id="L108">        return StreamSupport</span>
+<span class="nc" id="L109">            .stream(inspirationSearchRepository.search(queryStringQuery(query)).spliterator(), false)</span>
+<span class="nc" id="L110">            .map(inspirationMapper::toDto)</span>
+<span class="nc" id="L111">            .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

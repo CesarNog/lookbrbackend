@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomParameterizedException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.errors</a> &gt; <span class="el_source">CustomParameterizedException.java</span></div><h1>CustomParameterizedException.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.errors;
+
+import org.zalando.problem.AbstractThrowableProblem;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.zalando.problem.Status.BAD_REQUEST;
+
+/**
+ * Custom, parameterized exception, which can be translated on the client side.
+ * For example:
+ *
+ * &lt;pre&gt;
+ * throw new CustomParameterizedException(&amp;quot;myCustomError&amp;quot;, &amp;quot;hello&amp;quot;, &amp;quot;world&amp;quot;);
+ * &lt;/pre&gt;
+ *
+ * Can be translated with:
+ *
+ * &lt;pre&gt;
+ * &quot;error.myCustomError&quot; :  &quot;The server says {{param0}} to {{param1}}&quot;
+ * &lt;/pre&gt;
+ */
+public class CustomParameterizedException extends AbstractThrowableProblem {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final String PARAM = &quot;param&quot;;
+
+    public CustomParameterizedException(String message, String... params) {
+<span class="fc" id="L31">        this(message, toParamMap(params));</span>
+<span class="fc" id="L32">    }</span>
+
+    public CustomParameterizedException(String message, Map&lt;String, Object&gt; paramMap) {
+<span class="fc" id="L35">        super(ErrorConstants.PARAMETERIZED_TYPE, &quot;Parameterized Exception&quot;, BAD_REQUEST, null, null, null, toProblemParameters(message, paramMap));</span>
+<span class="fc" id="L36">    }</span>
+
+    public static Map&lt;String, Object&gt; toParamMap(String... params) {
+<span class="fc" id="L39">        Map&lt;String, Object&gt; paramMap = new HashMap&lt;&gt;();</span>
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">        if (params != null &amp;&amp; params.length &gt; 0) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            for (int i = 0; i &lt; params.length; i++) {</span>
+<span class="fc" id="L42">                paramMap.put(PARAM + i, params[i]);</span>
+            }
+        }
+<span class="fc" id="L45">        return paramMap;</span>
+    }
+
+    public static Map&lt;String, Object&gt; toProblemParameters(String message, Map&lt;String, Object&gt; paramMap) {
+<span class="fc" id="L49">        Map&lt;String, Object&gt; parameters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L50">        parameters.put(&quot;message&quot;, message);</span>
+<span class="fc" id="L51">        parameters.put(&quot;params&quot;, paramMap);</span>
+<span class="fc" id="L52">        return parameters;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

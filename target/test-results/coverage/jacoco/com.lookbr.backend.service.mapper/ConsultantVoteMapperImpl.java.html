@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsultantVoteMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">ConsultantVoteMapperImpl.java</span></div><h1>ConsultantVoteMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.ConsultantVote;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.service.dto.ConsultantVoteDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L31">public class ConsultantVoteMapperImpl implements ConsultantVoteMapper {</span>
+
+    @Autowired
+
+    private LookMapper lookMapper;
+
+    @Override
+
+    public List&lt;ConsultantVote&gt; toEntity(List&lt;ConsultantVoteDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L43">            return null;</span>
+        }
+
+<span class="nc" id="L46">        List&lt;ConsultantVote&gt; list = new ArrayList&lt;ConsultantVote&gt;();</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for ( ConsultantVoteDTO consultantVoteDTO : dtoList ) {</span>
+
+<span class="nc" id="L50">            list.add( toEntity( consultantVoteDTO ) );</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;ConsultantVoteDTO&gt; toDto(List&lt;ConsultantVote&gt; entityList) {
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L62">            return null;</span>
+        }
+
+<span class="nc" id="L65">        List&lt;ConsultantVoteDTO&gt; list = new ArrayList&lt;ConsultantVoteDTO&gt;();</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for ( ConsultantVote consultantVote : entityList ) {</span>
+
+<span class="nc" id="L69">            list.add( toDto( consultantVote ) );</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return list;</span>
+    }
+
+    @Override
+
+    public ConsultantVoteDTO toDto(ConsultantVote consultantVote) {
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if ( consultantVote == null ) {</span>
+
+<span class="nc" id="L81">            return null;</span>
+        }
+
+<span class="nc" id="L84">        ConsultantVoteDTO consultantVoteDTO_ = new ConsultantVoteDTO();</span>
+
+<span class="nc" id="L86">        consultantVoteDTO_.setLookId( consultantVoteLookId( consultantVote ) );</span>
+
+<span class="nc" id="L88">        consultantVoteDTO_.setId( consultantVote.getId() );</span>
+
+<span class="nc" id="L90">        consultantVoteDTO_.setConsultantProfilePhotoUrl( consultantVote.getConsultantProfilePhotoUrl() );</span>
+
+<span class="nc" id="L92">        return consultantVoteDTO_;</span>
+    }
+
+    @Override
+
+    public ConsultantVote toEntity(ConsultantVoteDTO consultantVoteDTO) {
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if ( consultantVoteDTO == null ) {</span>
+
+<span class="nc" id="L101">            return null;</span>
+        }
+
+<span class="nc" id="L104">        ConsultantVote consultantVote_ = new ConsultantVote();</span>
+
+<span class="nc" id="L106">        consultantVote_.setLook( lookMapper.fromId( consultantVoteDTO.getLookId() ) );</span>
+
+<span class="nc" id="L108">        consultantVote_.setId( consultantVoteDTO.getId() );</span>
+
+<span class="nc" id="L110">        consultantVote_.setConsultantProfilePhotoUrl( consultantVoteDTO.getConsultantProfilePhotoUrl() );</span>
+
+<span class="nc" id="L112">        return consultantVote_;</span>
+    }
+
+    private Long consultantVoteLookId(ConsultantVote consultantVote) {
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if ( consultantVote == null ) {</span>
+
+<span class="nc" id="L119">            return null;</span>
+        }
+
+<span class="nc" id="L122">        Look look = consultantVote.getLook();</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L126">            return null;</span>
+        }
+
+<span class="nc" id="L129">        Long id = look.getId();</span>
+
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L133">            return null;</span>
+        }
+
+<span class="nc" id="L136">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

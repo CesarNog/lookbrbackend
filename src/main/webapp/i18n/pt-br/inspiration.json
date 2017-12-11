@@ -1,0 +1,30 @@
+{
+    "lookbrbackendApp": {
+        "inspiration" : {
+            "home": {
+                "title": "Inspirations",
+                "createLabel": "Criar novo Inspiration",
+                "createOrEditLabel": "Criar ou editar Inspiration",
+                "search": "Pesquisar por Inspiration"
+            },
+            "created": "Um novo Inspiration foi criado com o identificador {{ param }}",
+            "updated": "Um Inspiration foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Inspiration foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Inspiration {{ id }}?"
+            },
+            "detail": {
+                "title": "Inspiration"
+            },
+            "consultantName": "Consultant Name",
+            "consultantProfilePhotoURL": "Consultant Profile Photo URL",
+            "inspirationURL": "Inspiration URL",
+            "page": "Page",
+            "timeline": "Timeline",
+            "intentions": "Intentions",
+            "occasions": "Occasions",
+            "temperature": "Temperature",
+            "dayTime": "Day Time"
+        }
+    }
+}

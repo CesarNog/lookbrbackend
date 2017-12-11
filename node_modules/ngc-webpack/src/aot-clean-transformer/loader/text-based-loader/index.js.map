@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../../src/aot-clean-transformer/loader/text-based-loader/index.ts"],"names":[],"mappings":";;AAAA,mCAAuD;AAA9C,kCAAA,cAAc,CAAA;AAAE,+BAAA,WAAW,CAAA","sourcesContent":["export { aotCleanLoader, resetLoader } from './loader';\n"]}

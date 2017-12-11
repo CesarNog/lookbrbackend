@@ -1,0 +1,37 @@
+
+<div *ngIf="occasion">
+    <h2><span jhiTranslate="lookbrbackendApp.occasion.detail.title">Occasion</span> {{occasion.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.occasion.page">Page</span></dt>
+        <dd>
+            <span>{{occasion.page}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.occasion.inspiration">Inspiration</span></dt>
+        <dd>
+            <div *ngIf="occasion.inspirationId">
+                <a [routerLink]="['/inspiration', occasion.inspirationId]">{{occasion.inspirationId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.occasion.look">Look</span></dt>
+        <dd>
+            <div *ngIf="occasion.lookId">
+                <a [routerLink]="['/look', occasion.lookId]">{{occasion.lookId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'occasion/'+ occasion.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

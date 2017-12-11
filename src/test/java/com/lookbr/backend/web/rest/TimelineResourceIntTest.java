@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Timeline;
 import com.lookbr.backend.repository.TimelineRepository;
 import com.lookbr.backend.service.TimelineService;
+import com.lookbr.backend.repository.search.TimelineSearchRepository;
 import com.lookbr.backend.service.dto.TimelineDTO;
 import com.lookbr.backend.service.mapper.TimelineMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -54,6 +55,9 @@ public class TimelineResourceIntTest {
     private TimelineService timelineService;
 
     @Autowired
+    private TimelineSearchRepository timelineSearchRepository;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,6 +98,7 @@ public class TimelineResourceIntTest {
 
     @Before
     public void initTest() {
+        timelineSearchRepository.deleteAll();
         timeline = createEntity(em);
     }
 
@@ -114,6 +119,10 @@ public class TimelineResourceIntTest {
         assertThat(timelineList).hasSize(databaseSizeBeforeCreate + 1);
         Timeline testTimeline = timelineList.get(timelineList.size() - 1);
         assertThat(testTimeline.getPage()).isEqualTo(DEFAULT_PAGE);
+
+        // Validate the Timeline in Elasticsearch
+        Timeline timelineEs = timelineSearchRepository.findOne(testTimeline.getId());
+        assertThat(timelineEs).isEqualToComparingFieldByField(testTimeline);
     }
 
     @Test
@@ -177,6 +186,7 @@ public class TimelineResourceIntTest {
     public void updateTimeline() throws Exception {
         // Initialize the database
         timelineRepository.saveAndFlush(timeline);
+        timelineSearchRepository.save(timeline);
         int databaseSizeBeforeUpdate = timelineRepository.findAll().size();
 
         // Update the timeline
@@ -197,6 +207,10 @@ public class TimelineResourceIntTest {
         assertThat(timelineList).hasSize(databaseSizeBeforeUpdate);
         Timeline testTimeline = timelineList.get(timelineList.size() - 1);
         assertThat(testTimeline.getPage()).isEqualTo(UPDATED_PAGE);
+
+        // Validate the Timeline in Elasticsearch
+        Timeline timelineEs = timelineSearchRepository.findOne(testTimeline.getId());
+        assertThat(timelineEs).isEqualToComparingFieldByField(testTimeline);
     }
 
     @Test
@@ -223,6 +237,7 @@ public class TimelineResourceIntTest {
     public void deleteTimeline() throws Exception {
         // Initialize the database
         timelineRepository.saveAndFlush(timeline);
+        timelineSearchRepository.save(timeline);
         int databaseSizeBeforeDelete = timelineRepository.findAll().size();
 
         // Get the timeline
@@ -230,9 +245,28 @@ public class TimelineResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean timelineExistsInEs = timelineSearchRepository.exists(timeline.getId());
+        assertThat(timelineExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Timeline> timelineList = timelineRepository.findAll();
         assertThat(timelineList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchTimeline() throws Exception {
+        // Initialize the database
+        timelineRepository.saveAndFlush(timeline);
+        timelineSearchRepository.save(timeline);
+
+        // Search the timeline
+        restTimelineMockMvc.perform(get("/api/_search/timelines?query=id:" + timeline.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(timeline.getId().intValue())))
+            .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)));
     }
 
     @Test

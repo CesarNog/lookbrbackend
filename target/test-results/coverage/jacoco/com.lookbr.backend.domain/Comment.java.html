@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Comment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">Comment.java</span></div><h1>Comment.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+
+
+/**
+ * A Comment.
+ */
+@Entity
+@Table(name = &quot;comment&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = &quot;comment&quot;)
+<span class="nc" id="L20">public class Comment implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;jhi_comment&quot;)
+    private String comment;
+
+    @Column(name = &quot;consultant_profile_photo&quot;)
+    private String consultantProfilePhoto;
+
+    @Column(name = &quot;consultant_name&quot;)
+    private String consultantName;
+
+    @Column(name = &quot;date_voted&quot;)
+    private LocalDate dateVoted;
+
+    @ManyToOne
+    private Look look;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="nc" id="L45">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L49">        this.id = id;</span>
+<span class="nc" id="L50">    }</span>
+
+    public String getComment() {
+<span class="nc" id="L53">        return comment;</span>
+    }
+
+    public Comment comment(String comment) {
+<span class="nc" id="L57">        this.comment = comment;</span>
+<span class="nc" id="L58">        return this;</span>
+    }
+
+    public void setComment(String comment) {
+<span class="nc" id="L62">        this.comment = comment;</span>
+<span class="nc" id="L63">    }</span>
+
+    public String getConsultantProfilePhoto() {
+<span class="nc" id="L66">        return consultantProfilePhoto;</span>
+    }
+
+    public Comment consultantProfilePhoto(String consultantProfilePhoto) {
+<span class="nc" id="L70">        this.consultantProfilePhoto = consultantProfilePhoto;</span>
+<span class="nc" id="L71">        return this;</span>
+    }
+
+    public void setConsultantProfilePhoto(String consultantProfilePhoto) {
+<span class="nc" id="L75">        this.consultantProfilePhoto = consultantProfilePhoto;</span>
+<span class="nc" id="L76">    }</span>
+
+    public String getConsultantName() {
+<span class="nc" id="L79">        return consultantName;</span>
+    }
+
+    public Comment consultantName(String consultantName) {
+<span class="nc" id="L83">        this.consultantName = consultantName;</span>
+<span class="nc" id="L84">        return this;</span>
+    }
+
+    public void setConsultantName(String consultantName) {
+<span class="nc" id="L88">        this.consultantName = consultantName;</span>
+<span class="nc" id="L89">    }</span>
+
+    public LocalDate getDateVoted() {
+<span class="nc" id="L92">        return dateVoted;</span>
+    }
+
+    public Comment dateVoted(LocalDate dateVoted) {
+<span class="nc" id="L96">        this.dateVoted = dateVoted;</span>
+<span class="nc" id="L97">        return this;</span>
+    }
+
+    public void setDateVoted(LocalDate dateVoted) {
+<span class="nc" id="L101">        this.dateVoted = dateVoted;</span>
+<span class="nc" id="L102">    }</span>
+
+    public Look getLook() {
+<span class="nc" id="L105">        return look;</span>
+    }
+
+    public Comment look(Look look) {
+<span class="nc" id="L109">        this.look = look;</span>
+<span class="nc" id="L110">        return this;</span>
+    }
+
+    public void setLook(Look look) {
+<span class="nc" id="L114">        this.look = look;</span>
+<span class="nc" id="L115">    }</span>
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L121">            return true;</span>
+        }
+<span class="nc bnc" id="L123" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L124">            return false;</span>
+        }
+<span class="nc" id="L126">        Comment comment = (Comment) o;</span>
+<span class="nc bnc" id="L127" title="All 4 branches missed.">        if (comment.getId() == null || getId() == null) {</span>
+<span class="nc" id="L128">            return false;</span>
+        }
+<span class="nc" id="L130">        return Objects.equals(getId(), comment.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L135">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L140">        return &quot;Comment{&quot; +</span>
+<span class="nc" id="L141">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L142">            &quot;, comment='&quot; + getComment() + &quot;'&quot; +</span>
+<span class="nc" id="L143">            &quot;, consultantProfilePhoto='&quot; + getConsultantProfilePhoto() + &quot;'&quot; +</span>
+<span class="nc" id="L144">            &quot;, consultantName='&quot; + getConsultantName() + &quot;'&quot; +</span>
+<span class="nc" id="L145">            &quot;, dateVoted='&quot; + getDateVoted() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

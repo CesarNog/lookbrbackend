@@ -16,6 +16,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Intention.
@@ -115,4 +118,19 @@ public class IntentionResource {
         intentionService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/intentions?query=:query : search for the intention corresponding
+     * to the query.
+     *
+     * @param query the query of the intention search
+     * @return the result of the search
+     */
+    @GetMapping("/_search/intentions")
+    @Timed
+    public List<IntentionDTO> searchIntentions(@RequestParam String query) {
+        log.debug("REST request to search Intentions for query {}", query);
+        return intentionService.search(query);
+    }
+
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TokenProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.security.jwt</a> &gt; <span class="el_source">TokenProvider.java</span></div><h1>TokenProvider.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.security.jwt;
+
+import io.github.jhipster.config.JHipsterProperties;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.*;
+
+@Component
+public class TokenProvider {
+
+<span class="fc" id="L23">    private final Logger log = LoggerFactory.getLogger(TokenProvider.class);</span>
+
+    private static final String AUTHORITIES_KEY = &quot;auth&quot;;
+
+    private String secretKey;
+
+    private long tokenValidityInMilliseconds;
+
+    private long tokenValidityInMillisecondsForRememberMe;
+
+    private final JHipsterProperties jHipsterProperties;
+
+<span class="fc" id="L35">    public TokenProvider(JHipsterProperties jHipsterProperties) {</span>
+<span class="fc" id="L36">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L37">    }</span>
+
+    @PostConstruct
+    public void init() {
+<span class="fc" id="L41">        this.secretKey =</span>
+<span class="fc" id="L42">            jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();</span>
+
+<span class="fc" id="L44">        this.tokenValidityInMilliseconds =</span>
+<span class="fc" id="L45">            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();</span>
+<span class="fc" id="L46">        this.tokenValidityInMillisecondsForRememberMe =</span>
+<span class="fc" id="L47">            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();</span>
+<span class="fc" id="L48">    }</span>
+
+    public String createToken(Authentication authentication, Boolean rememberMe) {
+<span class="fc" id="L51">        String authorities = authentication.getAuthorities().stream()</span>
+<span class="fc" id="L52">            .map(GrantedAuthority::getAuthority)</span>
+<span class="fc" id="L53">            .collect(Collectors.joining(&quot;,&quot;));</span>
+
+<span class="fc" id="L55">        long now = (new Date()).getTime();</span>
+        Date validity;
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (rememberMe) {</span>
+<span class="fc" id="L58">            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);</span>
+        } else {
+<span class="fc" id="L60">            validity = new Date(now + this.tokenValidityInMilliseconds);</span>
+        }
+
+<span class="fc" id="L63">        return Jwts.builder()</span>
+<span class="fc" id="L64">            .setSubject(authentication.getName())</span>
+<span class="fc" id="L65">            .claim(AUTHORITIES_KEY, authorities)</span>
+<span class="fc" id="L66">            .signWith(SignatureAlgorithm.HS512, secretKey)</span>
+<span class="fc" id="L67">            .setExpiration(validity)</span>
+<span class="fc" id="L68">            .compact();</span>
+    }
+
+    public Authentication getAuthentication(String token) {
+<span class="fc" id="L72">        Claims claims = Jwts.parser()</span>
+<span class="fc" id="L73">            .setSigningKey(secretKey)</span>
+<span class="fc" id="L74">            .parseClaimsJws(token)</span>
+<span class="fc" id="L75">            .getBody();</span>
+
+<span class="fc" id="L77">        Collection&lt;? extends GrantedAuthority&gt; authorities =</span>
+<span class="fc" id="L78">            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(&quot;,&quot;))</span>
+<span class="fc" id="L79">                .map(SimpleGrantedAuthority::new)</span>
+<span class="fc" id="L80">                .collect(Collectors.toList());</span>
+
+<span class="fc" id="L82">        User principal = new User(claims.getSubject(), &quot;&quot;, authorities);</span>
+
+<span class="fc" id="L84">        return new UsernamePasswordAuthenticationToken(principal, token, authorities);</span>
+    }
+
+    public boolean validateToken(String authToken) {
+        try {
+<span class="fc" id="L89">            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);</span>
+<span class="fc" id="L90">            return true;</span>
+<span class="fc" id="L91">        } catch (SignatureException e) {</span>
+<span class="fc" id="L92">            log.info(&quot;Invalid JWT signature.&quot;);</span>
+<span class="fc" id="L93">            log.trace(&quot;Invalid JWT signature trace: {}&quot;, e);</span>
+<span class="fc" id="L94">        } catch (MalformedJwtException e) {</span>
+<span class="fc" id="L95">            log.info(&quot;Invalid JWT token.&quot;);</span>
+<span class="fc" id="L96">            log.trace(&quot;Invalid JWT token trace: {}&quot;, e);</span>
+<span class="fc" id="L97">        } catch (ExpiredJwtException e) {</span>
+<span class="fc" id="L98">            log.info(&quot;Expired JWT token.&quot;);</span>
+<span class="fc" id="L99">            log.trace(&quot;Expired JWT token trace: {}&quot;, e);</span>
+<span class="fc" id="L100">        } catch (UnsupportedJwtException e) {</span>
+<span class="fc" id="L101">            log.info(&quot;Unsupported JWT token.&quot;);</span>
+<span class="fc" id="L102">            log.trace(&quot;Unsupported JWT token trace: {}&quot;, e);</span>
+<span class="fc" id="L103">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L104">            log.info(&quot;JWT token compact of handler are invalid.&quot;);</span>
+<span class="fc" id="L105">            log.trace(&quot;JWT token compact of handler are invalid trace: {}&quot;, e);</span>
+<span class="fc" id="L106">        }</span>
+<span class="fc" id="L107">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

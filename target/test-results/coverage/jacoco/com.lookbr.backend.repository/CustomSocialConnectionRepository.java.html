@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomSocialConnectionRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.repository</a> &gt; <span class="el_source">CustomSocialConnectionRepository.java</span></div><h1>CustomSocialConnectionRepository.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.repository;
+
+import com.lookbr.backend.domain.SocialUserConnection;
+
+import org.springframework.social.connect.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CustomSocialConnectionRepository implements ConnectionRepository {
+
+    private String userId;
+
+    private SocialUserConnectionRepository socialUserConnectionRepository;
+
+    private ConnectionFactoryLocator connectionFactoryLocator;
+
+<span class="fc" id="L21">    public CustomSocialConnectionRepository(String userId, SocialUserConnectionRepository socialUserConnectionRepository, ConnectionFactoryLocator connectionFactoryLocator) {</span>
+<span class="fc" id="L22">        this.userId = userId;</span>
+<span class="fc" id="L23">        this.socialUserConnectionRepository = socialUserConnectionRepository;</span>
+<span class="fc" id="L24">        this.connectionFactoryLocator = connectionFactoryLocator;</span>
+<span class="fc" id="L25">    }</span>
+
+    @Override
+    public MultiValueMap&lt;String, Connection&lt;?&gt;&gt; findAllConnections() {
+<span class="fc" id="L29">        List&lt;SocialUserConnection&gt; socialUserConnections = socialUserConnectionRepository.findAllByUserIdOrderByProviderIdAscRankAsc(userId);</span>
+<span class="fc" id="L30">        List&lt;Connection&lt;?&gt;&gt; connections = socialUserConnectionsToConnections(socialUserConnections);</span>
+<span class="fc" id="L31">        MultiValueMap&lt;String, Connection&lt;?&gt;&gt; connectionsByProviderId = new LinkedMultiValueMap&lt;&gt;();</span>
+<span class="fc" id="L32">        Set&lt;String&gt; registeredProviderIds = connectionFactoryLocator.registeredProviderIds();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">        for (String registeredProviderId : registeredProviderIds) {</span>
+<span class="fc" id="L34">            connectionsByProviderId.put(registeredProviderId, Collections.emptyList());</span>
+<span class="fc" id="L35">        }</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        for (Connection&lt;?&gt; connection : connections) {</span>
+<span class="fc" id="L37">            String providerId = connection.getKey().getProviderId();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (connectionsByProviderId.get(providerId).size() == 0) {</span>
+<span class="fc" id="L39">                connectionsByProviderId.put(providerId, new LinkedList&lt;&gt;());</span>
+            }
+<span class="fc" id="L41">            connectionsByProviderId.add(providerId, connection);</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">        return connectionsByProviderId;</span>
+    }
+
+    @Override
+    public List&lt;Connection&lt;?&gt;&gt; findConnections(String providerId) {
+<span class="fc" id="L48">        List&lt;SocialUserConnection&gt; socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdOrderByRankAsc(userId, providerId);</span>
+<span class="fc" id="L49">        return socialUserConnectionsToConnections(socialUserConnections);</span>
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;A&gt; List&lt;Connection&lt;A&gt;&gt; findConnections(Class&lt;A&gt; apiType) {
+<span class="fc" id="L55">        List&lt;?&gt; connections = findConnections(getProviderId(apiType));</span>
+<span class="fc" id="L56">        return (List&lt;Connection&lt;A&gt;&gt;) connections;</span>
+    }
+
+    @Override
+    public MultiValueMap&lt;String, Connection&lt;?&gt;&gt; findConnectionsToUsers(MultiValueMap&lt;String, String&gt; providerUserIdsByProviderId) {
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">        if (providerUserIdsByProviderId == null || providerUserIdsByProviderId.isEmpty()) {</span>
+<span class="fc" id="L62">            throw new IllegalArgumentException(&quot;Unable to execute find: no providerUsers provided&quot;);</span>
+        }
+
+<span class="fc" id="L65">        MultiValueMap&lt;String, Connection&lt;?&gt;&gt; connectionsForUsers = new LinkedMultiValueMap&lt;&gt;();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (Map.Entry&lt;String, List&lt;String&gt;&gt; entry : providerUserIdsByProviderId.entrySet()) {</span>
+<span class="fc" id="L67">            String providerId = entry.getKey();</span>
+<span class="fc" id="L68">            List&lt;String&gt; providerUserIds = entry.getValue();</span>
+<span class="fc" id="L69">            List&lt;Connection&lt;?&gt;&gt; connections = providerUserIdsToConnections(providerId, providerUserIds);</span>
+<span class="fc" id="L70">            connections.forEach(connection -&gt; connectionsForUsers.add(providerId, connection));</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">        return connectionsForUsers;</span>
+    }
+
+    @Override
+    public Connection&lt;?&gt; getConnection(ConnectionKey connectionKey) {
+<span class="fc" id="L77">        SocialUserConnection socialUserConnection = socialUserConnectionRepository.findOneByUserIdAndProviderIdAndProviderUserId(userId, connectionKey.getProviderId(), connectionKey.getProviderUserId());</span>
+<span class="fc" id="L78">        return Optional.ofNullable(socialUserConnection)</span>
+<span class="fc" id="L79">            .map(this::socialUserConnectionToConnection)</span>
+<span class="fc" id="L80">            .orElseThrow(() -&gt; new NoSuchConnectionException(connectionKey));</span>
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;A&gt; Connection&lt;A&gt; getConnection(Class&lt;A&gt; apiType, String providerUserId) {
+<span class="fc" id="L86">        String providerId = getProviderId(apiType);</span>
+<span class="fc" id="L87">        return (Connection&lt;A&gt;) getConnection(new ConnectionKey(providerId, providerUserId));</span>
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;A&gt; Connection&lt;A&gt; getPrimaryConnection(Class&lt;A&gt; apiType) {
+<span class="fc" id="L93">        String providerId = getProviderId(apiType);</span>
+<span class="fc" id="L94">        Connection&lt;A&gt; connection = (Connection&lt;A&gt;) findPrimaryConnection(providerId);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (connection == null) {</span>
+<span class="fc" id="L96">            throw new NotConnectedException(providerId);</span>
+        }
+<span class="fc" id="L98">        return connection;</span>
+    }
+
+    @Override
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;A&gt; Connection&lt;A&gt; findPrimaryConnection(Class&lt;A&gt; apiType) {
+<span class="fc" id="L104">        String providerId = getProviderId(apiType);</span>
+<span class="fc" id="L105">        return (Connection&lt;A&gt;) findPrimaryConnection(providerId);</span>
+    }
+
+    @Override
+    @Transactional
+    public void addConnection(Connection&lt;?&gt; connection) {
+<span class="fc" id="L111">        Long rank = getNewMaxRank(connection.getKey().getProviderId()).longValue();</span>
+<span class="fc" id="L112">        SocialUserConnection socialUserConnectionToSave = connectionToUserSocialConnection(connection, rank);</span>
+<span class="fc" id="L113">        socialUserConnectionRepository.save(socialUserConnectionToSave);</span>
+<span class="fc" id="L114">    }</span>
+
+    @Override
+    @Transactional
+    public void updateConnection(Connection&lt;?&gt; connection) {
+<span class="fc" id="L119">        SocialUserConnection socialUserConnection = socialUserConnectionRepository.findOneByUserIdAndProviderIdAndProviderUserId(userId, connection.getKey().getProviderId(), connection.getKey().getProviderUserId());</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (socialUserConnection != null) {</span>
+<span class="fc" id="L121">            SocialUserConnection socialUserConnectionToUdpate =  connectionToUserSocialConnection(connection, socialUserConnection.getRank());</span>
+<span class="fc" id="L122">            socialUserConnectionToUdpate.setId(socialUserConnection.getId());</span>
+<span class="fc" id="L123">            socialUserConnectionRepository.save(socialUserConnectionToUdpate);</span>
+        }
+<span class="fc" id="L125">    }</span>
+
+    @Override
+    @Transactional
+    public void removeConnections(String providerId) {
+<span class="fc" id="L130">        socialUserConnectionRepository.deleteByUserIdAndProviderId(userId, providerId);</span>
+<span class="fc" id="L131">    }</span>
+
+    @Override
+    @Transactional
+    public void removeConnection(ConnectionKey connectionKey) {
+<span class="fc" id="L136">        socialUserConnectionRepository.deleteByUserIdAndProviderIdAndProviderUserId(userId, connectionKey.getProviderId(), connectionKey.getProviderUserId());</span>
+<span class="fc" id="L137">    }</span>
+
+    private Double getNewMaxRank(String providerId) {
+<span class="fc" id="L140">        List&lt;SocialUserConnection&gt; socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdOrderByRankAsc(userId, providerId);</span>
+<span class="fc" id="L141">        return socialUserConnections.stream()</span>
+<span class="fc" id="L142">            .mapToDouble(SocialUserConnection::getRank)</span>
+<span class="fc" id="L143">            .max()</span>
+<span class="fc" id="L144">            .orElse(0D) + 1D;</span>
+    }
+
+    private Connection&lt;?&gt; findPrimaryConnection(String providerId) {
+<span class="fc" id="L148">        List&lt;SocialUserConnection&gt; socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdOrderByRankAsc(userId, providerId);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (socialUserConnections.size() &gt; 0) {</span>
+<span class="fc" id="L150">            return socialUserConnectionToConnection(socialUserConnections.get(0));</span>
+        } else {
+<span class="fc" id="L152">            return null;</span>
+        }
+    }
+
+    private SocialUserConnection connectionToUserSocialConnection(Connection&lt;?&gt; connection, Long rank) {
+<span class="fc" id="L157">        ConnectionData connectionData = connection.createData();</span>
+<span class="fc" id="L158">        return new SocialUserConnection(</span>
+            userId,
+<span class="fc" id="L160">            connection.getKey().getProviderId(),</span>
+<span class="fc" id="L161">            connection.getKey().getProviderUserId(),</span>
+            rank,
+<span class="fc" id="L163">            connection.getDisplayName(),</span>
+<span class="fc" id="L164">            connection.getProfileUrl(),</span>
+<span class="fc" id="L165">            connection.getImageUrl(),</span>
+<span class="fc" id="L166">            connectionData.getAccessToken(),</span>
+<span class="fc" id="L167">            connectionData.getSecret(),</span>
+<span class="fc" id="L168">            connectionData.getRefreshToken(),</span>
+<span class="fc" id="L169">            connectionData.getExpireTime()</span>
+        );
+    }
+
+    private List&lt;Connection&lt;?&gt;&gt; providerUserIdsToConnections(String providerId, List&lt;String&gt; providerUserIds) {
+<span class="fc" id="L174">        List&lt;SocialUserConnection&gt; socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdAndProviderUserIdIn(userId, providerId, providerUserIds);</span>
+<span class="fc" id="L175">        return socialUserConnectionsToConnections(socialUserConnections);</span>
+    }
+
+    private List&lt;Connection&lt;?&gt;&gt; socialUserConnectionsToConnections(List&lt;SocialUserConnection&gt; socialUserConnections) {
+<span class="fc" id="L179">        return socialUserConnections.stream()</span>
+<span class="fc" id="L180">            .map(this::socialUserConnectionToConnection)</span>
+<span class="fc" id="L181">            .collect(Collectors.toList());</span>
+    }
+
+    private Connection&lt;?&gt; socialUserConnectionToConnection(SocialUserConnection socialUserConnection) {
+<span class="fc" id="L185">        ConnectionData connectionData = new ConnectionData(socialUserConnection.getProviderId(),</span>
+<span class="fc" id="L186">            socialUserConnection.getProviderUserId(),</span>
+<span class="fc" id="L187">            socialUserConnection.getDisplayName(),</span>
+<span class="fc" id="L188">            socialUserConnection.getProfileURL(),</span>
+<span class="fc" id="L189">            socialUserConnection.getImageURL(),</span>
+<span class="fc" id="L190">            socialUserConnection.getAccessToken(),</span>
+<span class="fc" id="L191">            socialUserConnection.getSecret(),</span>
+<span class="fc" id="L192">            socialUserConnection.getRefreshToken(),</span>
+<span class="fc" id="L193">            socialUserConnection.getExpireTime());</span>
+<span class="fc" id="L194">        ConnectionFactory&lt;?&gt; connectionFactory = connectionFactoryLocator.getConnectionFactory(connectionData.getProviderId());</span>
+<span class="fc" id="L195">        return connectionFactory.createConnection(connectionData);</span>
+    }
+
+    private &lt;A&gt; String getProviderId(Class&lt;A&gt; apiType) {
+<span class="fc" id="L199">        return connectionFactoryLocator.getConnectionFactory(apiType).getProviderId();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

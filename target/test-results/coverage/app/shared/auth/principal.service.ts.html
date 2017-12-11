@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/shared/auth/principal.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/shared/auth/</a> principal.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">36.67% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>22/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/23</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">13.33% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/15</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">34.48% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>20/58</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { AccountService } from './account.service';
+import { JhiTrackerService } from '../tracker/tracker.service'; // Barrel doesn't work here. No idea why!
+&nbsp;
+@Injectable()
+export class Principal {
+    private userIdentity: any;
+    private authenticated = false;
+    private authenticationState = new Subject&lt;any&gt;();
+&nbsp;
+    constructor(
+        private account: AccountService,
+        private trackerService: JhiTrackerService
+    ) {}
+&nbsp;
+<span class="fstat-no" title="function not covered" >    authenticate(identity)</span> {
+<span class="cstat-no" title="statement not covered" >        this.userIdentity = identity;</span>
+<span class="cstat-no" title="statement not covered" >        this.authenticated = identity !== null;</span>
+<span class="cstat-no" title="statement not covered" >        this.authenticationState.next(this.userIdentity);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    hasAnyAuthority(authorities: string[])</span>: Promise&lt;boolean&gt; {
+<span class="cstat-no" title="statement not covered" >        return Promise.resolve(this.hasAnyAuthorityDirect(authorities));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    hasAnyAuthorityDirect(authorities: string[])</span>: boolean {
+<span class="cstat-no" title="statement not covered" >        if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        for (let i = 0; i &lt; authorities.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            if (this.userIdentity.authorities.includes(authorities[i])) {</span>
+<span class="cstat-no" title="statement not covered" >                return true;</span>
+            }
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return false;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    hasAuthority(authority: string)</span>: Promise&lt;boolean&gt; {
+<span class="cstat-no" title="statement not covered" >        if (!this.authenticated) {</span>
+<span class="cstat-no" title="statement not covered" >           return Promise.resolve(false);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return this.identity().then(<span class="fstat-no" title="function not covered" >(id)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            return Promise.resolve(id.authorities &amp;&amp; id.authorities.includes(authority));</span>
+        }, <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            return Promise.resolve(false);</span>
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    identity(force?: boolean)</span>: Promise&lt;any&gt; {
+<span class="cstat-no" title="statement not covered" >        if (force === true) {</span>
+<span class="cstat-no" title="statement not covered" >            this.userIdentity = undefined;</span>
+        }
+&nbsp;
+        // check and see if we have retrieved the userIdentity data from the server.
+        // if we have, reuse it by immediately resolving
+<span class="cstat-no" title="statement not covered" >        if (this.userIdentity) {</span>
+<span class="cstat-no" title="statement not covered" >            return Promise.resolve(this.userIdentity);</span>
+        }
+&nbsp;
+        // retrieve the userIdentity data from the server, update the identity object, and then resolve.
+<span class="cstat-no" title="statement not covered" >        return this.account.get().toPromise().then(<span class="fstat-no" title="function not covered" >(account)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (account) {</span>
+<span class="cstat-no" title="statement not covered" >                this.userIdentity = account;</span>
+<span class="cstat-no" title="statement not covered" >                this.authenticated = true;</span>
+<span class="cstat-no" title="statement not covered" >                this.trackerService.connect();</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                this.userIdentity = null;</span>
+<span class="cstat-no" title="statement not covered" >                this.authenticated = false;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.authenticationState.next(this.userIdentity);</span>
+<span class="cstat-no" title="statement not covered" >            return this.userIdentity;</span>
+        }).catch(<span class="fstat-no" title="function not covered" >(err)</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (this.trackerService.stompClient &amp;&amp; this.trackerService.stompClient.connected) {</span>
+<span class="cstat-no" title="statement not covered" >                this.trackerService.disconnect();</span>
+            }
+<span class="cstat-no" title="statement not covered" >            this.userIdentity = null;</span>
+<span class="cstat-no" title="statement not covered" >            this.authenticated = false;</span>
+<span class="cstat-no" title="statement not covered" >            this.authenticationState.next(this.userIdentity);</span>
+<span class="cstat-no" title="statement not covered" >            return null;</span>
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    isAuthenticated(): boolean {</span>
+<span class="cstat-no" title="statement not covered" >        return this.authenticated;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    isIdentityResolved(): boolean {</span>
+<span class="cstat-no" title="statement not covered" >        return this.userIdentity !== undefined;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getAuthenticationState(): Observable&lt;any&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        return this.authenticationState.asObservable();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    getImageUrl(): String {</span>
+<span class="cstat-no" title="statement not covered" >        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;</span>
+    }
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 06 2017 12:39:09 GMT-0200 (-02)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

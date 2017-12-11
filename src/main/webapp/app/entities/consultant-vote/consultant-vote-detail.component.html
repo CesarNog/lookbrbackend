@@ -1,0 +1,31 @@
+
+<div *ngIf="consultantVote">
+    <h2><span jhiTranslate="lookbrbackendApp.consultantVote.detail.title">Consultant Vote</span> {{consultantVote.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.consultantVote.consultantProfilePhotoUrl">Consultant Profile Photo Url</span></dt>
+        <dd>
+            <span>{{consultantVote.consultantProfilePhotoUrl}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.consultantVote.look">Look</span></dt>
+        <dd>
+            <div *ngIf="consultantVote.lookId">
+                <a [routerLink]="['/look', consultantVote.lookId]">{{consultantVote.lookId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'consultant-vote/'+ consultantVote.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

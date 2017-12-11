@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocialService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service</a> &gt; <span class="el_source">SocialService.java</span></div><h1>SocialService.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service;
+
+import com.lookbr.backend.domain.Authority;
+import com.lookbr.backend.domain.User;
+import com.lookbr.backend.repository.AuthorityRepository;
+import com.lookbr.backend.repository.UserRepository;
+import com.lookbr.backend.security.AuthoritiesConstants;
+import com.lookbr.backend.repository.search.UserSearchRepository;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.UserProfile;
+import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+
+@Service
+public class SocialService {
+
+<span class="fc" id="L29">    private final Logger log = LoggerFactory.getLogger(SocialService.class);</span>
+
+    private final UsersConnectionRepository usersConnectionRepository;
+
+    private final AuthorityRepository authorityRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
+    private final MailService mailService;
+
+    private final UserSearchRepository userSearchRepository;
+
+    public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
+            PasswordEncoder passwordEncoder, UserRepository userRepository,
+<span class="fc" id="L45">            MailService mailService, UserSearchRepository userSearchRepository) {</span>
+
+<span class="fc" id="L47">        this.usersConnectionRepository = usersConnectionRepository;</span>
+<span class="fc" id="L48">        this.authorityRepository = authorityRepository;</span>
+<span class="fc" id="L49">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L50">        this.userRepository = userRepository;</span>
+<span class="fc" id="L51">        this.mailService = mailService;</span>
+<span class="fc" id="L52">        this.userSearchRepository = userSearchRepository;</span>
+<span class="fc" id="L53">    }</span>
+
+    public void deleteUserSocialConnection(String login) {
+<span class="fc" id="L56">        ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);</span>
+<span class="fc" id="L57">        connectionRepository.findAllConnections().keySet().stream()</span>
+<span class="fc" id="L58">            .forEach(providerId -&gt; {</span>
+<span class="fc" id="L59">                connectionRepository.removeConnections(providerId);</span>
+<span class="fc" id="L60">                log.debug(&quot;Delete user social connection providerId: {}&quot;, providerId);</span>
+<span class="fc" id="L61">            });</span>
+<span class="fc" id="L62">    }</span>
+
+    public void createSocialUser(Connection&lt;?&gt; connection, String langKey) {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (connection == null) {</span>
+<span class="fc" id="L66">            log.error(&quot;Cannot create social user because connection is null&quot;);</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException(&quot;Connection cannot be null&quot;);</span>
+        }
+<span class="fc" id="L69">        UserProfile userProfile = connection.fetchUserProfile();</span>
+<span class="fc" id="L70">        String providerId = connection.getKey().getProviderId();</span>
+<span class="fc" id="L71">        String imageUrl = connection.getImageUrl();</span>
+<span class="fc" id="L72">        User user = createUserIfNotExist(userProfile, langKey, providerId, imageUrl);</span>
+<span class="fc" id="L73">        createSocialConnection(user.getLogin(), connection);</span>
+<span class="fc" id="L74">        mailService.sendSocialRegistrationValidationEmail(user, providerId);</span>
+<span class="fc" id="L75">    }</span>
+
+    private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId, String imageUrl) {
+<span class="fc" id="L78">        String email = userProfile.getEmail();</span>
+<span class="fc" id="L79">        String userName = userProfile.getUsername();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (!StringUtils.isBlank(userName)) {</span>
+<span class="fc" id="L81">            userName = userName.toLowerCase(Locale.ENGLISH);</span>
+        }
+<span class="fc bfc" id="L83" title="All 4 branches covered.">        if (StringUtils.isBlank(email) &amp;&amp; StringUtils.isBlank(userName)) {</span>
+<span class="fc" id="L84">            log.error(&quot;Cannot create social user because email and login are null&quot;);</span>
+<span class="fc" id="L85">            throw new IllegalArgumentException(&quot;Email and login cannot be null&quot;);</span>
+        }
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">        if (StringUtils.isBlank(email) &amp;&amp; userRepository.findOneByLogin(userName).isPresent()) {</span>
+<span class="fc" id="L88">            log.error(&quot;Cannot create social user because email is null and login already exist, login -&gt; {}&quot;, userName);</span>
+<span class="fc" id="L89">            throw new IllegalArgumentException(&quot;Email cannot be null with an existing login&quot;);</span>
+        }
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (!StringUtils.isBlank(email)) {</span>
+<span class="fc" id="L92">            Optional&lt;User&gt; user = userRepository.findOneByEmailIgnoreCase(email);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (user.isPresent()) {</span>
+<span class="fc" id="L94">                log.info(&quot;User already exist associate the connection to this account&quot;);</span>
+<span class="fc" id="L95">                return user.get();</span>
+            }
+        }
+
+<span class="fc" id="L99">        String login = getLoginDependingOnProviderId(userProfile, providerId);</span>
+<span class="fc" id="L100">        String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));</span>
+<span class="fc" id="L101">        Set&lt;Authority&gt; authorities = new HashSet&lt;&gt;(1);</span>
+<span class="fc" id="L102">        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER));</span>
+
+<span class="fc" id="L104">        User newUser = new User();</span>
+<span class="fc" id="L105">        newUser.setLogin(login);</span>
+<span class="fc" id="L106">        newUser.setPassword(encryptedPassword);</span>
+<span class="fc" id="L107">        newUser.setFirstName(userProfile.getFirstName());</span>
+<span class="fc" id="L108">        newUser.setLastName(userProfile.getLastName());</span>
+<span class="fc" id="L109">        newUser.setEmail(email);</span>
+<span class="fc" id="L110">        newUser.setActivated(true);</span>
+<span class="fc" id="L111">        newUser.setAuthorities(authorities);</span>
+<span class="fc" id="L112">        newUser.setLangKey(langKey);</span>
+<span class="fc" id="L113">        newUser.setImageUrl(imageUrl);</span>
+
+<span class="fc" id="L115">        userSearchRepository.save(newUser);</span>
+<span class="fc" id="L116">        return userRepository.save(newUser);</span>
+    }
+
+    /**
+     * @return login if provider manage a login like Twitter or GitHub otherwise email address.
+     *         Because provider like Google or Facebook didn't provide login or login like &quot;12099388847393&quot;
+     */
+    private String getLoginDependingOnProviderId(UserProfile userProfile, String providerId) {
+<span class="pc bpc" id="L124" title="1 of 6 branches missed.">        switch (providerId) {</span>
+            case &quot;twitter&quot;:
+<span class="fc" id="L126">                return userProfile.getUsername().toLowerCase();</span>
+            default:
+<span class="fc" id="L128">                return userProfile.getEmail();</span>
+        }
+    }
+
+    private void createSocialConnection(String login, Connection&lt;?&gt; connection) {
+<span class="fc" id="L133">        ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);</span>
+<span class="fc" id="L134">        connectionRepository.addConnection(connection);</span>
+<span class="fc" id="L135">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

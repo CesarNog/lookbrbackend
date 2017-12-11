@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoggingAspect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.aop.logging</a> &gt; <span class="el_source">LoggingAspect.java</span></div><h1>LoggingAspect.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.aop.logging;
+
+import io.github.jhipster.config.JHipsterConstants;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
+
+/**
+ * Aspect for logging execution of service and repository Spring components.
+ *
+ * By default, it only runs with the &quot;dev&quot; profile.
+ */
+@Aspect
+public class LoggingAspect {
+
+<span class="nc" id="L25">    private final Logger log = LoggerFactory.getLogger(this.getClass());</span>
+
+    private final Environment env;
+
+<span class="nc" id="L29">    public LoggingAspect(Environment env) {</span>
+<span class="nc" id="L30">        this.env = env;</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Pointcut that matches all repositories, services and Web REST endpoints.
+     */
+    @Pointcut(&quot;within(@org.springframework.stereotype.Repository *)&quot; +
+        &quot; || within(@org.springframework.stereotype.Service *)&quot; +
+        &quot; || within(@org.springframework.web.bind.annotation.RestController *)&quot;)
+    public void springBeanPointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * Pointcut that matches all Spring beans in the application's main packages.
+     */
+    @Pointcut(&quot;within(com.lookbr.backend.repository..*)&quot;+
+        &quot; || within(com.lookbr.backend.service..*)&quot;+
+        &quot; || within(com.lookbr.backend.web.rest..*)&quot;)
+    public void applicationPackagePointcut() {
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+<span class="nc" id="L51">    }</span>
+
+    /**
+     * Advice that logs methods throwing exceptions.
+     *
+     * @param joinPoint join point for advice
+     * @param e exception
+     */
+    @AfterThrowing(pointcut = &quot;applicationPackagePointcut() &amp;&amp; springBeanPointcut()&quot;, throwing = &quot;e&quot;)
+    public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {</span>
+<span class="nc" id="L62">            log.error(&quot;Exception in {}.{}() with cause = \'{}\' and exception = \'{}\'&quot;, joinPoint.getSignature().getDeclaringTypeName(),</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                joinPoint.getSignature().getName(), e.getCause() != null? e.getCause() : &quot;NULL&quot;, e.getMessage(), e);</span>
+
+        } else {
+<span class="nc" id="L66">            log.error(&quot;Exception in {}.{}() with cause = {}&quot;, joinPoint.getSignature().getDeclaringTypeName(),</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                joinPoint.getSignature().getName(), e.getCause() != null? e.getCause() : &quot;NULL&quot;);</span>
+        }
+<span class="nc" id="L69">    }</span>
+
+    /**
+     * Advice that logs when a method is entered and exited.
+     *
+     * @param joinPoint join point for advice
+     * @return result
+     * @throws Throwable throws IllegalArgumentException
+     */
+    @Around(&quot;applicationPackagePointcut() &amp;&amp; springBeanPointcut()&quot;)
+    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L81">            log.debug(&quot;Enter: {}.{}() with argument[s] = {}&quot;, joinPoint.getSignature().getDeclaringTypeName(),</span>
+<span class="nc" id="L82">                joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));</span>
+        }
+        try {
+<span class="nc" id="L85">            Object result = joinPoint.proceed();</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            if (log.isDebugEnabled()) {</span>
+<span class="nc" id="L87">                log.debug(&quot;Exit: {}.{}() with result = {}&quot;, joinPoint.getSignature().getDeclaringTypeName(),</span>
+<span class="nc" id="L88">                    joinPoint.getSignature().getName(), result);</span>
+            }
+<span class="nc" id="L90">            return result;</span>
+<span class="nc" id="L91">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L92">            log.error(&quot;Illegal argument: {} in {}.{}()&quot;, Arrays.toString(joinPoint.getArgs()),</span>
+<span class="nc" id="L93">                joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());</span>
+
+<span class="nc" id="L95">            throw e;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OccasionMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">OccasionMapperImpl.java</span></div><h1>OccasionMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Inspiration;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.domain.Occasion;
+
+import com.lookbr.backend.service.dto.OccasionDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:21-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L33">public class OccasionMapperImpl implements OccasionMapper {</span>
+
+    @Autowired
+
+    private InspirationMapper inspirationMapper;
+
+    @Autowired
+
+    private LookMapper lookMapper;
+
+    @Override
+
+    public List&lt;Occasion&gt; toEntity(List&lt;OccasionDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L49">            return null;</span>
+        }
+
+<span class="nc" id="L52">        List&lt;Occasion&gt; list = new ArrayList&lt;Occasion&gt;();</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for ( OccasionDTO occasionDTO : dtoList ) {</span>
+
+<span class="nc" id="L56">            list.add( toEntity( occasionDTO ) );</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;OccasionDTO&gt; toDto(List&lt;Occasion&gt; entityList) {
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L68">            return null;</span>
+        }
+
+<span class="nc" id="L71">        List&lt;OccasionDTO&gt; list = new ArrayList&lt;OccasionDTO&gt;();</span>
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for ( Occasion occasion : entityList ) {</span>
+
+<span class="nc" id="L75">            list.add( toDto( occasion ) );</span>
+<span class="nc" id="L76">        }</span>
+
+<span class="nc" id="L78">        return list;</span>
+    }
+
+    @Override
+
+    public OccasionDTO toDto(Occasion occasion) {
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if ( occasion == null ) {</span>
+
+<span class="nc" id="L87">            return null;</span>
+        }
+
+<span class="nc" id="L90">        OccasionDTO occasionDTO_ = new OccasionDTO();</span>
+
+<span class="nc" id="L92">        occasionDTO_.setLookId( occasionLookId( occasion ) );</span>
+
+<span class="nc" id="L94">        occasionDTO_.setInspirationId( occasionInspirationId( occasion ) );</span>
+
+<span class="nc" id="L96">        occasionDTO_.setId( occasion.getId() );</span>
+
+<span class="nc" id="L98">        occasionDTO_.setPage( occasion.getPage() );</span>
+
+<span class="nc" id="L100">        return occasionDTO_;</span>
+    }
+
+    @Override
+
+    public Occasion toEntity(OccasionDTO occasionDTO) {
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if ( occasionDTO == null ) {</span>
+
+<span class="nc" id="L109">            return null;</span>
+        }
+
+<span class="nc" id="L112">        Occasion occasion_ = new Occasion();</span>
+
+<span class="nc" id="L114">        occasion_.setLook( lookMapper.fromId( occasionDTO.getLookId() ) );</span>
+
+<span class="nc" id="L116">        occasion_.setInspiration( inspirationMapper.fromId( occasionDTO.getInspirationId() ) );</span>
+
+<span class="nc" id="L118">        occasion_.setId( occasionDTO.getId() );</span>
+
+<span class="nc" id="L120">        occasion_.setPage( occasionDTO.getPage() );</span>
+
+<span class="nc" id="L122">        return occasion_;</span>
+    }
+
+    private Long occasionLookId(Occasion occasion) {
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if ( occasion == null ) {</span>
+
+<span class="nc" id="L129">            return null;</span>
+        }
+
+<span class="nc" id="L132">        Look look = occasion.getLook();</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L136">            return null;</span>
+        }
+
+<span class="nc" id="L139">        Long id = look.getId();</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L143">            return null;</span>
+        }
+
+<span class="nc" id="L146">        return id;</span>
+    }
+
+    private Long occasionInspirationId(Occasion occasion) {
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if ( occasion == null ) {</span>
+
+<span class="nc" id="L153">            return null;</span>
+        }
+
+<span class="nc" id="L156">        Inspiration inspiration = occasion.getInspiration();</span>
+
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if ( inspiration == null ) {</span>
+
+<span class="nc" id="L160">            return null;</span>
+        }
+
+<span class="nc" id="L163">        Long id = inspiration.getId();</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L167">            return null;</span>
+        }
+
+<span class="nc" id="L170">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

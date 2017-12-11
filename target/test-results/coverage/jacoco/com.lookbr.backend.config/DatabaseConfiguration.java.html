@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatabaseConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">DatabaseConfiguration.java</span></div><h1>DatabaseConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
+
+import liquibase.integration.spring.SpringLiquibase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+
+@Configuration
+@EnableJpaRepositories(&quot;com.lookbr.backend.repository&quot;)
+@EnableJpaAuditing(auditorAwareRef = &quot;springSecurityAuditorAware&quot;)
+@EnableTransactionManagement
+@EnableElasticsearchRepositories(&quot;com.lookbr.backend.repository.search&quot;)
+public class DatabaseConfiguration {
+
+<span class="fc" id="L33">    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);</span>
+
+    private final Environment env;
+
+<span class="fc" id="L37">    public DatabaseConfiguration(Environment env) {</span>
+<span class="fc" id="L38">        this.env = env;</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Open the TCP port for the H2 database, so it is available remotely.
+     *
+     * @return the H2 database TCP server
+     * @throws SQLException if the server failed to start
+     */
+    @Bean(initMethod = &quot;start&quot;, destroyMethod = &quot;stop&quot;)
+    @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+    public Object h2TCPServer() throws SQLException {
+        try {
+            // We don't want to include H2 when we are packaging for the &quot;prod&quot; profile and won't
+            // actually need it, so we have to load / invoke things at runtime through reflection.
+<span class="nc" id="L53">            ClassLoader loader = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc" id="L54">            Class&lt;?&gt; serverClass = Class.forName(&quot;org.h2.tools.Server&quot;, true, loader);</span>
+<span class="nc" id="L55">            Method createServer = serverClass.getMethod(&quot;createTcpServer&quot;, String[].class);</span>
+<span class="nc" id="L56">            return createServer.invoke(null, new Object[] { new String[] { &quot;-tcp&quot;, &quot;-tcpAllowOthers&quot; } });</span>
+
+<span class="nc" id="L58">        } catch (ClassNotFoundException | LinkageError  e) {</span>
+<span class="nc" id="L59">            throw new RuntimeException(&quot;Failed to load and initialize org.h2.tools.Server&quot;, e);</span>
+
+<span class="nc" id="L61">        } catch (SecurityException | NoSuchMethodException e) {</span>
+<span class="nc" id="L62">            throw new RuntimeException(&quot;Failed to get method org.h2.tools.Server.createTcpServer()&quot;, e);</span>
+
+<span class="nc" id="L64">        } catch (IllegalAccessException | IllegalArgumentException e) {</span>
+<span class="nc" id="L65">            throw new RuntimeException(&quot;Failed to invoke org.h2.tools.Server.createTcpServer()&quot;, e);</span>
+
+<span class="nc" id="L67">        } catch (InvocationTargetException e) {</span>
+<span class="nc" id="L68">            Throwable t = e.getTargetException();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (t instanceof SQLException) {</span>
+<span class="nc" id="L70">                throw (SQLException) t;</span>
+            }
+<span class="nc" id="L72">            throw new RuntimeException(&quot;Unchecked exception in org.h2.tools.Server.createTcpServer()&quot;, t);</span>
+        }
+    }
+
+    @Bean
+    public SpringLiquibase liquibase(@Qualifier(&quot;taskExecutor&quot;) TaskExecutor taskExecutor,
+            DataSource dataSource, LiquibaseProperties liquibaseProperties) {
+
+        // Use liquibase.integration.spring.SpringLiquibase if you don't want Liquibase to start asynchronously
+<span class="fc" id="L81">        SpringLiquibase liquibase = new AsyncSpringLiquibase(taskExecutor, env);</span>
+<span class="fc" id="L82">        liquibase.setDataSource(dataSource);</span>
+<span class="fc" id="L83">        liquibase.setChangeLog(&quot;classpath:config/liquibase/master.xml&quot;);</span>
+<span class="fc" id="L84">        liquibase.setContexts(liquibaseProperties.getContexts());</span>
+<span class="fc" id="L85">        liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());</span>
+<span class="fc" id="L86">        liquibase.setDropFirst(liquibaseProperties.isDropFirst());</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE)) {</span>
+<span class="nc" id="L88">            liquibase.setShouldRun(false);</span>
+        } else {
+<span class="fc" id="L90">            liquibase.setShouldRun(liquibaseProperties.isEnabled());</span>
+<span class="fc" id="L91">            log.debug(&quot;Configuring Liquibase&quot;);</span>
+        }
+<span class="fc" id="L93">        return liquibase;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

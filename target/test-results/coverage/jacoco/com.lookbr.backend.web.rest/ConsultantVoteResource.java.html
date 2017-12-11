@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsultantVoteResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">ConsultantVoteResource.java</span></div><h1>ConsultantVoteResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.ConsultantVoteService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.ConsultantVoteDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing ConsultantVote.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class ConsultantVoteResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(ConsultantVoteResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;consultantVote&quot;;
+
+    private final ConsultantVoteService consultantVoteService;
+
+<span class="nc" id="L36">    public ConsultantVoteResource(ConsultantVoteService consultantVoteService) {</span>
+<span class="nc" id="L37">        this.consultantVoteService = consultantVoteService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /consultant-votes : Create a new consultantVote.
+     *
+     * @param consultantVoteDTO the consultantVoteDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new consultantVoteDTO, or with status 400 (Bad Request) if the consultantVote has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/consultant-votes&quot;)
+    @Timed
+    public ResponseEntity&lt;ConsultantVoteDTO&gt; createConsultantVote(@RequestBody ConsultantVoteDTO consultantVoteDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save ConsultantVote : {}&quot;, consultantVoteDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (consultantVoteDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new consultantVote cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        ConsultantVoteDTO result = consultantVoteService.save(consultantVoteDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/consultant-votes/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /consultant-votes : Updates an existing consultantVote.
+     *
+     * @param consultantVoteDTO the consultantVoteDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated consultantVoteDTO,
+     * or with status 400 (Bad Request) if the consultantVoteDTO is not valid,
+     * or with status 500 (Internal Server Error) if the consultantVoteDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/consultant-votes&quot;)
+    @Timed
+    public ResponseEntity&lt;ConsultantVoteDTO&gt; updateConsultantVote(@RequestBody ConsultantVoteDTO consultantVoteDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update ConsultantVote : {}&quot;, consultantVoteDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (consultantVoteDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createConsultantVote(consultantVoteDTO);</span>
+        }
+<span class="nc" id="L76">        ConsultantVoteDTO result = consultantVoteService.save(consultantVoteDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, consultantVoteDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /consultant-votes : get all the consultantVotes.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of consultantVotes in body
+     */
+    @GetMapping(&quot;/consultant-votes&quot;)
+    @Timed
+    public List&lt;ConsultantVoteDTO&gt; getAllConsultantVotes() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all ConsultantVotes&quot;);</span>
+<span class="nc" id="L91">        return consultantVoteService.findAll();</span>
+        }
+
+    /**
+     * GET  /consultant-votes/:id : get the &quot;id&quot; consultantVote.
+     *
+     * @param id the id of the consultantVoteDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the consultantVoteDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/consultant-votes/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;ConsultantVoteDTO&gt; getConsultantVote(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get ConsultantVote : {}&quot;, id);</span>
+<span class="nc" id="L104">        ConsultantVoteDTO consultantVoteDTO = consultantVoteService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(consultantVoteDTO));</span>
+    }
+
+    /**
+     * DELETE  /consultant-votes/:id : delete the &quot;id&quot; consultantVote.
+     *
+     * @param id the id of the consultantVoteDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/consultant-votes/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteConsultantVote(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete ConsultantVote : {}&quot;, id);</span>
+<span class="nc" id="L118">        consultantVoteService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/consultant-votes?query=:query : search for the consultantVote corresponding
+     * to the query.
+     *
+     * @param query the query of the consultantVote search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/consultant-votes&quot;)
+    @Timed
+    public List&lt;ConsultantVoteDTO&gt; searchConsultantVotes(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search ConsultantVotes for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return consultantVoteService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

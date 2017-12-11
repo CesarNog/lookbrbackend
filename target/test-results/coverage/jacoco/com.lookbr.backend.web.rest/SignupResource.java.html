@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">SignupResource.java</span></div><h1>SignupResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.SignupService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.SignupDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Signup.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class SignupResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(SignupResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;signup&quot;;
+
+    private final SignupService signupService;
+
+<span class="nc" id="L36">    public SignupResource(SignupService signupService) {</span>
+<span class="nc" id="L37">        this.signupService = signupService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /signups : Create a new signup.
+     *
+     * @param signupDTO the signupDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new signupDTO, or with status 400 (Bad Request) if the signup has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/signups&quot;)
+    @Timed
+    public ResponseEntity&lt;SignupDTO&gt; createSignup(@RequestBody SignupDTO signupDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Signup : {}&quot;, signupDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (signupDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new signup cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        SignupDTO result = signupService.save(signupDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/signups/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /signups : Updates an existing signup.
+     *
+     * @param signupDTO the signupDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated signupDTO,
+     * or with status 400 (Bad Request) if the signupDTO is not valid,
+     * or with status 500 (Internal Server Error) if the signupDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/signups&quot;)
+    @Timed
+    public ResponseEntity&lt;SignupDTO&gt; updateSignup(@RequestBody SignupDTO signupDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Signup : {}&quot;, signupDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (signupDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createSignup(signupDTO);</span>
+        }
+<span class="nc" id="L76">        SignupDTO result = signupService.save(signupDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, signupDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /signups : get all the signups.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of signups in body
+     */
+    @GetMapping(&quot;/signups&quot;)
+    @Timed
+    public List&lt;SignupDTO&gt; getAllSignups() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Signups&quot;);</span>
+<span class="nc" id="L91">        return signupService.findAll();</span>
+        }
+
+    /**
+     * GET  /signups/:id : get the &quot;id&quot; signup.
+     *
+     * @param id the id of the signupDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the signupDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/signups/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;SignupDTO&gt; getSignup(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Signup : {}&quot;, id);</span>
+<span class="nc" id="L104">        SignupDTO signupDTO = signupService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(signupDTO));</span>
+    }
+
+    /**
+     * DELETE  /signups/:id : delete the &quot;id&quot; signup.
+     *
+     * @param id the id of the signupDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/signups/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteSignup(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Signup : {}&quot;, id);</span>
+<span class="nc" id="L118">        signupService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/signups?query=:query : search for the signup corresponding
+     * to the query.
+     *
+     * @param query the query of the signup search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/signups&quot;)
+    @Timed
+    public List&lt;SignupDTO&gt; searchSignups(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Signups for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return signupService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

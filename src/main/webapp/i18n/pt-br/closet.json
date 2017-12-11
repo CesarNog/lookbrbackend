@@ -4,7 +4,8 @@
             "home": {
                 "title": "Closets",
                 "createLabel": "Criar novo Closet",
-                "createOrEditLabel": "Criar ou editar Closet"
+                "createOrEditLabel": "Criar ou editar Closet",
+                "search": "Pesquisar por Closet"
             },
             "created": "Um novo Closet foi criado com o identificador {{ param }}",
             "updated": "Um Closet foi atualizado com o identificador {{ param }}",
@@ -15,7 +16,8 @@
             "detail": {
                 "title": "Closet"
             },
-            "page": "Page"
+            "page": "Page",
+            "look": "Look"
         }
     }
 }

@@ -4,7 +4,8 @@
             "home": {
                 "title": "Timelines",
                 "createLabel": "Create a new Timeline",
-                "createOrEditLabel": "Create or edit a Timeline"
+                "createOrEditLabel": "Create or edit a Timeline",
+                "search": "Search for Timeline"
             },
             "created": "A new Timeline is created with identifier {{ param }}",
             "updated": "A Timeline is updated with identifier {{ param }}",
@@ -15,7 +16,8 @@
             "detail": {
                 "title": "Timeline"
             },
-            "page": "Page"
+            "page": "Page",
+            "inspirations": "Inspirations"
         }
     }
 }

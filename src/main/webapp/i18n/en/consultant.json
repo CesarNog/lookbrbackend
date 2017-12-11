@@ -1,0 +1,33 @@
+{
+    "lookbrbackendApp": {
+        "consultant" : {
+            "home": {
+                "title": "Consultants",
+                "createLabel": "Create a new Consultant",
+                "createOrEditLabel": "Create or edit a Consultant",
+                "search": "Search for Consultant"
+            },
+            "created": "A new Consultant is created with identifier {{ param }}",
+            "updated": "A Consultant is updated with identifier {{ param }}",
+            "deleted": "A Consultant is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Consultant {{ id }}?"
+            },
+            "detail": {
+                "title": "Consultant"
+            },
+            "consultantId": "Consultant Id",
+            "consultantName": "Consultant Name",
+            "consultantDescription": "Consultant Description",
+            "consultantCoverPhotoURL": "Consultant Cover Photo URL",
+            "consultantProfilePhotoURL": "Consultant Profile Photo URL",
+            "charge": "Charge",
+            "inspirationURL": "Inspiration URL",
+            "profilePhoto": "Profile Photo",
+            "status": "Status",
+            "page": "Page",
+            "socialMedias": "Social Medias",
+            "look": "Look"
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DefaultProfileUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">DefaultProfileUtil.java</span></div><h1>DefaultProfileUtil.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import io.github.jhipster.config.JHipsterConstants;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.core.env.Environment;
+
+import java.util.*;
+
+/**
+ * Utility class to load a Spring profile to be used as default
+ * when there is no &lt;code&gt;spring.profiles.active&lt;/code&gt; set in the environment or as command line argument.
+ * If the value is not available in &lt;code&gt;application.yml&lt;/code&gt; then &lt;code&gt;dev&lt;/code&gt; profile will be used as default.
+ */
+public final class DefaultProfileUtil {
+
+    private static final String SPRING_PROFILE_DEFAULT = &quot;spring.profiles.default&quot;;
+
+<span class="nc" id="L19">    private DefaultProfileUtil() {</span>
+<span class="nc" id="L20">    }</span>
+
+    /**
+     * Set a default to use when no profile is configured.
+     *
+     * @param app the Spring application
+     */
+    public static void addDefaultProfile(SpringApplication app) {
+<span class="nc" id="L28">        Map&lt;String, Object&gt; defProperties = new HashMap&lt;&gt;();</span>
+        /*
+        * The default profile to use when no other profiles are defined
+        * This cannot be set in the &lt;code&gt;application.yml&lt;/code&gt; file.
+        * See https://github.com/spring-projects/spring-boot/issues/1219
+        */
+<span class="nc" id="L34">        defProperties.put(SPRING_PROFILE_DEFAULT, JHipsterConstants.SPRING_PROFILE_DEVELOPMENT);</span>
+<span class="nc" id="L35">        app.setDefaultProperties(defProperties);</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * Get the profiles that are applied else get default profiles.
+     *
+     * @param env spring environment
+     * @return profiles
+     */
+    public static String[] getActiveProfiles(Environment env) {
+<span class="fc" id="L45">        String[] profiles = env.getActiveProfiles();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (profiles.length == 0) {</span>
+<span class="fc" id="L47">            return env.getDefaultProfiles();</span>
+        }
+<span class="fc" id="L49">        return profiles;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

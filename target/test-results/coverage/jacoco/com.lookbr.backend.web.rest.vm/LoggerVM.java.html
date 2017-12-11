@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoggerVM.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.vm</a> &gt; <span class="el_source">LoggerVM.java</span></div><h1>LoggerVM.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.vm;
+
+import ch.qos.logback.classic.Logger;
+
+/**
+ * View Model object for storing a Logback logger.
+ */
+public class LoggerVM {
+
+    private String name;
+
+    private String level;
+
+<span class="fc" id="L14">    public LoggerVM(Logger logger) {</span>
+<span class="fc" id="L15">        this.name = logger.getName();</span>
+<span class="fc" id="L16">        this.level = logger.getEffectiveLevel().toString();</span>
+<span class="fc" id="L17">    }</span>
+
+<span class="fc" id="L19">    public LoggerVM() {</span>
+        // Empty public constructor used by Jackson.
+<span class="fc" id="L21">    }</span>
+
+    public String getName() {
+<span class="fc" id="L24">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L28">        this.name = name;</span>
+<span class="fc" id="L29">    }</span>
+
+    public String getLevel() {
+<span class="fc" id="L32">        return level;</span>
+    }
+
+    public void setLevel(String level) {
+<span class="fc" id="L36">        this.level = level;</span>
+<span class="fc" id="L37">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L41">        return &quot;LoggerVM{&quot; +</span>
+            &quot;name='&quot; + name + '\'' +
+            &quot;, level='&quot; + level + '\'' +
+            '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

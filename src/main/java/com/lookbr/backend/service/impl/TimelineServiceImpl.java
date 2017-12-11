@@ -3,6 +3,7 @@ package com.lookbr.backend.service.impl;
 import com.lookbr.backend.service.TimelineService;
 import com.lookbr.backend.domain.Timeline;
 import com.lookbr.backend.repository.TimelineRepository;
+import com.lookbr.backend.repository.search.TimelineSearchRepository;
 import com.lookbr.backend.service.dto.TimelineDTO;
 import com.lookbr.backend.service.mapper.TimelineMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Timeline.
@@ -26,9 +29,12 @@ public class TimelineServiceImpl implements TimelineService{
 
     private final TimelineMapper timelineMapper;
 
-    public TimelineServiceImpl(TimelineRepository timelineRepository, TimelineMapper timelineMapper) {
+    private final TimelineSearchRepository timelineSearchRepository;
+
+    public TimelineServiceImpl(TimelineRepository timelineRepository, TimelineMapper timelineMapper, TimelineSearchRepository timelineSearchRepository) {
         this.timelineRepository = timelineRepository;
         this.timelineMapper = timelineMapper;
+        this.timelineSearchRepository = timelineSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class TimelineServiceImpl implements TimelineService{
         log.debug("Request to save Timeline : {}", timelineDTO);
         Timeline timeline = timelineMapper.toEntity(timelineDTO);
         timeline = timelineRepository.save(timeline);
-        return timelineMapper.toDto(timeline);
+        TimelineDTO result = timelineMapper.toDto(timeline);
+        timelineSearchRepository.save(timeline);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class TimelineServiceImpl implements TimelineService{
     public void delete(Long id) {
         log.debug("Request to delete Timeline : {}", id);
         timelineRepository.delete(id);
+        timelineSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the timeline corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TimelineDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Timelines for query {}", query);
+        Page<Timeline> result = timelineSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(timelineMapper::toDto);
     }
 }

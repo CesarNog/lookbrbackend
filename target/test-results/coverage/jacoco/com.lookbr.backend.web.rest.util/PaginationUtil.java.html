@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaginationUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.util</a> &gt; <span class="el_source">PaginationUtil.java</span></div><h1>PaginationUtil.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.util;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+/**
+ * Utility class for handling pagination.
+ *
+ * &lt;p&gt;
+ * Pagination uses the same principles as the &lt;a href=&quot;https://developer.github.com/v3/#pagination&quot;&gt;GitHub API&lt;/a&gt;,
+ * and follow &lt;a href=&quot;http://tools.ietf.org/html/rfc5988&quot;&gt;RFC 5988 (Link header)&lt;/a&gt;.
+ */
+public final class PaginationUtil {
+
+<span class="nc" id="L19">    private PaginationUtil() {</span>
+<span class="nc" id="L20">    }</span>
+
+    public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl) {
+
+<span class="fc" id="L24">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L25">        headers.add(&quot;X-Total-Count&quot;, Long.toString(page.getTotalElements()));</span>
+<span class="fc" id="L26">        String link = &quot;&quot;;</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if ((page.getNumber() + 1) &lt; page.getTotalPages()) {</span>
+<span class="fc" id="L28">            link = &quot;&lt;&quot; + generateUri(baseUrl, page.getNumber() + 1, page.getSize()) + &quot;&gt;; rel=\&quot;next\&quot;,&quot;;</span>
+        }
+        // prev link
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if ((page.getNumber()) &gt; 0) {</span>
+<span class="fc" id="L32">            link += &quot;&lt;&quot; + generateUri(baseUrl, page.getNumber() - 1, page.getSize()) + &quot;&gt;; rel=\&quot;prev\&quot;,&quot;;</span>
+        }
+        // last and first link
+<span class="fc" id="L35">        int lastPage = 0;</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (page.getTotalPages() &gt; 0) {</span>
+<span class="fc" id="L37">            lastPage = page.getTotalPages() - 1;</span>
+        }
+<span class="fc" id="L39">        link += &quot;&lt;&quot; + generateUri(baseUrl, lastPage, page.getSize()) + &quot;&gt;; rel=\&quot;last\&quot;,&quot;;</span>
+<span class="fc" id="L40">        link += &quot;&lt;&quot; + generateUri(baseUrl, 0, page.getSize()) + &quot;&gt;; rel=\&quot;first\&quot;&quot;;</span>
+<span class="fc" id="L41">        headers.add(HttpHeaders.LINK, link);</span>
+<span class="fc" id="L42">        return headers;</span>
+    }
+
+    private static String generateUri(String baseUrl, int page, int size) {
+<span class="fc" id="L46">        return UriComponentsBuilder.fromUriString(baseUrl).queryParam(&quot;page&quot;, page).queryParam(&quot;size&quot;, size).toUriString();</span>
+    }
+
+    public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl) {
+        String escapedQuery;
+        try {
+<span class="fc" id="L52">            escapedQuery = URLEncoder.encode(query, &quot;UTF-8&quot;);</span>
+<span class="nc" id="L53">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L54">            throw new RuntimeException(e);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L57">        headers.add(&quot;X-Total-Count&quot;, Long.toString(page.getTotalElements()));</span>
+<span class="fc" id="L58">        String link = &quot;&quot;;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if ((page.getNumber() + 1) &lt; page.getTotalPages()) {</span>
+<span class="fc" id="L60">            link = &quot;&lt;&quot; + generateUri(baseUrl, page.getNumber() + 1, page.getSize()) + &quot;&amp;query=&quot; + escapedQuery + &quot;&gt;; rel=\&quot;next\&quot;,&quot;;</span>
+        }
+        // prev link
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if ((page.getNumber()) &gt; 0) {</span>
+<span class="fc" id="L64">            link += &quot;&lt;&quot; + generateUri(baseUrl, page.getNumber() - 1, page.getSize()) + &quot;&amp;query=&quot; + escapedQuery + &quot;&gt;; rel=\&quot;prev\&quot;,&quot;;</span>
+        }
+        // last and first link
+<span class="fc" id="L67">        int lastPage = 0;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (page.getTotalPages() &gt; 0) {</span>
+<span class="fc" id="L69">            lastPage = page.getTotalPages() - 1;</span>
+        }
+<span class="fc" id="L71">        link += &quot;&lt;&quot; + generateUri(baseUrl, lastPage, page.getSize()) + &quot;&amp;query=&quot; + escapedQuery + &quot;&gt;; rel=\&quot;last\&quot;,&quot;;</span>
+<span class="fc" id="L72">        link += &quot;&lt;&quot; + generateUri(baseUrl, 0, page.getSize()) + &quot;&amp;query=&quot; + escapedQuery + &quot;&gt;; rel=\&quot;first\&quot;&quot;;</span>
+<span class="fc" id="L73">        headers.add(HttpHeaders.LINK, link);</span>
+<span class="fc" id="L74">        return headers;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

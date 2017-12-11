@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">SignupMapperImpl.java</span></div><h1>SignupMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Signup;
+
+import com.lookbr.backend.service.dto.SignupDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L27">public class SignupMapperImpl implements SignupMapper {</span>
+
+    @Override
+
+    public Signup toEntity(SignupDTO dto) {
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if ( dto == null ) {</span>
+
+<span class="nc" id="L35">            return null;</span>
+        }
+
+<span class="nc" id="L38">        Signup signup = new Signup();</span>
+
+<span class="nc" id="L40">        signup.setId( dto.getId() );</span>
+
+<span class="nc" id="L42">        signup.setEmail( dto.getEmail() );</span>
+
+<span class="nc" id="L44">        signup.setLoginType( dto.getLoginType() );</span>
+
+<span class="nc" id="L46">        signup.setPassword( dto.getPassword() );</span>
+
+<span class="nc" id="L48">        signup.setProfilePhotoUrl( dto.getProfilePhotoUrl() );</span>
+
+<span class="nc" id="L50">        signup.setProfilePhoto( dto.getProfilePhoto() );</span>
+
+<span class="nc" id="L52">        signup.setUsername( dto.getUsername() );</span>
+
+<span class="nc" id="L54">        signup.setToken( dto.getToken() );</span>
+
+<span class="nc" id="L56">        return signup;</span>
+    }
+
+    @Override
+
+    public SignupDTO toDto(Signup entity) {
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if ( entity == null ) {</span>
+
+<span class="nc" id="L65">            return null;</span>
+        }
+
+<span class="nc" id="L68">        SignupDTO signupDTO = new SignupDTO();</span>
+
+<span class="nc" id="L70">        signupDTO.setId( entity.getId() );</span>
+
+<span class="nc" id="L72">        signupDTO.setEmail( entity.getEmail() );</span>
+
+<span class="nc" id="L74">        signupDTO.setLoginType( entity.getLoginType() );</span>
+
+<span class="nc" id="L76">        signupDTO.setPassword( entity.getPassword() );</span>
+
+<span class="nc" id="L78">        signupDTO.setProfilePhotoUrl( entity.getProfilePhotoUrl() );</span>
+
+<span class="nc" id="L80">        signupDTO.setProfilePhoto( entity.getProfilePhoto() );</span>
+
+<span class="nc" id="L82">        signupDTO.setUsername( entity.getUsername() );</span>
+
+<span class="nc" id="L84">        signupDTO.setToken( entity.getToken() );</span>
+
+<span class="nc" id="L86">        return signupDTO;</span>
+    }
+
+    @Override
+
+    public List&lt;Signup&gt; toEntity(List&lt;SignupDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L95">            return null;</span>
+        }
+
+<span class="nc" id="L98">        List&lt;Signup&gt; list = new ArrayList&lt;Signup&gt;();</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for ( SignupDTO signupDTO : dtoList ) {</span>
+
+<span class="nc" id="L102">            list.add( toEntity( signupDTO ) );</span>
+<span class="nc" id="L103">        }</span>
+
+<span class="nc" id="L105">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;SignupDTO&gt; toDto(List&lt;Signup&gt; entityList) {
+
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L114">            return null;</span>
+        }
+
+<span class="nc" id="L117">        List&lt;SignupDTO&gt; list = new ArrayList&lt;SignupDTO&gt;();</span>
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        for ( Signup signup : entityList ) {</span>
+
+<span class="nc" id="L121">            list.add( toDto( signup ) );</span>
+<span class="nc" id="L122">        }</span>
+
+<span class="nc" id="L124">        return list;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

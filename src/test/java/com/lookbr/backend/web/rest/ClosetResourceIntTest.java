@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Closet;
 import com.lookbr.backend.repository.ClosetRepository;
 import com.lookbr.backend.service.ClosetService;
+import com.lookbr.backend.repository.search.ClosetSearchRepository;
 import com.lookbr.backend.service.dto.ClosetDTO;
 import com.lookbr.backend.service.mapper.ClosetMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -54,6 +55,9 @@ public class ClosetResourceIntTest {
     private ClosetService closetService;
 
     @Autowired
+    private ClosetSearchRepository closetSearchRepository;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,6 +98,7 @@ public class ClosetResourceIntTest {
 
     @Before
     public void initTest() {
+        closetSearchRepository.deleteAll();
         closet = createEntity(em);
     }
 
@@ -114,6 +119,10 @@ public class ClosetResourceIntTest {
         assertThat(closetList).hasSize(databaseSizeBeforeCreate + 1);
         Closet testCloset = closetList.get(closetList.size() - 1);
         assertThat(testCloset.getPage()).isEqualTo(DEFAULT_PAGE);
+
+        // Validate the Closet in Elasticsearch
+        Closet closetEs = closetSearchRepository.findOne(testCloset.getId());
+        assertThat(closetEs).isEqualToComparingFieldByField(testCloset);
     }
 
     @Test
@@ -177,6 +186,7 @@ public class ClosetResourceIntTest {
     public void updateCloset() throws Exception {
         // Initialize the database
         closetRepository.saveAndFlush(closet);
+        closetSearchRepository.save(closet);
         int databaseSizeBeforeUpdate = closetRepository.findAll().size();
 
         // Update the closet
@@ -197,6 +207,10 @@ public class ClosetResourceIntTest {
         assertThat(closetList).hasSize(databaseSizeBeforeUpdate);
         Closet testCloset = closetList.get(closetList.size() - 1);
         assertThat(testCloset.getPage()).isEqualTo(UPDATED_PAGE);
+
+        // Validate the Closet in Elasticsearch
+        Closet closetEs = closetSearchRepository.findOne(testCloset.getId());
+        assertThat(closetEs).isEqualToComparingFieldByField(testCloset);
     }
 
     @Test
@@ -223,6 +237,7 @@ public class ClosetResourceIntTest {
     public void deleteCloset() throws Exception {
         // Initialize the database
         closetRepository.saveAndFlush(closet);
+        closetSearchRepository.save(closet);
         int databaseSizeBeforeDelete = closetRepository.findAll().size();
 
         // Get the closet
@@ -230,9 +245,28 @@ public class ClosetResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean closetExistsInEs = closetSearchRepository.exists(closet.getId());
+        assertThat(closetExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Closet> closetList = closetRepository.findAll();
         assertThat(closetList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchCloset() throws Exception {
+        // Initialize the database
+        closetRepository.saveAndFlush(closet);
+        closetSearchRepository.save(closet);
+
+        // Search the closet
+        restClosetMockMvc.perform(get("/api/_search/closets?query=id:" + closet.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(closet.getId().intValue())))
+            .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)));
     }
 
     @Test

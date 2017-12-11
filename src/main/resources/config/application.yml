@@ -54,13 +54,18 @@ spring:
     social:
         # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
         google:
-            client-id: 269105182064-8koqujokhi8tsr40a6vn9bs455hl9nh7.apps.googleusercontent.com
-            client-secret: -SH49fO53W_yAUJuh6RtF1LE
+            client-id: xxx
+            client-secret: xxx
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            client-id: 1742808629360190
-            client-secret: 99522e21ceb6054f0b74502ef10e8993
+            client-id: xxx
+            client-secret: xxx
+
+        # see https://apps.twitter.com/app/
+        twitter:
+            client-id: xxx
+            client-secret: xxx
 
         # jhipster-needle-add-social-configuration
 security:

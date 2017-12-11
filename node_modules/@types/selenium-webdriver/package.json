@@ -1,0 +1,38 @@
+{
+    "name": "@types/selenium-webdriver",
+    "version": "3.0.4",
+    "description": "TypeScript definitions for Selenium WebDriverJS",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Bill Armstrong",
+            "url": "https://github.com/BillArmstrong"
+        },
+        {
+            "name": "Yuki Kokubun",
+            "url": "https://github.com/Kuniwak"
+        },
+        {
+            "name": "Craig Nishina",
+            "url": "https://github.com/cnishina"
+        },
+        {
+            "name": "Simon Gellis",
+            "url": "https://github.com/SupernaviX"
+        },
+        {
+            "name": "Ben Dixon",
+            "url": "https://github.com/bendxn"
+        }
+    ],
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "peerDependencies": {},
+    "typesPublisherContentHash": "445e6900141d9f4ce43aa96d4b5153bf2eb81bb393ba05399179e4fa30ab6964",
+    "typeScriptVersion": "2.1"
+}

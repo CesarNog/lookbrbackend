@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<testsuite name="PhantomJS 2.1.1 (Linux 0.0.0)" package="" timestamp="2017-12-06T14:39:07" id="0" hostname="lnxcit017002" tests="37" errors="0" failures="0" time="0.887">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"/>
+  </properties>
+  <testcase name="Component Tests ActivateComponent calls activate.get with the key from params" time="0.094" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests ActivateComponent should set set success to OK upon successful activation" time="0.041" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests ActivateComponent should set set error to ERROR upon activation failure" time="0.029" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetFinishComponent should define its initial state" time="0.028" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetFinishComponent sets focus after the view has been initialized" time="0.013" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetInitComponent should define its initial state" time="0.017" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetInitComponent sets focus after the view has been initialized" time="0.033" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetInitComponent notifies of success upon successful requestReset" time="0.013" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetInitComponent notifies of unknown email upon email address not registered/400" time="0.011" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordResetInitComponent notifies of error upon error response" time="0.01" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should initialize with default values" time="0.021" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should increase strength upon password value change" time="0.02" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordStrengthBarComponent PasswordStrengthBarComponents should change the color based on strength" time="0.019" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordComponent should show error if passwords do not match" time="0.026" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordComponent should call Auth.changePassword when passwords match" time="0.035" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordComponent should set success to OK upon success" time="0.026" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests PasswordComponent should notify of error if change password fails" time="0.021" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests RegisterComponent should ensure the two passwords entered match" time="0.023" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests RegisterComponent should update success to OK after creating an account" time="0.024" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests RegisterComponent should notify of user existence upon 400/login already in use" time="0.017" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests RegisterComponent should notify of email existence upon 400/email address already in use" time="0.019" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests RegisterComponent should notify of generic error" time="0.019" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests SettingsComponent should send the current identity upon save" time="0.018" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests SettingsComponent should notify of success upon successful save" time="0.022" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests SettingsComponent should notify of error upon failed save" time="0.022" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests AuditsComponent today function  should set toDate to current date" time="0.032" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests AuditsComponent previousMonth function  should set fromDate to current date" time="0.036" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests AuditsComponent By default, on init should set all default values correctly" time="0.028" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the basename when it has no sub system" time="0.018" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the basename when it has sub systems" time="0.019" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the sub system name" time="0.024" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent baseName and subSystemName should return the subsystem when it has multiple keys" time="0.011" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent transformHealthData should flatten empty health data" time="0.016" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent should flatten health data with no subsystems" time="0.022" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent should flatten health data with subsystems at level 1, main system has no additional information" time="0.02" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent should flatten health data with subsystems at level 1, main system has additional information" time="0.017" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <testcase name="Component Tests JhiHealthCheckComponent should flatten health data with subsystems at level 1, main system has additional error" time="0.023" classname="PhantomJS_2_1_1_(Linux_0_0_0).Component Tests"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

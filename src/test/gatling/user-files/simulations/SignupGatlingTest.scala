@@ -68,7 +68,7 @@ class SignupGatlingTest extends Simulation {
             .exec(http("Create new signup")
             .post("/api/signups")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "loginType":null, "email":"SAMPLE_TEXT", "profilePhotoUrl":"SAMPLE_TEXT", "profilePhoto":"SAMPLE_TEXT", "username":"SAMPLE_TEXT", "password":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "email":"SAMPLE_TEXT", "loginType":null, "password":"SAMPLE_TEXT", "profilePhotoUrl":"SAMPLE_TEXT", "profilePhoto":"SAMPLE_TEXT", "username":"SAMPLE_TEXT", "token":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_signup_url"))).exitHereIfFailed
             .pause(10)

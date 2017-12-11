@@ -1,8 +1,0 @@
-== Overview
-
-include::security&authentication.adoc[]
-include::limitation.adoc[]
-include::workflow.adoc[]
-include::contact.adoc[]
-include::information.adoc[]
-

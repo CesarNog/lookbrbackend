@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LookMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">LookMapperImpl.java</span></div><h1>LookMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Closet;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.service.dto.LookDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L31">public class LookMapperImpl implements LookMapper {</span>
+
+    @Autowired
+
+    private ClosetMapper closetMapper;
+
+    @Override
+
+    public List&lt;Look&gt; toEntity(List&lt;LookDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L43">            return null;</span>
+        }
+
+<span class="nc" id="L46">        List&lt;Look&gt; list = new ArrayList&lt;Look&gt;();</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for ( LookDTO lookDTO : dtoList ) {</span>
+
+<span class="nc" id="L50">            list.add( toEntity( lookDTO ) );</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;LookDTO&gt; toDto(List&lt;Look&gt; entityList) {
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L62">            return null;</span>
+        }
+
+<span class="nc" id="L65">        List&lt;LookDTO&gt; list = new ArrayList&lt;LookDTO&gt;();</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for ( Look look : entityList ) {</span>
+
+<span class="nc" id="L69">            list.add( toDto( look ) );</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return list;</span>
+    }
+
+    @Override
+
+    public LookDTO toDto(Look look) {
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L81">            return null;</span>
+        }
+
+<span class="nc" id="L84">        LookDTO lookDTO_ = new LookDTO();</span>
+
+<span class="nc" id="L86">        lookDTO_.setClosetId( lookClosetId( look ) );</span>
+
+<span class="nc" id="L88">        lookDTO_.setId( look.getId() );</span>
+
+<span class="nc" id="L90">        lookDTO_.setUserId( look.getUserId() );</span>
+
+<span class="nc" id="L92">        lookDTO_.setTemperature( look.getTemperature() );</span>
+
+<span class="nc" id="L94">        lookDTO_.setDayTime( look.getDayTime() );</span>
+
+<span class="nc" id="L96">        lookDTO_.setPictureIndex( look.getPictureIndex() );</span>
+
+<span class="nc" id="L98">        lookDTO_.setUrl( look.getUrl() );</span>
+
+<span class="nc" id="L100">        return lookDTO_;</span>
+    }
+
+    @Override
+
+    public Look toEntity(LookDTO lookDTO) {
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if ( lookDTO == null ) {</span>
+
+<span class="nc" id="L109">            return null;</span>
+        }
+
+<span class="nc" id="L112">        Look look_ = new Look();</span>
+
+<span class="nc" id="L114">        look_.setCloset( closetMapper.fromId( lookDTO.getClosetId() ) );</span>
+
+<span class="nc" id="L116">        look_.setId( lookDTO.getId() );</span>
+
+<span class="nc" id="L118">        look_.setUserId( lookDTO.getUserId() );</span>
+
+<span class="nc" id="L120">        look_.setTemperature( lookDTO.getTemperature() );</span>
+
+<span class="nc" id="L122">        look_.setDayTime( lookDTO.getDayTime() );</span>
+
+<span class="nc" id="L124">        look_.setPictureIndex( lookDTO.getPictureIndex() );</span>
+
+<span class="nc" id="L126">        look_.setUrl( lookDTO.getUrl() );</span>
+
+<span class="nc" id="L128">        return look_;</span>
+    }
+
+    private Long lookClosetId(Look look) {
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L135">            return null;</span>
+        }
+
+<span class="nc" id="L138">        Closet closet = look.getCloset();</span>
+
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        if ( closet == null ) {</span>
+
+<span class="nc" id="L142">            return null;</span>
+        }
+
+<span class="nc" id="L145">        Long id = closet.getId();</span>
+
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L149">            return null;</span>
+        }
+
+<span class="nc" id="L152">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BadRequestAlertException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.errors</a> &gt; <span class="el_source">BadRequestAlertException.java</span></div><h1>BadRequestAlertException.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.errors;
+
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+
+public class BadRequestAlertException extends AbstractThrowableProblem {
+
+    private final String entityName;
+
+    private final String errorKey;
+
+    public BadRequestAlertException(String defaultMessage, String entityName, String errorKey) {
+<span class="fc" id="L17">        this(ErrorConstants.DEFAULT_TYPE, defaultMessage, entityName, errorKey);</span>
+<span class="fc" id="L18">    }</span>
+
+    public BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
+<span class="fc" id="L21">        super(type, defaultMessage, Status.BAD_REQUEST, null, null, null, getAlertParameters(entityName, errorKey));</span>
+<span class="fc" id="L22">        this.entityName = entityName;</span>
+<span class="fc" id="L23">        this.errorKey = errorKey;</span>
+<span class="fc" id="L24">    }</span>
+
+    public String getEntityName() {
+<span class="fc" id="L27">        return entityName;</span>
+    }
+
+    public String getErrorKey() {
+<span class="fc" id="L31">        return errorKey;</span>
+    }
+
+    private static Map&lt;String, Object&gt; getAlertParameters(String entityName, String errorKey) {
+<span class="fc" id="L35">        Map&lt;String, Object&gt; parameters = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L36">        parameters.put(&quot;message&quot;, &quot;error.&quot; + errorKey);</span>
+<span class="fc" id="L37">        parameters.put(&quot;params&quot;, entityName);</span>
+<span class="fc" id="L38">        return parameters;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

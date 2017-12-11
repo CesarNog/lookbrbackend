@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.lookbr.backend.repository.CustomSocialUsersConnectionRepositoryIntTest
+-------------------------------------------------------------------------------
+Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.048 sec - in com.lookbr.backend.repository.CustomSocialUsersConnectionRepositoryIntTest

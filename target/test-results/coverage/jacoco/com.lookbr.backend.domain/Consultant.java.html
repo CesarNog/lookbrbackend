@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Consultant.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">Consultant.java</span></div><h1>Consultant.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
+import com.lookbr.backend.domain.enumeration.Status;
+
+
+/**
+ * A Consultant.
+ */
+@Entity
+@Table(name = &quot;consultant&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = &quot;consultant&quot;)
+<span class="nc" id="L24">public class Consultant implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;consultant_id&quot;)
+    private String consultantId;
+
+    @Column(name = &quot;consultant_name&quot;)
+    private String consultantName;
+
+    @Column(name = &quot;consultant_description&quot;)
+    private String consultantDescription;
+
+    @Column(name = &quot;consultant_cover_photo_url&quot;)
+    private String consultantCoverPhotoURL;
+
+    @Column(name = &quot;consultant_profile_photo_url&quot;)
+    private String consultantProfilePhotoURL;
+
+    @Column(name = &quot;charge&quot;)
+    private Integer charge;
+
+    @Column(name = &quot;inspiration_url&quot;)
+    private String inspirationURL;
+
+    @Column(name = &quot;profile_photo&quot;)
+    private String profilePhoto;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;status&quot;)
+    private Status status;
+
+    @Column(name = &quot;page&quot;)
+    private Integer page;
+
+<span class="nc" id="L63">    @OneToMany(mappedBy = &quot;consultant&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;SocialMedia&gt; socialMedias = new HashSet&lt;&gt;();
+
+    @ManyToOne
+    private Look look;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="nc" id="L73">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L77">        this.id = id;</span>
+<span class="nc" id="L78">    }</span>
+
+    public String getConsultantId() {
+<span class="nc" id="L81">        return consultantId;</span>
+    }
+
+    public Consultant consultantId(String consultantId) {
+<span class="nc" id="L85">        this.consultantId = consultantId;</span>
+<span class="nc" id="L86">        return this;</span>
+    }
+
+    public void setConsultantId(String consultantId) {
+<span class="nc" id="L90">        this.consultantId = consultantId;</span>
+<span class="nc" id="L91">    }</span>
+
+    public String getConsultantName() {
+<span class="nc" id="L94">        return consultantName;</span>
+    }
+
+    public Consultant consultantName(String consultantName) {
+<span class="nc" id="L98">        this.consultantName = consultantName;</span>
+<span class="nc" id="L99">        return this;</span>
+    }
+
+    public void setConsultantName(String consultantName) {
+<span class="nc" id="L103">        this.consultantName = consultantName;</span>
+<span class="nc" id="L104">    }</span>
+
+    public String getConsultantDescription() {
+<span class="nc" id="L107">        return consultantDescription;</span>
+    }
+
+    public Consultant consultantDescription(String consultantDescription) {
+<span class="nc" id="L111">        this.consultantDescription = consultantDescription;</span>
+<span class="nc" id="L112">        return this;</span>
+    }
+
+    public void setConsultantDescription(String consultantDescription) {
+<span class="nc" id="L116">        this.consultantDescription = consultantDescription;</span>
+<span class="nc" id="L117">    }</span>
+
+    public String getConsultantCoverPhotoURL() {
+<span class="nc" id="L120">        return consultantCoverPhotoURL;</span>
+    }
+
+    public Consultant consultantCoverPhotoURL(String consultantCoverPhotoURL) {
+<span class="nc" id="L124">        this.consultantCoverPhotoURL = consultantCoverPhotoURL;</span>
+<span class="nc" id="L125">        return this;</span>
+    }
+
+    public void setConsultantCoverPhotoURL(String consultantCoverPhotoURL) {
+<span class="nc" id="L129">        this.consultantCoverPhotoURL = consultantCoverPhotoURL;</span>
+<span class="nc" id="L130">    }</span>
+
+    public String getConsultantProfilePhotoURL() {
+<span class="nc" id="L133">        return consultantProfilePhotoURL;</span>
+    }
+
+    public Consultant consultantProfilePhotoURL(String consultantProfilePhotoURL) {
+<span class="nc" id="L137">        this.consultantProfilePhotoURL = consultantProfilePhotoURL;</span>
+<span class="nc" id="L138">        return this;</span>
+    }
+
+    public void setConsultantProfilePhotoURL(String consultantProfilePhotoURL) {
+<span class="nc" id="L142">        this.consultantProfilePhotoURL = consultantProfilePhotoURL;</span>
+<span class="nc" id="L143">    }</span>
+
+    public Integer getCharge() {
+<span class="nc" id="L146">        return charge;</span>
+    }
+
+    public Consultant charge(Integer charge) {
+<span class="nc" id="L150">        this.charge = charge;</span>
+<span class="nc" id="L151">        return this;</span>
+    }
+
+    public void setCharge(Integer charge) {
+<span class="nc" id="L155">        this.charge = charge;</span>
+<span class="nc" id="L156">    }</span>
+
+    public String getInspirationURL() {
+<span class="nc" id="L159">        return inspirationURL;</span>
+    }
+
+    public Consultant inspirationURL(String inspirationURL) {
+<span class="nc" id="L163">        this.inspirationURL = inspirationURL;</span>
+<span class="nc" id="L164">        return this;</span>
+    }
+
+    public void setInspirationURL(String inspirationURL) {
+<span class="nc" id="L168">        this.inspirationURL = inspirationURL;</span>
+<span class="nc" id="L169">    }</span>
+
+    public String getProfilePhoto() {
+<span class="nc" id="L172">        return profilePhoto;</span>
+    }
+
+    public Consultant profilePhoto(String profilePhoto) {
+<span class="nc" id="L176">        this.profilePhoto = profilePhoto;</span>
+<span class="nc" id="L177">        return this;</span>
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+<span class="nc" id="L181">        this.profilePhoto = profilePhoto;</span>
+<span class="nc" id="L182">    }</span>
+
+    public Status getStatus() {
+<span class="nc" id="L185">        return status;</span>
+    }
+
+    public Consultant status(Status status) {
+<span class="nc" id="L189">        this.status = status;</span>
+<span class="nc" id="L190">        return this;</span>
+    }
+
+    public void setStatus(Status status) {
+<span class="nc" id="L194">        this.status = status;</span>
+<span class="nc" id="L195">    }</span>
+
+    public Integer getPage() {
+<span class="nc" id="L198">        return page;</span>
+    }
+
+    public Consultant page(Integer page) {
+<span class="nc" id="L202">        this.page = page;</span>
+<span class="nc" id="L203">        return this;</span>
+    }
+
+    public void setPage(Integer page) {
+<span class="nc" id="L207">        this.page = page;</span>
+<span class="nc" id="L208">    }</span>
+
+    public Set&lt;SocialMedia&gt; getSocialMedias() {
+<span class="nc" id="L211">        return socialMedias;</span>
+    }
+
+    public Consultant socialMedias(Set&lt;SocialMedia&gt; socialMedias) {
+<span class="nc" id="L215">        this.socialMedias = socialMedias;</span>
+<span class="nc" id="L216">        return this;</span>
+    }
+
+    public Consultant addSocialMedias(SocialMedia socialMedia) {
+<span class="nc" id="L220">        this.socialMedias.add(socialMedia);</span>
+<span class="nc" id="L221">        socialMedia.setConsultant(this);</span>
+<span class="nc" id="L222">        return this;</span>
+    }
+
+    public Consultant removeSocialMedias(SocialMedia socialMedia) {
+<span class="nc" id="L226">        this.socialMedias.remove(socialMedia);</span>
+<span class="nc" id="L227">        socialMedia.setConsultant(null);</span>
+<span class="nc" id="L228">        return this;</span>
+    }
+
+    public void setSocialMedias(Set&lt;SocialMedia&gt; socialMedias) {
+<span class="nc" id="L232">        this.socialMedias = socialMedias;</span>
+<span class="nc" id="L233">    }</span>
+
+    public Look getLook() {
+<span class="nc" id="L236">        return look;</span>
+    }
+
+    public Consultant look(Look look) {
+<span class="nc" id="L240">        this.look = look;</span>
+<span class="nc" id="L241">        return this;</span>
+    }
+
+    public void setLook(Look look) {
+<span class="nc" id="L245">        this.look = look;</span>
+<span class="nc" id="L246">    }</span>
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L252">            return true;</span>
+        }
+<span class="nc bnc" id="L254" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L255">            return false;</span>
+        }
+<span class="nc" id="L257">        Consultant consultant = (Consultant) o;</span>
+<span class="nc bnc" id="L258" title="All 4 branches missed.">        if (consultant.getId() == null || getId() == null) {</span>
+<span class="nc" id="L259">            return false;</span>
+        }
+<span class="nc" id="L261">        return Objects.equals(getId(), consultant.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L266">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L271">        return &quot;Consultant{&quot; +</span>
+<span class="nc" id="L272">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L273">            &quot;, consultantId='&quot; + getConsultantId() + &quot;'&quot; +</span>
+<span class="nc" id="L274">            &quot;, consultantName='&quot; + getConsultantName() + &quot;'&quot; +</span>
+<span class="nc" id="L275">            &quot;, consultantDescription='&quot; + getConsultantDescription() + &quot;'&quot; +</span>
+<span class="nc" id="L276">            &quot;, consultantCoverPhotoURL='&quot; + getConsultantCoverPhotoURL() + &quot;'&quot; +</span>
+<span class="nc" id="L277">            &quot;, consultantProfilePhotoURL='&quot; + getConsultantProfilePhotoURL() + &quot;'&quot; +</span>
+<span class="nc" id="L278">            &quot;, charge=&quot; + getCharge() +</span>
+<span class="nc" id="L279">            &quot;, inspirationURL='&quot; + getInspirationURL() + &quot;'&quot; +</span>
+<span class="nc" id="L280">            &quot;, profilePhoto='&quot; + getProfilePhoto() + &quot;'&quot; +</span>
+<span class="nc" id="L281">            &quot;, status='&quot; + getStatus() + &quot;'&quot; +</span>
+<span class="nc" id="L282">            &quot;, page=&quot; + getPage() +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

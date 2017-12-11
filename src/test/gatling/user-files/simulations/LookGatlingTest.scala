@@ -68,7 +68,7 @@ class LookGatlingTest extends Simulation {
             .exec(http("Create new look")
             .post("/api/looks")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "userId":"SAMPLE_TEXT", "temperature":"SAMPLE_TEXT", "dayTime":"2020-01-01T00:00:00.000Z"}""")).asJSON
+            .body(StringBody("""{"id":null, "userId":"SAMPLE_TEXT", "temperature":"SAMPLE_TEXT", "dayTime":"2020-01-01T00:00:00.000Z", "pictureIndex":"0", "url":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_look_url"))).exitHereIfFailed
             .pause(10)

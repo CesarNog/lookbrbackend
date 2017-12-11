@@ -4,7 +4,8 @@
             "home": {
                 "title": "Looks",
                 "createLabel": "Criar novo Look",
-                "createOrEditLabel": "Criar ou editar Look"
+                "createOrEditLabel": "Criar ou editar Look",
+                "search": "Pesquisar por Look"
             },
             "created": "Um novo Look foi criado com o identificador {{ param }}",
             "updated": "Um Look foi atualizado com o identificador {{ param }}",
@@ -17,7 +18,16 @@
             },
             "userId": "User Id",
             "temperature": "Temperature",
-            "dayTime": "Day Time"
+            "dayTime": "Day Time",
+            "pictureIndex": "Picture Index",
+            "url": "Url",
+            "consultantsVotes": "Consultants Votes",
+            "comments": "Comments",
+            "intentions": "Intentions",
+            "occasions": "Occasions",
+            "temperature": "Temperature",
+            "consultants": "Consultants",
+            "closet": "Closet"
         }
     }
 }

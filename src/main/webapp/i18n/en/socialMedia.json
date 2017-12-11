@@ -1,0 +1,24 @@
+{
+    "lookbrbackendApp": {
+        "socialMedia" : {
+            "home": {
+                "title": "Social Medias",
+                "createLabel": "Create a new Social Media",
+                "createOrEditLabel": "Create or edit a Social Media",
+                "search": "Search for Social Media"
+            },
+            "created": "A new Social Media is created with identifier {{ param }}",
+            "updated": "A Social Media is updated with identifier {{ param }}",
+            "deleted": "A Social Media is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Social Media {{ id }}?"
+            },
+            "detail": {
+                "title": "Social Media"
+            },
+            "type": "Type",
+            "url": "Url",
+            "consultant": "Consultant"
+        }
+    }
+}

@@ -5,6 +5,7 @@ import com.lookbr.backend.domain.User;
 import com.lookbr.backend.repository.AuthorityRepository;
 import com.lookbr.backend.repository.UserRepository;
 import com.lookbr.backend.security.AuthoritiesConstants;
+import com.lookbr.backend.repository.search.UserSearchRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,15 +38,18 @@ public class SocialService {
 
     private final MailService mailService;
 
+    private final UserSearchRepository userSearchRepository;
+
     public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
             PasswordEncoder passwordEncoder, UserRepository userRepository,
-            MailService mailService) {
+            MailService mailService, UserSearchRepository userSearchRepository) {
 
         this.usersConnectionRepository = usersConnectionRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.userSearchRepository = userSearchRepository;
     }
 
     public void deleteUserSocialConnection(String login) {
@@ -108,6 +112,7 @@ public class SocialService {
         newUser.setLangKey(langKey);
         newUser.setImageUrl(imageUrl);
 
+        userSearchRepository.save(newUser);
         return userRepository.save(newUser);
     }
 

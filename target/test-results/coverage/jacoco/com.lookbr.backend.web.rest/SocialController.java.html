@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocialController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">SocialController.java</span></div><h1>SocialController.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.lookbr.backend.config.Constants;
+import com.lookbr.backend.service.SocialService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.ProviderSignInUtils;
+import org.springframework.social.support.URIBuilder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.view.RedirectView;
+
+@RestController
+@RequestMapping(&quot;/social&quot;)
+public class SocialController {
+
+<span class="fc" id="L20">    private final Logger log = LoggerFactory.getLogger(SocialController.class);</span>
+
+    private final SocialService socialService;
+
+    private final ProviderSignInUtils providerSignInUtils;
+
+<span class="fc" id="L26">    public SocialController(SocialService socialService, ProviderSignInUtils providerSignInUtils) {</span>
+<span class="fc" id="L27">        this.socialService = socialService;</span>
+<span class="fc" id="L28">        this.providerSignInUtils = providerSignInUtils;</span>
+<span class="fc" id="L29">    }</span>
+
+    @GetMapping(&quot;/signup&quot;)
+    public RedirectView signUp(WebRequest webRequest, @CookieValue(name = &quot;NG_TRANSLATE_LANG_KEY&quot;, required = false, defaultValue = Constants.DEFAULT_LANGUAGE) String langKey) {
+        try {
+<span class="nc" id="L34">            Connection&lt;?&gt; connection = providerSignInUtils.getConnectionFromSession(webRequest);</span>
+<span class="nc" id="L35">            socialService.createSocialUser(connection, langKey.replace(&quot;\&quot;&quot;, &quot;&quot;));</span>
+<span class="nc" id="L36">            return new RedirectView(URIBuilder.fromUri(&quot;/#/social-register/&quot; + connection.getKey().getProviderId())</span>
+<span class="nc" id="L37">                .queryParam(&quot;success&quot;, &quot;true&quot;)</span>
+<span class="nc" id="L38">                .build().toString(), true);</span>
+<span class="nc" id="L39">        } catch (Exception e) {</span>
+<span class="nc" id="L40">            log.error(&quot;Exception creating social user: &quot;, e);</span>
+<span class="nc" id="L41">            return new RedirectView(URIBuilder.fromUri(&quot;/#/social-register/no-provider&quot;)</span>
+<span class="nc" id="L42">                .queryParam(&quot;success&quot;, &quot;false&quot;)</span>
+<span class="nc" id="L43">                .build().toString(), true);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

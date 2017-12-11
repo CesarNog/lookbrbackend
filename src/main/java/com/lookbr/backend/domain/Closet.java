@@ -1,10 +1,14 @@
 package com.lookbr.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 
@@ -14,6 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "closet")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "closet")
 public class Closet implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,6 +29,11 @@ public class Closet implements Serializable {
 
     @Column(name = "page")
     private Integer page;
+
+    @OneToMany(mappedBy = "closet")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Look> looks = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -45,6 +55,31 @@ public class Closet implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public Set<Look> getLooks() {
+        return looks;
+    }
+
+    public Closet looks(Set<Look> looks) {
+        this.looks = looks;
+        return this;
+    }
+
+    public Closet addLook(Look look) {
+        this.looks.add(look);
+        look.setCloset(this);
+        return this;
+    }
+
+    public Closet removeLook(Look look) {
+        this.looks.remove(look);
+        look.setCloset(null);
+        return this;
+    }
+
+    public void setLooks(Set<Look> looks) {
+        this.looks = looks;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

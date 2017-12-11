@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomSignInAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.security.social</a> &gt; <span class="el_source">CustomSignInAdapter.java</span></div><h1>CustomSignInAdapter.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.security.social;
+
+import com.lookbr.backend.security.jwt.TokenProvider;
+
+import io.github.jhipster.config.JHipsterProperties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.web.SignInAdapter;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.context.request.ServletWebRequest;
+import javax.servlet.http.Cookie;
+
+public class CustomSignInAdapter implements SignInAdapter {
+
+<span class="fc" id="L24">    @SuppressWarnings(&quot;unused&quot;)</span>
+<span class="fc" id="L25">    private final Logger log = LoggerFactory.getLogger(CustomSignInAdapter.class);</span>
+
+    private final UserDetailsService userDetailsService;
+
+    private final JHipsterProperties jHipsterProperties;
+
+    private final TokenProvider tokenProvider;
+
+
+    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties,
+<span class="fc" id="L35">            TokenProvider tokenProvider) {</span>
+<span class="fc" id="L36">        this.userDetailsService = userDetailsService;</span>
+<span class="fc" id="L37">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L38">        this.tokenProvider = tokenProvider;</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public String signIn(String userId, Connection&lt;?&gt; connection, NativeWebRequest request){
+        try {
+<span class="nc" id="L44">            UserDetails user = userDetailsService.loadUserByUsername(userId);</span>
+<span class="nc" id="L45">            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(</span>
+                user,
+                null,
+<span class="nc" id="L48">                user.getAuthorities());</span>
+
+<span class="nc" id="L50">            SecurityContextHolder.getContext().setAuthentication(authenticationToken);</span>
+<span class="nc" id="L51">            String jwt = tokenProvider.createToken(authenticationToken, false);</span>
+<span class="nc" id="L52">            ServletWebRequest servletWebRequest = (ServletWebRequest) request;</span>
+<span class="nc" id="L53">            servletWebRequest.getResponse().addCookie(getSocialAuthenticationCookie(jwt));</span>
+<span class="nc" id="L54">        } catch (AuthenticationException ae) {</span>
+<span class="nc" id="L55">            log.error(&quot;Social authentication error&quot;);</span>
+<span class="nc" id="L56">            log.trace(&quot;Authentication exception trace: {}&quot;, ae);</span>
+<span class="nc" id="L57">        }</span>
+<span class="nc" id="L58">        return jHipsterProperties.getSocial().getRedirectAfterSignIn();</span>
+    }
+
+    private Cookie getSocialAuthenticationCookie(String token) {
+<span class="nc" id="L62">        Cookie socialAuthCookie = new Cookie(&quot;social-authentication&quot;, token);</span>
+<span class="nc" id="L63">        socialAuthCookie.setPath(&quot;/&quot;);</span>
+<span class="nc" id="L64">        socialAuthCookie.setMaxAge(10);</span>
+<span class="nc" id="L65">        return socialAuthCookie;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

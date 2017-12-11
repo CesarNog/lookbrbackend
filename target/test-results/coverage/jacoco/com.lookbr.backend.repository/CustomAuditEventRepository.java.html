@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomAuditEventRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.repository</a> &gt; <span class="el_source">CustomAuditEventRepository.java</span></div><h1>CustomAuditEventRepository.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.repository;
+
+import com.lookbr.backend.config.Constants;
+import com.lookbr.backend.config.audit.AuditEventConverter;
+import com.lookbr.backend.domain.PersistentAuditEvent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.boot.actuate.audit.AuditEventRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * An implementation of Spring Boot's AuditEventRepository.
+ */
+@Repository
+public class CustomAuditEventRepository implements AuditEventRepository {
+
+    private static final String AUTHORIZATION_FAILURE = &quot;AUTHORIZATION_FAILURE&quot;;
+
+    /**
+     * Should be the same as in Liquibase migration.
+     */
+    protected static final int EVENT_DATA_COLUMN_MAX_LENGTH = 255;
+
+    private final PersistenceAuditEventRepository persistenceAuditEventRepository;
+
+    private final AuditEventConverter auditEventConverter;
+
+<span class="fc" id="L37">    private final Logger log = LoggerFactory.getLogger(getClass());</span>
+
+    public CustomAuditEventRepository(PersistenceAuditEventRepository persistenceAuditEventRepository,
+<span class="fc" id="L40">            AuditEventConverter auditEventConverter) {</span>
+
+<span class="fc" id="L42">        this.persistenceAuditEventRepository = persistenceAuditEventRepository;</span>
+<span class="fc" id="L43">        this.auditEventConverter = auditEventConverter;</span>
+<span class="fc" id="L44">    }</span>
+
+    @Override
+    public List&lt;AuditEvent&gt; find(Date after) {
+<span class="fc" id="L48">        Iterable&lt;PersistentAuditEvent&gt; persistentAuditEvents =</span>
+<span class="fc" id="L49">            persistenceAuditEventRepository.findByAuditEventDateAfter(after.toInstant());</span>
+<span class="fc" id="L50">        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);</span>
+    }
+
+    @Override
+    public List&lt;AuditEvent&gt; find(String principal, Date after) {
+        Iterable&lt;PersistentAuditEvent&gt; persistentAuditEvents;
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">        if (principal == null &amp;&amp; after == null) {</span>
+<span class="fc" id="L57">            persistentAuditEvents = persistenceAuditEventRepository.findAll();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        } else if (after == null) {</span>
+<span class="fc" id="L59">            persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal(principal);</span>
+        } else {
+<span class="fc" id="L61">            persistentAuditEvents =</span>
+<span class="fc" id="L62">                persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfter(principal, after.toInstant());</span>
+        }
+<span class="fc" id="L64">        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);</span>
+    }
+
+    @Override
+    public List&lt;AuditEvent&gt; find(String principal, Date after, String type) {
+<span class="fc" id="L69">        Iterable&lt;PersistentAuditEvent&gt; persistentAuditEvents =</span>
+<span class="fc" id="L70">            persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfterAndAuditEventType(principal, after.toInstant(), type);</span>
+<span class="fc" id="L71">        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);</span>
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void add(AuditEvent event) {
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (!AUTHORIZATION_FAILURE.equals(event.getType()) &amp;&amp;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            !Constants.ANONYMOUS_USER.equals(event.getPrincipal())) {</span>
+
+<span class="fc" id="L80">            PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();</span>
+<span class="fc" id="L81">            persistentAuditEvent.setPrincipal(event.getPrincipal());</span>
+<span class="fc" id="L82">            persistentAuditEvent.setAuditEventType(event.getType());</span>
+<span class="fc" id="L83">            persistentAuditEvent.setAuditEventDate(event.getTimestamp().toInstant());</span>
+<span class="fc" id="L84">            Map&lt;String, String&gt; eventData = auditEventConverter.convertDataToStrings(event.getData());</span>
+<span class="fc" id="L85">            persistentAuditEvent.setData(truncate(eventData));</span>
+<span class="fc" id="L86">            persistenceAuditEventRepository.save(persistentAuditEvent);</span>
+        }
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Truncate event data that might exceed column length.
+     */
+    private Map&lt;String, String&gt; truncate(Map&lt;String, String&gt; data) {
+<span class="fc" id="L94">        Map&lt;String, String&gt; results = new HashMap&lt;&gt;();</span>
+
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (data != null) {</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">            for (Map.Entry&lt;String, String&gt; entry : data.entrySet()) {</span>
+<span class="fc" id="L98">                String value = entry.getValue();</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">                if (value != null) {</span>
+<span class="fc" id="L100">                    int length = value.length();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                    if (length &gt; EVENT_DATA_COLUMN_MAX_LENGTH) {</span>
+<span class="fc" id="L102">                        value = value.substring(0, EVENT_DATA_COLUMN_MAX_LENGTH);</span>
+<span class="fc" id="L103">                        log.warn(&quot;Event data for {} too long ({}) has been truncated to {}. Consider increasing column width.&quot;,</span>
+<span class="fc" id="L104">                                 entry.getKey(), length, EVENT_DATA_COLUMN_MAX_LENGTH);</span>
+                    }
+                }
+<span class="fc" id="L107">                results.put(entry.getKey(), value);</span>
+<span class="fc" id="L108">            }</span>
+        }
+<span class="fc" id="L110">        return results;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

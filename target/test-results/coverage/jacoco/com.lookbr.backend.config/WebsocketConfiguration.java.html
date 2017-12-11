@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebsocketConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">WebsocketConfiguration.java</span></div><h1>WebsocketConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import com.lookbr.backend.security.AuthoritiesConstants;
+import io.github.jhipster.config.JHipsterProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.server.HandshakeInterceptor;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfigurer {
+
+<span class="fc" id="L32">    private final Logger log = LoggerFactory.getLogger(WebsocketConfiguration.class);</span>
+
+    public static final String IP_ADDRESS = &quot;IP_ADDRESS&quot;;
+
+    private final JHipsterProperties jHipsterProperties;
+
+<span class="fc" id="L38">    public WebsocketConfiguration(JHipsterProperties jHipsterProperties) {</span>
+<span class="fc" id="L39">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L40">    }</span>
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+<span class="fc" id="L44">        config.enableSimpleBroker(&quot;/topic&quot;);</span>
+<span class="fc" id="L45">    }</span>
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+<span class="pc" id="L49">        String[] allowedOrigins = Optional.ofNullable(jHipsterProperties.getCors().getAllowedOrigins()).map(origins -&gt; origins.toArray(new String[0])).orElse(new String[0]);</span>
+<span class="fc" id="L50">        registry.addEndpoint(&quot;/websocket/tracker&quot;)</span>
+<span class="fc" id="L51">            .setHandshakeHandler(defaultHandshakeHandler())</span>
+<span class="fc" id="L52">            .setAllowedOrigins(allowedOrigins)</span>
+<span class="fc" id="L53">            .withSockJS()</span>
+<span class="fc" id="L54">            .setInterceptors(httpSessionHandshakeInterceptor());</span>
+<span class="fc" id="L55">    }</span>
+
+    @Bean
+    public HandshakeInterceptor httpSessionHandshakeInterceptor() {
+<span class="fc" id="L59">        return new HandshakeInterceptor() {</span>
+
+            @Override
+            public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map&lt;String, Object&gt; attributes) throws Exception {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                if (request instanceof ServletServerHttpRequest) {</span>
+<span class="nc" id="L64">                    ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;</span>
+<span class="nc" id="L65">                    attributes.put(IP_ADDRESS, servletRequest.getRemoteAddress());</span>
+                }
+<span class="nc" id="L67">                return true;</span>
+            }
+
+            @Override
+            public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+
+<span class="nc" id="L73">            }</span>
+        };
+    }
+
+    private DefaultHandshakeHandler defaultHandshakeHandler() {
+<span class="fc" id="L78">        return new DefaultHandshakeHandler() {</span>
+            @Override
+            protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map&lt;String, Object&gt; attributes) {
+<span class="nc" id="L81">                Principal principal = request.getPrincipal();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                if (principal == null) {</span>
+<span class="nc" id="L83">                    Collection&lt;SimpleGrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L84">                    authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));</span>
+<span class="nc" id="L85">                    principal = new AnonymousAuthenticationToken(&quot;WebsocketConfiguration&quot;, &quot;anonymous&quot;, authorities);</span>
+                }
+<span class="nc" id="L87">                return principal;</span>
+            }
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

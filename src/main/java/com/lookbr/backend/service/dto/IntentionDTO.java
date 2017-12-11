@@ -2,6 +2,8 @@ package com.lookbr.backend.service.dto;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -12,6 +14,10 @@ public class IntentionDTO implements Serializable {
     private Long id;
 
     private Integer page;
+
+    private Long inspirationId;
+
+    private Long lookId;
 
     public Long getId() {
         return id;
@@ -27,6 +33,22 @@ public class IntentionDTO implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public Long getInspirationId() {
+        return inspirationId;
+    }
+
+    public void setInspirationId(Long inspirationId) {
+        this.inspirationId = inspirationId;
+    }
+
+    public Long getLookId() {
+        return lookId;
+    }
+
+    public void setLookId(Long lookId) {
+        this.lookId = lookId;
     }
 
     @Override

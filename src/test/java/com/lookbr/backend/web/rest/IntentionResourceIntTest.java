@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Intention;
 import com.lookbr.backend.repository.IntentionRepository;
 import com.lookbr.backend.service.IntentionService;
+import com.lookbr.backend.repository.search.IntentionSearchRepository;
 import com.lookbr.backend.service.dto.IntentionDTO;
 import com.lookbr.backend.service.mapper.IntentionMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -54,6 +55,9 @@ public class IntentionResourceIntTest {
     private IntentionService intentionService;
 
     @Autowired
+    private IntentionSearchRepository intentionSearchRepository;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,6 +98,7 @@ public class IntentionResourceIntTest {
 
     @Before
     public void initTest() {
+        intentionSearchRepository.deleteAll();
         intention = createEntity(em);
     }
 
@@ -114,6 +119,10 @@ public class IntentionResourceIntTest {
         assertThat(intentionList).hasSize(databaseSizeBeforeCreate + 1);
         Intention testIntention = intentionList.get(intentionList.size() - 1);
         assertThat(testIntention.getPage()).isEqualTo(DEFAULT_PAGE);
+
+        // Validate the Intention in Elasticsearch
+        Intention intentionEs = intentionSearchRepository.findOne(testIntention.getId());
+        assertThat(intentionEs).isEqualToComparingFieldByField(testIntention);
     }
 
     @Test
@@ -177,6 +186,7 @@ public class IntentionResourceIntTest {
     public void updateIntention() throws Exception {
         // Initialize the database
         intentionRepository.saveAndFlush(intention);
+        intentionSearchRepository.save(intention);
         int databaseSizeBeforeUpdate = intentionRepository.findAll().size();
 
         // Update the intention
@@ -197,6 +207,10 @@ public class IntentionResourceIntTest {
         assertThat(intentionList).hasSize(databaseSizeBeforeUpdate);
         Intention testIntention = intentionList.get(intentionList.size() - 1);
         assertThat(testIntention.getPage()).isEqualTo(UPDATED_PAGE);
+
+        // Validate the Intention in Elasticsearch
+        Intention intentionEs = intentionSearchRepository.findOne(testIntention.getId());
+        assertThat(intentionEs).isEqualToComparingFieldByField(testIntention);
     }
 
     @Test
@@ -223,6 +237,7 @@ public class IntentionResourceIntTest {
     public void deleteIntention() throws Exception {
         // Initialize the database
         intentionRepository.saveAndFlush(intention);
+        intentionSearchRepository.save(intention);
         int databaseSizeBeforeDelete = intentionRepository.findAll().size();
 
         // Get the intention
@@ -230,9 +245,28 @@ public class IntentionResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean intentionExistsInEs = intentionSearchRepository.exists(intention.getId());
+        assertThat(intentionExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Intention> intentionList = intentionRepository.findAll();
         assertThat(intentionList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchIntention() throws Exception {
+        // Initialize the database
+        intentionRepository.saveAndFlush(intention);
+        intentionSearchRepository.save(intention);
+
+        // Search the intention
+        restIntentionMockMvc.perform(get("/api/_search/intentions?query=id:" + intention.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(intention.getId().intValue())))
+            .andExpect(jsonPath("$.[*].page").value(hasItem(DEFAULT_PAGE)));
     }
 
     @Test

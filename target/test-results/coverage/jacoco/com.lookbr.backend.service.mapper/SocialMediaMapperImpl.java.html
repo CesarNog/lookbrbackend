@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocialMediaMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">SocialMediaMapperImpl.java</span></div><h1>SocialMediaMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Consultant;
+
+import com.lookbr.backend.domain.SocialMedia;
+
+import com.lookbr.backend.service.dto.SocialMediaDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:21-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L31">public class SocialMediaMapperImpl implements SocialMediaMapper {</span>
+
+    @Autowired
+
+    private ConsultantMapper consultantMapper;
+
+    @Override
+
+    public List&lt;SocialMedia&gt; toEntity(List&lt;SocialMediaDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L43">            return null;</span>
+        }
+
+<span class="nc" id="L46">        List&lt;SocialMedia&gt; list = new ArrayList&lt;SocialMedia&gt;();</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for ( SocialMediaDTO socialMediaDTO : dtoList ) {</span>
+
+<span class="nc" id="L50">            list.add( toEntity( socialMediaDTO ) );</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;SocialMediaDTO&gt; toDto(List&lt;SocialMedia&gt; entityList) {
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L62">            return null;</span>
+        }
+
+<span class="nc" id="L65">        List&lt;SocialMediaDTO&gt; list = new ArrayList&lt;SocialMediaDTO&gt;();</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for ( SocialMedia socialMedia : entityList ) {</span>
+
+<span class="nc" id="L69">            list.add( toDto( socialMedia ) );</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return list;</span>
+    }
+
+    @Override
+
+    public SocialMediaDTO toDto(SocialMedia socialMedia) {
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if ( socialMedia == null ) {</span>
+
+<span class="nc" id="L81">            return null;</span>
+        }
+
+<span class="nc" id="L84">        SocialMediaDTO socialMediaDTO_ = new SocialMediaDTO();</span>
+
+<span class="nc" id="L86">        socialMediaDTO_.setConsultantId( socialMediaConsultantId( socialMedia ) );</span>
+
+<span class="nc" id="L88">        socialMediaDTO_.setId( socialMedia.getId() );</span>
+
+<span class="nc" id="L90">        socialMediaDTO_.setType( socialMedia.getType() );</span>
+
+<span class="nc" id="L92">        socialMediaDTO_.setUrl( socialMedia.getUrl() );</span>
+
+<span class="nc" id="L94">        return socialMediaDTO_;</span>
+    }
+
+    @Override
+
+    public SocialMedia toEntity(SocialMediaDTO socialMediaDTO) {
+
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if ( socialMediaDTO == null ) {</span>
+
+<span class="nc" id="L103">            return null;</span>
+        }
+
+<span class="nc" id="L106">        SocialMedia socialMedia_ = new SocialMedia();</span>
+
+<span class="nc" id="L108">        socialMedia_.setConsultant( consultantMapper.fromId( socialMediaDTO.getConsultantId() ) );</span>
+
+<span class="nc" id="L110">        socialMedia_.setId( socialMediaDTO.getId() );</span>
+
+<span class="nc" id="L112">        socialMedia_.setType( socialMediaDTO.getType() );</span>
+
+<span class="nc" id="L114">        socialMedia_.setUrl( socialMediaDTO.getUrl() );</span>
+
+<span class="nc" id="L116">        return socialMedia_;</span>
+    }
+
+    private Long socialMediaConsultantId(SocialMedia socialMedia) {
+
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if ( socialMedia == null ) {</span>
+
+<span class="nc" id="L123">            return null;</span>
+        }
+
+<span class="nc" id="L126">        Consultant consultant = socialMedia.getConsultant();</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if ( consultant == null ) {</span>
+
+<span class="nc" id="L130">            return null;</span>
+        }
+
+<span class="nc" id="L133">        Long id = consultant.getId();</span>
+
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L137">            return null;</span>
+        }
+
+<span class="nc" id="L140">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

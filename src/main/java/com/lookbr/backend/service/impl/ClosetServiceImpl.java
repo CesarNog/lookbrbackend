@@ -3,6 +3,7 @@ package com.lookbr.backend.service.impl;
 import com.lookbr.backend.service.ClosetService;
 import com.lookbr.backend.domain.Closet;
 import com.lookbr.backend.repository.ClosetRepository;
+import com.lookbr.backend.repository.search.ClosetSearchRepository;
 import com.lookbr.backend.service.dto.ClosetDTO;
 import com.lookbr.backend.service.mapper.ClosetMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing Closet.
@@ -26,9 +29,12 @@ public class ClosetServiceImpl implements ClosetService{
 
     private final ClosetMapper closetMapper;
 
-    public ClosetServiceImpl(ClosetRepository closetRepository, ClosetMapper closetMapper) {
+    private final ClosetSearchRepository closetSearchRepository;
+
+    public ClosetServiceImpl(ClosetRepository closetRepository, ClosetMapper closetMapper, ClosetSearchRepository closetSearchRepository) {
         this.closetRepository = closetRepository;
         this.closetMapper = closetMapper;
+        this.closetSearchRepository = closetSearchRepository;
     }
 
     /**
@@ -42,7 +48,9 @@ public class ClosetServiceImpl implements ClosetService{
         log.debug("Request to save Closet : {}", closetDTO);
         Closet closet = closetMapper.toEntity(closetDTO);
         closet = closetRepository.save(closet);
-        return closetMapper.toDto(closet);
+        ClosetDTO result = closetMapper.toDto(closet);
+        closetSearchRepository.save(closet);
+        return result;
     }
 
     /**
@@ -82,5 +90,21 @@ public class ClosetServiceImpl implements ClosetService{
     public void delete(Long id) {
         log.debug("Request to delete Closet : {}", id);
         closetRepository.delete(id);
+        closetSearchRepository.delete(id);
+    }
+
+    /**
+     * Search for the closet corresponding to the query.
+     *
+     * @param query the query of the search
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ClosetDTO> search(String query, Pageable pageable) {
+        log.debug("Request to search for a page of Closets for query {}", query);
+        Page<Closet> result = closetSearchRepository.search(queryStringQuery(query), pageable);
+        return result.map(closetMapper::toDto);
     }
 }

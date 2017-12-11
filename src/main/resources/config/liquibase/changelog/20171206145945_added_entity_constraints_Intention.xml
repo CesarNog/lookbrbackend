@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Intention.
+    -->
+    <changeSet id="20171206145945-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="inspiration_id"
+                                 baseTableName="intention"
+                                 constraintName="fk_intention_inspiration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspiration"/>
+
+        <addForeignKeyConstraint baseColumnNames="look_id"
+                                 baseTableName="intention"
+                                 constraintName="fk_intention_look_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="look"/>
+
+    </changeSet>
+</databaseChangeLog>

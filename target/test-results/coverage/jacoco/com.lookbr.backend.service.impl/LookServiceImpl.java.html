@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LookServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.impl</a> &gt; <span class="el_source">LookServiceImpl.java</span></div><h1>LookServiceImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.impl;
+
+import com.lookbr.backend.service.LookService;
+import com.lookbr.backend.domain.Look;
+import com.lookbr.backend.repository.LookRepository;
+import com.lookbr.backend.repository.search.LookSearchRepository;
+import com.lookbr.backend.service.dto.LookDTO;
+import com.lookbr.backend.service.mapper.LookMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * Service Implementation for managing Look.
+ */
+@Service
+@Transactional
+public class LookServiceImpl implements LookService{
+
+<span class="nc" id="L28">    private final Logger log = LoggerFactory.getLogger(LookServiceImpl.class);</span>
+
+    private final LookRepository lookRepository;
+
+    private final LookMapper lookMapper;
+
+    private final LookSearchRepository lookSearchRepository;
+
+<span class="nc" id="L36">    public LookServiceImpl(LookRepository lookRepository, LookMapper lookMapper, LookSearchRepository lookSearchRepository) {</span>
+<span class="nc" id="L37">        this.lookRepository = lookRepository;</span>
+<span class="nc" id="L38">        this.lookMapper = lookMapper;</span>
+<span class="nc" id="L39">        this.lookSearchRepository = lookSearchRepository;</span>
+<span class="nc" id="L40">    }</span>
+
+    /**
+     * Save a look.
+     *
+     * @param lookDTO the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public LookDTO save(LookDTO lookDTO) {
+<span class="nc" id="L50">        log.debug(&quot;Request to save Look : {}&quot;, lookDTO);</span>
+<span class="nc" id="L51">        Look look = lookMapper.toEntity(lookDTO);</span>
+<span class="nc" id="L52">        look = lookRepository.save(look);</span>
+<span class="nc" id="L53">        LookDTO result = lookMapper.toDto(look);</span>
+<span class="nc" id="L54">        lookSearchRepository.save(look);</span>
+<span class="nc" id="L55">        return result;</span>
+    }
+
+    /**
+     * Get all the looks.
+     *
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;LookDTO&gt; findAll() {
+<span class="nc" id="L66">        log.debug(&quot;Request to get all Looks&quot;);</span>
+<span class="nc" id="L67">        return lookRepository.findAll().stream()</span>
+<span class="nc" id="L68">            .map(lookMapper::toDto)</span>
+<span class="nc" id="L69">            .collect(Collectors.toCollection(LinkedList::new));</span>
+    }
+
+    /**
+     * Get one look by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public LookDTO findOne(Long id) {
+<span class="nc" id="L81">        log.debug(&quot;Request to get Look : {}&quot;, id);</span>
+<span class="nc" id="L82">        Look look = lookRepository.findOne(id);</span>
+<span class="nc" id="L83">        return lookMapper.toDto(look);</span>
+    }
+
+    /**
+     * Delete the look by id.
+     *
+     * @param id the id of the entity
+     */
+    @Override
+    public void delete(Long id) {
+<span class="nc" id="L93">        log.debug(&quot;Request to delete Look : {}&quot;, id);</span>
+<span class="nc" id="L94">        lookRepository.delete(id);</span>
+<span class="nc" id="L95">        lookSearchRepository.delete(id);</span>
+<span class="nc" id="L96">    }</span>
+
+    /**
+     * Search for the look corresponding to the query.
+     *
+     * @param query the query of the search
+     * @return the list of entities
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List&lt;LookDTO&gt; search(String query) {
+<span class="nc" id="L107">        log.debug(&quot;Request to search Looks for query {}&quot;, query);</span>
+<span class="nc" id="L108">        return StreamSupport</span>
+<span class="nc" id="L109">            .stream(lookSearchRepository.search(queryStringQuery(query)).spliterator(), false)</span>
+<span class="nc" id="L110">            .map(lookMapper::toDto)</span>
+<span class="nc" id="L111">            .collect(Collectors.toList());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

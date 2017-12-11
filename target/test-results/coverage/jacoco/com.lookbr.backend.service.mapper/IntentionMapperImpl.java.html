@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IntentionMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">IntentionMapperImpl.java</span></div><h1>IntentionMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Inspiration;
+
+import com.lookbr.backend.domain.Intention;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.service.dto.IntentionDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L33">public class IntentionMapperImpl implements IntentionMapper {</span>
+
+    @Autowired
+
+    private InspirationMapper inspirationMapper;
+
+    @Autowired
+
+    private LookMapper lookMapper;
+
+    @Override
+
+    public List&lt;Intention&gt; toEntity(List&lt;IntentionDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L49">            return null;</span>
+        }
+
+<span class="nc" id="L52">        List&lt;Intention&gt; list = new ArrayList&lt;Intention&gt;();</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for ( IntentionDTO intentionDTO : dtoList ) {</span>
+
+<span class="nc" id="L56">            list.add( toEntity( intentionDTO ) );</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;IntentionDTO&gt; toDto(List&lt;Intention&gt; entityList) {
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L68">            return null;</span>
+        }
+
+<span class="nc" id="L71">        List&lt;IntentionDTO&gt; list = new ArrayList&lt;IntentionDTO&gt;();</span>
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for ( Intention intention : entityList ) {</span>
+
+<span class="nc" id="L75">            list.add( toDto( intention ) );</span>
+<span class="nc" id="L76">        }</span>
+
+<span class="nc" id="L78">        return list;</span>
+    }
+
+    @Override
+
+    public IntentionDTO toDto(Intention intention) {
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if ( intention == null ) {</span>
+
+<span class="nc" id="L87">            return null;</span>
+        }
+
+<span class="nc" id="L90">        IntentionDTO intentionDTO_ = new IntentionDTO();</span>
+
+<span class="nc" id="L92">        intentionDTO_.setLookId( intentionLookId( intention ) );</span>
+
+<span class="nc" id="L94">        intentionDTO_.setInspirationId( intentionInspirationId( intention ) );</span>
+
+<span class="nc" id="L96">        intentionDTO_.setId( intention.getId() );</span>
+
+<span class="nc" id="L98">        intentionDTO_.setPage( intention.getPage() );</span>
+
+<span class="nc" id="L100">        return intentionDTO_;</span>
+    }
+
+    @Override
+
+    public Intention toEntity(IntentionDTO intentionDTO) {
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if ( intentionDTO == null ) {</span>
+
+<span class="nc" id="L109">            return null;</span>
+        }
+
+<span class="nc" id="L112">        Intention intention_ = new Intention();</span>
+
+<span class="nc" id="L114">        intention_.setLook( lookMapper.fromId( intentionDTO.getLookId() ) );</span>
+
+<span class="nc" id="L116">        intention_.setInspiration( inspirationMapper.fromId( intentionDTO.getInspirationId() ) );</span>
+
+<span class="nc" id="L118">        intention_.setId( intentionDTO.getId() );</span>
+
+<span class="nc" id="L120">        intention_.setPage( intentionDTO.getPage() );</span>
+
+<span class="nc" id="L122">        return intention_;</span>
+    }
+
+    private Long intentionLookId(Intention intention) {
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if ( intention == null ) {</span>
+
+<span class="nc" id="L129">            return null;</span>
+        }
+
+<span class="nc" id="L132">        Look look = intention.getLook();</span>
+
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L136">            return null;</span>
+        }
+
+<span class="nc" id="L139">        Long id = look.getId();</span>
+
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L143">            return null;</span>
+        }
+
+<span class="nc" id="L146">        return id;</span>
+    }
+
+    private Long intentionInspirationId(Intention intention) {
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if ( intention == null ) {</span>
+
+<span class="nc" id="L153">            return null;</span>
+        }
+
+<span class="nc" id="L156">        Inspiration inspiration = intention.getInspiration();</span>
+
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if ( inspiration == null ) {</span>
+
+<span class="nc" id="L160">            return null;</span>
+        }
+
+<span class="nc" id="L163">        Long id = inspiration.getId();</span>
+
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L167">            return null;</span>
+        }
+
+<span class="nc" id="L170">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

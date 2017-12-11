@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ElasticsearchConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">ElasticsearchConfiguration.java</span></div><h1>ElasticsearchConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import java.io.IOException;
+
+import org.elasticsearch.client.Client;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.EntityMapper;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Configuration
+<span class="fc" id="L16">public class ElasticsearchConfiguration {</span>
+
+    @Bean
+    public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
+<span class="fc" id="L20">        return new ElasticsearchTemplate(client, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build()));</span>
+    }
+
+    public class CustomEntityMapper implements EntityMapper {
+
+        private ObjectMapper objectMapper;
+
+<span class="fc" id="L27">        public CustomEntityMapper(ObjectMapper objectMapper) {</span>
+<span class="fc" id="L28">            this.objectMapper = objectMapper;</span>
+<span class="fc" id="L29">            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);</span>
+<span class="fc" id="L30">            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);</span>
+<span class="fc" id="L31">        }</span>
+
+        @Override
+        public String mapToString(Object object) throws IOException {
+<span class="fc" id="L35">            return objectMapper.writeValueAsString(object);</span>
+        }
+
+        @Override
+        public &lt;T&gt; T mapToObject(String source, Class&lt;T&gt; clazz) throws IOException {
+<span class="nc" id="L40">            return objectMapper.readValue(source, clazz);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

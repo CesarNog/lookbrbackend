@@ -5,6 +5,7 @@ import com.lookbr.backend.LookbrbackendApp;
 import com.lookbr.backend.domain.Signup;
 import com.lookbr.backend.repository.SignupRepository;
 import com.lookbr.backend.service.SignupService;
+import com.lookbr.backend.repository.search.SignupSearchRepository;
 import com.lookbr.backend.service.dto.SignupDTO;
 import com.lookbr.backend.service.mapper.SignupMapper;
 import com.lookbr.backend.web.rest.errors.ExceptionTranslator;
@@ -42,11 +43,14 @@ import com.lookbr.backend.domain.enumeration.LoginType;
 @SpringBootTest(classes = LookbrbackendApp.class)
 public class SignupResourceIntTest {
 
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+
     private static final LoginType DEFAULT_LOGIN_TYPE = LoginType.FACEBOOK;
     private static final LoginType UPDATED_LOGIN_TYPE = LoginType.EMAIL;
 
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
-    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
+    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
 
     private static final String DEFAULT_PROFILE_PHOTO_URL = "AAAAAAAAAA";
     private static final String UPDATED_PROFILE_PHOTO_URL = "BBBBBBBBBB";
@@ -57,8 +61,8 @@ public class SignupResourceIntTest {
     private static final String DEFAULT_USERNAME = "AAAAAAAAAA";
     private static final String UPDATED_USERNAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
-    private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
+    private static final String DEFAULT_TOKEN = "AAAAAAAAAA";
+    private static final String UPDATED_TOKEN = "BBBBBBBBBB";
 
     @Autowired
     private SignupRepository signupRepository;
@@ -68,6 +72,9 @@ public class SignupResourceIntTest {
 
     @Autowired
     private SignupService signupService;
+
+    @Autowired
+    private SignupSearchRepository signupSearchRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -104,17 +111,19 @@ public class SignupResourceIntTest {
      */
     public static Signup createEntity(EntityManager em) {
         Signup signup = new Signup()
-            .loginType(DEFAULT_LOGIN_TYPE)
             .email(DEFAULT_EMAIL)
+            .loginType(DEFAULT_LOGIN_TYPE)
+            .password(DEFAULT_PASSWORD)
             .profilePhotoUrl(DEFAULT_PROFILE_PHOTO_URL)
             .profilePhoto(DEFAULT_PROFILE_PHOTO)
             .username(DEFAULT_USERNAME)
-            .password(DEFAULT_PASSWORD);
+            .token(DEFAULT_TOKEN);
         return signup;
     }
 
     @Before
     public void initTest() {
+        signupSearchRepository.deleteAll();
         signup = createEntity(em);
     }
 
@@ -134,12 +143,17 @@ public class SignupResourceIntTest {
         List<Signup> signupList = signupRepository.findAll();
         assertThat(signupList).hasSize(databaseSizeBeforeCreate + 1);
         Signup testSignup = signupList.get(signupList.size() - 1);
-        assertThat(testSignup.getLoginType()).isEqualTo(DEFAULT_LOGIN_TYPE);
         assertThat(testSignup.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testSignup.getLoginType()).isEqualTo(DEFAULT_LOGIN_TYPE);
+        assertThat(testSignup.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testSignup.getProfilePhotoUrl()).isEqualTo(DEFAULT_PROFILE_PHOTO_URL);
         assertThat(testSignup.getProfilePhoto()).isEqualTo(DEFAULT_PROFILE_PHOTO);
         assertThat(testSignup.getUsername()).isEqualTo(DEFAULT_USERNAME);
-        assertThat(testSignup.getPassword()).isEqualTo(DEFAULT_PASSWORD);
+        assertThat(testSignup.getToken()).isEqualTo(DEFAULT_TOKEN);
+
+        // Validate the Signup in Elasticsearch
+        Signup signupEs = signupSearchRepository.findOne(testSignup.getId());
+        assertThat(signupEs).isEqualToComparingFieldByField(testSignup);
     }
 
     @Test
@@ -173,12 +187,13 @@ public class SignupResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(signup.getId().intValue())))
-            .andExpect(jsonPath("$.[*].loginType").value(hasItem(DEFAULT_LOGIN_TYPE.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
+            .andExpect(jsonPath("$.[*].loginType").value(hasItem(DEFAULT_LOGIN_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
             .andExpect(jsonPath("$.[*].profilePhotoUrl").value(hasItem(DEFAULT_PROFILE_PHOTO_URL.toString())))
             .andExpect(jsonPath("$.[*].profilePhoto").value(hasItem(DEFAULT_PROFILE_PHOTO.toString())))
             .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME.toString())))
-            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())));
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN.toString())));
     }
 
     @Test
@@ -192,12 +207,13 @@ public class SignupResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(signup.getId().intValue()))
-            .andExpect(jsonPath("$.loginType").value(DEFAULT_LOGIN_TYPE.toString()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
+            .andExpect(jsonPath("$.loginType").value(DEFAULT_LOGIN_TYPE.toString()))
+            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()))
             .andExpect(jsonPath("$.profilePhotoUrl").value(DEFAULT_PROFILE_PHOTO_URL.toString()))
             .andExpect(jsonPath("$.profilePhoto").value(DEFAULT_PROFILE_PHOTO.toString()))
             .andExpect(jsonPath("$.username").value(DEFAULT_USERNAME.toString()))
-            .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD.toString()));
+            .andExpect(jsonPath("$.token").value(DEFAULT_TOKEN.toString()));
     }
 
     @Test
@@ -213,6 +229,7 @@ public class SignupResourceIntTest {
     public void updateSignup() throws Exception {
         // Initialize the database
         signupRepository.saveAndFlush(signup);
+        signupSearchRepository.save(signup);
         int databaseSizeBeforeUpdate = signupRepository.findAll().size();
 
         // Update the signup
@@ -220,12 +237,13 @@ public class SignupResourceIntTest {
         // Disconnect from session so that the updates on updatedSignup are not directly saved in db
         em.detach(updatedSignup);
         updatedSignup
-            .loginType(UPDATED_LOGIN_TYPE)
             .email(UPDATED_EMAIL)
+            .loginType(UPDATED_LOGIN_TYPE)
+            .password(UPDATED_PASSWORD)
             .profilePhotoUrl(UPDATED_PROFILE_PHOTO_URL)
             .profilePhoto(UPDATED_PROFILE_PHOTO)
             .username(UPDATED_USERNAME)
-            .password(UPDATED_PASSWORD);
+            .token(UPDATED_TOKEN);
         SignupDTO signupDTO = signupMapper.toDto(updatedSignup);
 
         restSignupMockMvc.perform(put("/api/signups")
@@ -237,12 +255,17 @@ public class SignupResourceIntTest {
         List<Signup> signupList = signupRepository.findAll();
         assertThat(signupList).hasSize(databaseSizeBeforeUpdate);
         Signup testSignup = signupList.get(signupList.size() - 1);
-        assertThat(testSignup.getLoginType()).isEqualTo(UPDATED_LOGIN_TYPE);
         assertThat(testSignup.getEmail()).isEqualTo(UPDATED_EMAIL);
+        assertThat(testSignup.getLoginType()).isEqualTo(UPDATED_LOGIN_TYPE);
+        assertThat(testSignup.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testSignup.getProfilePhotoUrl()).isEqualTo(UPDATED_PROFILE_PHOTO_URL);
         assertThat(testSignup.getProfilePhoto()).isEqualTo(UPDATED_PROFILE_PHOTO);
         assertThat(testSignup.getUsername()).isEqualTo(UPDATED_USERNAME);
-        assertThat(testSignup.getPassword()).isEqualTo(UPDATED_PASSWORD);
+        assertThat(testSignup.getToken()).isEqualTo(UPDATED_TOKEN);
+
+        // Validate the Signup in Elasticsearch
+        Signup signupEs = signupSearchRepository.findOne(testSignup.getId());
+        assertThat(signupEs).isEqualToComparingFieldByField(testSignup);
     }
 
     @Test
@@ -269,6 +292,7 @@ public class SignupResourceIntTest {
     public void deleteSignup() throws Exception {
         // Initialize the database
         signupRepository.saveAndFlush(signup);
+        signupSearchRepository.save(signup);
         int databaseSizeBeforeDelete = signupRepository.findAll().size();
 
         // Get the signup
@@ -276,9 +300,34 @@ public class SignupResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
+        // Validate Elasticsearch is empty
+        boolean signupExistsInEs = signupSearchRepository.exists(signup.getId());
+        assertThat(signupExistsInEs).isFalse();
+
         // Validate the database is empty
         List<Signup> signupList = signupRepository.findAll();
         assertThat(signupList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+
+    @Test
+    @Transactional
+    public void searchSignup() throws Exception {
+        // Initialize the database
+        signupRepository.saveAndFlush(signup);
+        signupSearchRepository.save(signup);
+
+        // Search the signup
+        restSignupMockMvc.perform(get("/api/_search/signups?query=id:" + signup.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(signup.getId().intValue())))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
+            .andExpect(jsonPath("$.[*].loginType").value(hasItem(DEFAULT_LOGIN_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD.toString())))
+            .andExpect(jsonPath("$.[*].profilePhotoUrl").value(hasItem(DEFAULT_PROFILE_PHOTO_URL.toString())))
+            .andExpect(jsonPath("$.[*].profilePhoto").value(hasItem(DEFAULT_PROFILE_PHOTO.toString())))
+            .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME.toString())))
+            .andExpect(jsonPath("$.[*].token").value(hasItem(DEFAULT_TOKEN.toString())));
     }
 
     @Test

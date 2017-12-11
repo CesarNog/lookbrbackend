@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OccasionResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">OccasionResource.java</span></div><h1>OccasionResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.OccasionService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.OccasionDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Occasion.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class OccasionResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(OccasionResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;occasion&quot;;
+
+    private final OccasionService occasionService;
+
+<span class="nc" id="L36">    public OccasionResource(OccasionService occasionService) {</span>
+<span class="nc" id="L37">        this.occasionService = occasionService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /occasions : Create a new occasion.
+     *
+     * @param occasionDTO the occasionDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new occasionDTO, or with status 400 (Bad Request) if the occasion has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/occasions&quot;)
+    @Timed
+    public ResponseEntity&lt;OccasionDTO&gt; createOccasion(@RequestBody OccasionDTO occasionDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Occasion : {}&quot;, occasionDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (occasionDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new occasion cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        OccasionDTO result = occasionService.save(occasionDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/occasions/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /occasions : Updates an existing occasion.
+     *
+     * @param occasionDTO the occasionDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated occasionDTO,
+     * or with status 400 (Bad Request) if the occasionDTO is not valid,
+     * or with status 500 (Internal Server Error) if the occasionDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/occasions&quot;)
+    @Timed
+    public ResponseEntity&lt;OccasionDTO&gt; updateOccasion(@RequestBody OccasionDTO occasionDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Occasion : {}&quot;, occasionDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (occasionDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createOccasion(occasionDTO);</span>
+        }
+<span class="nc" id="L76">        OccasionDTO result = occasionService.save(occasionDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, occasionDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /occasions : get all the occasions.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of occasions in body
+     */
+    @GetMapping(&quot;/occasions&quot;)
+    @Timed
+    public List&lt;OccasionDTO&gt; getAllOccasions() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Occasions&quot;);</span>
+<span class="nc" id="L91">        return occasionService.findAll();</span>
+        }
+
+    /**
+     * GET  /occasions/:id : get the &quot;id&quot; occasion.
+     *
+     * @param id the id of the occasionDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the occasionDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/occasions/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;OccasionDTO&gt; getOccasion(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Occasion : {}&quot;, id);</span>
+<span class="nc" id="L104">        OccasionDTO occasionDTO = occasionService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(occasionDTO));</span>
+    }
+
+    /**
+     * DELETE  /occasions/:id : delete the &quot;id&quot; occasion.
+     *
+     * @param id the id of the occasionDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/occasions/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteOccasion(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Occasion : {}&quot;, id);</span>
+<span class="nc" id="L118">        occasionService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/occasions?query=:query : search for the occasion corresponding
+     * to the query.
+     *
+     * @param query the query of the occasion search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/occasions&quot;)
+    @Timed
+    public List&lt;OccasionDTO&gt; searchOccasions(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Occasions for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return occasionService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

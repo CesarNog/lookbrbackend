@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LookDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.dto</a> &gt; <span class="el_source">LookDTO.java</span></div><h1>LookDTO.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.dto;
+
+
+import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
+/**
+ * A DTO for the Look entity.
+ */
+<span class="nc" id="L13">public class LookDTO implements Serializable {</span>
+
+    private Long id;
+
+    private String userId;
+
+    private String temperature;
+
+    private LocalDate dayTime;
+
+    private Integer pictureIndex;
+
+    private String url;
+
+    private Long closetId;
+
+    public Long getId() {
+<span class="nc" id="L30">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L34">        this.id = id;</span>
+<span class="nc" id="L35">    }</span>
+
+    public String getUserId() {
+<span class="nc" id="L38">        return userId;</span>
+    }
+
+    public void setUserId(String userId) {
+<span class="nc" id="L42">        this.userId = userId;</span>
+<span class="nc" id="L43">    }</span>
+
+    public String getTemperature() {
+<span class="nc" id="L46">        return temperature;</span>
+    }
+
+    public void setTemperature(String temperature) {
+<span class="nc" id="L50">        this.temperature = temperature;</span>
+<span class="nc" id="L51">    }</span>
+
+    public LocalDate getDayTime() {
+<span class="nc" id="L54">        return dayTime;</span>
+    }
+
+    public void setDayTime(LocalDate dayTime) {
+<span class="nc" id="L58">        this.dayTime = dayTime;</span>
+<span class="nc" id="L59">    }</span>
+
+    public Integer getPictureIndex() {
+<span class="nc" id="L62">        return pictureIndex;</span>
+    }
+
+    public void setPictureIndex(Integer pictureIndex) {
+<span class="nc" id="L66">        this.pictureIndex = pictureIndex;</span>
+<span class="nc" id="L67">    }</span>
+
+    public String getUrl() {
+<span class="nc" id="L70">        return url;</span>
+    }
+
+    public void setUrl(String url) {
+<span class="nc" id="L74">        this.url = url;</span>
+<span class="nc" id="L75">    }</span>
+
+    public Long getClosetId() {
+<span class="nc" id="L78">        return closetId;</span>
+    }
+
+    public void setClosetId(Long closetId) {
+<span class="nc" id="L82">        this.closetId = closetId;</span>
+<span class="nc" id="L83">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L88">            return true;</span>
+        }
+<span class="nc bnc" id="L90" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L91">            return false;</span>
+        }
+
+<span class="nc" id="L94">        LookDTO lookDTO = (LookDTO) o;</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">        if(lookDTO.getId() == null || getId() == null) {</span>
+<span class="nc" id="L96">            return false;</span>
+        }
+<span class="nc" id="L98">        return Objects.equals(getId(), lookDTO.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L103">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L108">        return &quot;LookDTO{&quot; +</span>
+<span class="nc" id="L109">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L110">            &quot;, userId='&quot; + getUserId() + &quot;'&quot; +</span>
+<span class="nc" id="L111">            &quot;, temperature='&quot; + getTemperature() + &quot;'&quot; +</span>
+<span class="nc" id="L112">            &quot;, dayTime='&quot; + getDayTime() + &quot;'&quot; +</span>
+<span class="nc" id="L113">            &quot;, pictureIndex=&quot; + getPictureIndex() +</span>
+<span class="nc" id="L114">            &quot;, url='&quot; + getUrl() + &quot;'&quot; +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

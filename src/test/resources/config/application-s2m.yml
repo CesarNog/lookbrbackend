@@ -1,4 +1,0 @@
-jhipster:
-    swagger:
-        contactName: com.lookbr.backend
-        contactEmail: com.lookbr.backend@example.org

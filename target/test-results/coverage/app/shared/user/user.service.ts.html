@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/shared/user/user.service.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/shared/user/</a> user.service.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>17/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.14% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>15/30</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+&nbsp;
+import { SERVER_API_URL } from '../../app.constants';
+import { User } from './user.model';
+import { ResponseWrapper } from '../model/response-wrapper.model';
+import { createRequestOption } from '../model/request-util';
+&nbsp;
+@Injectable()
+export class UserService {
+    private <span class="cstat-no" title="statement not covered" >resourceUrl = SERVER_API_URL + 'api/users';</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >    constructor(private <span class="cstat-no" title="statement not covered" >http: Http)</span></span> { }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    create(user: User)</span>: Observable&lt;ResponseWrapper&gt; {
+<span class="cstat-no" title="statement not covered" >        return this.http.post(this.resourceUrl, user)</span>
+            .map(<span class="fstat-no" title="function not covered" >(res: Response)</span> =&gt; <span class="cstat-no" title="statement not covered" >this.convertResponse(res))</span>;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    update(user: User)</span>: Observable&lt;ResponseWrapper&gt; {
+<span class="cstat-no" title="statement not covered" >        return this.http.put(this.resourceUrl, user)</span>
+            .map(<span class="fstat-no" title="function not covered" >(res: Response)</span> =&gt; <span class="cstat-no" title="statement not covered" >this.convertResponse(res))</span>;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    find(login: string)</span>: Observable&lt;User&gt; {
+<span class="cstat-no" title="statement not covered" >        return this.http.get(`${this.resourceUrl}/${login}`).map(<span class="fstat-no" title="function not covered" >(res: Response)</span> =&gt; <span class="cstat-no" title="statement not covered" >res.json())</span>;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    query(req?: any)</span>: Observable&lt;ResponseWrapper&gt; {
+<span class="cstat-no" title="statement not covered" >        const options = createRequestOption(req);</span>
+<span class="cstat-no" title="statement not covered" >        return this.http.get(this.resourceUrl, options)</span>
+            .map(<span class="fstat-no" title="function not covered" >(res: Response)</span> =&gt; <span class="cstat-no" title="statement not covered" >this.convertResponse(res))</span>;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    delete(login: string)</span>: Observable&lt;Response&gt; {
+<span class="cstat-no" title="statement not covered" >        return this.http.delete(`${this.resourceUrl}/${login}`);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    authorities(): Observable&lt;string[]&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        return this.http.get(SERVER_API_URL + 'api/users/authorities').map(<span class="fstat-no" title="function not covered" >(res: Response)</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            const json = res.json();</span>
+<span class="cstat-no" title="statement not covered" >            return &lt;string[]&gt; json;</span>
+        });
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    private convertResponse(res: Response)</span>: ResponseWrapper {
+<span class="cstat-no" title="statement not covered" >        const jsonResponse = res.json();</span>
+<span class="cstat-no" title="statement not covered" >        return new ResponseWrapper(res.headers, jsonResponse, res.status);</span>
+    }
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 06 2017 12:39:09 GMT-0200 (-02)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

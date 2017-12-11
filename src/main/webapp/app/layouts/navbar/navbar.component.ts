@@ -12,7 +12,7 @@ import { VERSION } from '../../app.constants';
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: [
-        'navbar.css'
+        'navbar.scss'
     ]
 })
 export class NavbarComponent implements OnInit {

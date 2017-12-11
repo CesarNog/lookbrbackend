@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileInfoResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">ProfileInfoResource.java</span></div><h1>ProfileInfoResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.lookbr.backend.config.DefaultProfileUtil;
+
+import io.github.jhipster.config.JHipsterProperties;
+
+import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Resource to return information about the currently running Spring profiles.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class ProfileInfoResource {
+
+    private final Environment env;
+
+    private final JHipsterProperties jHipsterProperties;
+
+<span class="fc" id="L25">    public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties) {</span>
+<span class="fc" id="L26">        this.env = env;</span>
+<span class="fc" id="L27">        this.jHipsterProperties = jHipsterProperties;</span>
+<span class="fc" id="L28">    }</span>
+
+    @GetMapping(&quot;/profile-info&quot;)
+    public ProfileInfoVM getActiveProfiles() {
+<span class="fc" id="L32">        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);</span>
+<span class="fc" id="L33">        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));</span>
+    }
+
+    private String getRibbonEnv(String[] activeProfiles) {
+<span class="fc" id="L37">        String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (displayOnActiveProfiles == null) {</span>
+<span class="fc" id="L39">            return null;</span>
+        }
+<span class="fc" id="L41">        List&lt;String&gt; ribbonProfiles = new ArrayList&lt;&gt;(Arrays.asList(displayOnActiveProfiles));</span>
+<span class="fc" id="L42">        List&lt;String&gt; springBootProfiles = Arrays.asList(activeProfiles);</span>
+<span class="fc" id="L43">        ribbonProfiles.retainAll(springBootProfiles);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (!ribbonProfiles.isEmpty()) {</span>
+<span class="fc" id="L45">            return ribbonProfiles.get(0);</span>
+        }
+<span class="fc" id="L47">        return null;</span>
+    }
+
+    class ProfileInfoVM {
+
+        private String[] activeProfiles;
+
+        private String ribbonEnv;
+
+<span class="fc" id="L56">        ProfileInfoVM(String[] activeProfiles, String ribbonEnv) {</span>
+<span class="fc" id="L57">            this.activeProfiles = activeProfiles;</span>
+<span class="fc" id="L58">            this.ribbonEnv = ribbonEnv;</span>
+<span class="fc" id="L59">        }</span>
+
+        public String[] getActiveProfiles() {
+<span class="fc" id="L62">            return activeProfiles;</span>
+        }
+
+        public String getRibbonEnv() {
+<span class="fc" id="L66">            return ribbonEnv;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

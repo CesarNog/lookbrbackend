@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebsocketSecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.config</a> &gt; <span class="el_source">WebsocketSecurityConfiguration.java</span></div><h1>WebsocketSecurityConfiguration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.config;
+
+import com.lookbr.backend.security.AuthoritiesConstants;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
+import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+
+@Configuration
+<span class="fc" id="L10">public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {</span>
+
+    @Override
+    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+<span class="fc" id="L14">        messages</span>
+<span class="fc" id="L15">            .nullDestMatcher().authenticated()</span>
+<span class="fc" id="L16">            .simpDestMatchers(&quot;/topic/tracker&quot;).hasAuthority(AuthoritiesConstants.ADMIN)</span>
+            // matches any destination that starts with /topic/
+            // (i.e. cannot send messages directly to /topic/)
+            // (i.e. cannot subscribe to /topic/messages/* to get messages sent to
+            // /topic/messages-user&lt;id&gt;)
+<span class="fc" id="L21">            .simpDestMatchers(&quot;/topic/**&quot;).authenticated()</span>
+            // message types other than MESSAGE and SUBSCRIBE
+<span class="fc" id="L23">            .simpTypeMatchers(SimpMessageType.MESSAGE, SimpMessageType.SUBSCRIBE).denyAll()</span>
+            // catch all
+<span class="fc" id="L25">            .anyMessage().denyAll();</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Disables CSRF for Websockets.
+     */
+    @Override
+    protected boolean sameOriginDisabled() {
+<span class="fc" id="L33">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

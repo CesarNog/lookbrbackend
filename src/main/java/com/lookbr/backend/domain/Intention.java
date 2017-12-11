@@ -2,6 +2,7 @@ package com.lookbr.backend.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "intention")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "intention")
 public class Intention implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,6 +26,12 @@ public class Intention implements Serializable {
 
     @Column(name = "page")
     private Integer page;
+
+    @ManyToOne
+    private Inspiration inspiration;
+
+    @ManyToOne
+    private Look look;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -45,6 +53,32 @@ public class Intention implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public Inspiration getInspiration() {
+        return inspiration;
+    }
+
+    public Intention inspiration(Inspiration inspiration) {
+        this.inspiration = inspiration;
+        return this;
+    }
+
+    public void setInspiration(Inspiration inspiration) {
+        this.inspiration = inspiration;
+    }
+
+    public Look getLook() {
+        return look;
+    }
+
+    public Intention look(Look look) {
+        this.look = look;
+        return this;
+    }
+
+    public void setLook(Look look) {
+        this.look = look;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

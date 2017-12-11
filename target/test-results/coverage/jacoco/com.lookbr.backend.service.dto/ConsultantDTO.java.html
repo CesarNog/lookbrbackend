@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsultantDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.dto</a> &gt; <span class="el_source">ConsultantDTO.java</span></div><h1>ConsultantDTO.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.dto;
+
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+import com.lookbr.backend.domain.enumeration.Status;
+
+/**
+ * A DTO for the Consultant entity.
+ */
+<span class="nc" id="L13">public class ConsultantDTO implements Serializable {</span>
+
+    private Long id;
+
+    private String consultantId;
+
+    private String consultantName;
+
+    private String consultantDescription;
+
+    private String consultantCoverPhotoURL;
+
+    private String consultantProfilePhotoURL;
+
+    private Integer charge;
+
+    private String inspirationURL;
+
+    private String profilePhoto;
+
+    private Status status;
+
+    private Integer page;
+
+    private Long lookId;
+
+    public Long getId() {
+<span class="nc" id="L40">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L44">        this.id = id;</span>
+<span class="nc" id="L45">    }</span>
+
+    public String getConsultantId() {
+<span class="nc" id="L48">        return consultantId;</span>
+    }
+
+    public void setConsultantId(String consultantId) {
+<span class="nc" id="L52">        this.consultantId = consultantId;</span>
+<span class="nc" id="L53">    }</span>
+
+    public String getConsultantName() {
+<span class="nc" id="L56">        return consultantName;</span>
+    }
+
+    public void setConsultantName(String consultantName) {
+<span class="nc" id="L60">        this.consultantName = consultantName;</span>
+<span class="nc" id="L61">    }</span>
+
+    public String getConsultantDescription() {
+<span class="nc" id="L64">        return consultantDescription;</span>
+    }
+
+    public void setConsultantDescription(String consultantDescription) {
+<span class="nc" id="L68">        this.consultantDescription = consultantDescription;</span>
+<span class="nc" id="L69">    }</span>
+
+    public String getConsultantCoverPhotoURL() {
+<span class="nc" id="L72">        return consultantCoverPhotoURL;</span>
+    }
+
+    public void setConsultantCoverPhotoURL(String consultantCoverPhotoURL) {
+<span class="nc" id="L76">        this.consultantCoverPhotoURL = consultantCoverPhotoURL;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getConsultantProfilePhotoURL() {
+<span class="nc" id="L80">        return consultantProfilePhotoURL;</span>
+    }
+
+    public void setConsultantProfilePhotoURL(String consultantProfilePhotoURL) {
+<span class="nc" id="L84">        this.consultantProfilePhotoURL = consultantProfilePhotoURL;</span>
+<span class="nc" id="L85">    }</span>
+
+    public Integer getCharge() {
+<span class="nc" id="L88">        return charge;</span>
+    }
+
+    public void setCharge(Integer charge) {
+<span class="nc" id="L92">        this.charge = charge;</span>
+<span class="nc" id="L93">    }</span>
+
+    public String getInspirationURL() {
+<span class="nc" id="L96">        return inspirationURL;</span>
+    }
+
+    public void setInspirationURL(String inspirationURL) {
+<span class="nc" id="L100">        this.inspirationURL = inspirationURL;</span>
+<span class="nc" id="L101">    }</span>
+
+    public String getProfilePhoto() {
+<span class="nc" id="L104">        return profilePhoto;</span>
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+<span class="nc" id="L108">        this.profilePhoto = profilePhoto;</span>
+<span class="nc" id="L109">    }</span>
+
+    public Status getStatus() {
+<span class="nc" id="L112">        return status;</span>
+    }
+
+    public void setStatus(Status status) {
+<span class="nc" id="L116">        this.status = status;</span>
+<span class="nc" id="L117">    }</span>
+
+    public Integer getPage() {
+<span class="nc" id="L120">        return page;</span>
+    }
+
+    public void setPage(Integer page) {
+<span class="nc" id="L124">        this.page = page;</span>
+<span class="nc" id="L125">    }</span>
+
+    public Long getLookId() {
+<span class="nc" id="L128">        return lookId;</span>
+    }
+
+    public void setLookId(Long lookId) {
+<span class="nc" id="L132">        this.lookId = lookId;</span>
+<span class="nc" id="L133">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L138">            return true;</span>
+        }
+<span class="nc bnc" id="L140" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L141">            return false;</span>
+        }
+
+<span class="nc" id="L144">        ConsultantDTO consultantDTO = (ConsultantDTO) o;</span>
+<span class="nc bnc" id="L145" title="All 4 branches missed.">        if(consultantDTO.getId() == null || getId() == null) {</span>
+<span class="nc" id="L146">            return false;</span>
+        }
+<span class="nc" id="L148">        return Objects.equals(getId(), consultantDTO.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L153">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L158">        return &quot;ConsultantDTO{&quot; +</span>
+<span class="nc" id="L159">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L160">            &quot;, consultantId='&quot; + getConsultantId() + &quot;'&quot; +</span>
+<span class="nc" id="L161">            &quot;, consultantName='&quot; + getConsultantName() + &quot;'&quot; +</span>
+<span class="nc" id="L162">            &quot;, consultantDescription='&quot; + getConsultantDescription() + &quot;'&quot; +</span>
+<span class="nc" id="L163">            &quot;, consultantCoverPhotoURL='&quot; + getConsultantCoverPhotoURL() + &quot;'&quot; +</span>
+<span class="nc" id="L164">            &quot;, consultantProfilePhotoURL='&quot; + getConsultantProfilePhotoURL() + &quot;'&quot; +</span>
+<span class="nc" id="L165">            &quot;, charge=&quot; + getCharge() +</span>
+<span class="nc" id="L166">            &quot;, inspirationURL='&quot; + getInspirationURL() + &quot;'&quot; +</span>
+<span class="nc" id="L167">            &quot;, profilePhoto='&quot; + getProfilePhoto() + &quot;'&quot; +</span>
+<span class="nc" id="L168">            &quot;, status='&quot; + getStatus() + &quot;'&quot; +</span>
+<span class="nc" id="L169">            &quot;, page=&quot; + getPage() +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

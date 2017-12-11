@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TemperatureMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">TemperatureMapperImpl.java</span></div><h1>TemperatureMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Inspiration;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.domain.Temperature;
+
+import com.lookbr.backend.service.dto.TemperatureDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:21-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L33">public class TemperatureMapperImpl implements TemperatureMapper {</span>
+
+    @Autowired
+
+    private InspirationMapper inspirationMapper;
+
+    @Autowired
+
+    private LookMapper lookMapper;
+
+    @Override
+
+    public List&lt;Temperature&gt; toEntity(List&lt;TemperatureDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L49">            return null;</span>
+        }
+
+<span class="nc" id="L52">        List&lt;Temperature&gt; list = new ArrayList&lt;Temperature&gt;();</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for ( TemperatureDTO temperatureDTO : dtoList ) {</span>
+
+<span class="nc" id="L56">            list.add( toEntity( temperatureDTO ) );</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;TemperatureDTO&gt; toDto(List&lt;Temperature&gt; entityList) {
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L68">            return null;</span>
+        }
+
+<span class="nc" id="L71">        List&lt;TemperatureDTO&gt; list = new ArrayList&lt;TemperatureDTO&gt;();</span>
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        for ( Temperature temperature : entityList ) {</span>
+
+<span class="nc" id="L75">            list.add( toDto( temperature ) );</span>
+<span class="nc" id="L76">        }</span>
+
+<span class="nc" id="L78">        return list;</span>
+    }
+
+    @Override
+
+    public TemperatureDTO toDto(Temperature temperature) {
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if ( temperature == null ) {</span>
+
+<span class="nc" id="L87">            return null;</span>
+        }
+
+<span class="nc" id="L90">        TemperatureDTO temperatureDTO_ = new TemperatureDTO();</span>
+
+<span class="nc" id="L92">        temperatureDTO_.setLookId( temperatureLookId( temperature ) );</span>
+
+<span class="nc" id="L94">        temperatureDTO_.setInspirationId( temperatureInspirationId( temperature ) );</span>
+
+<span class="nc" id="L96">        temperatureDTO_.setId( temperature.getId() );</span>
+
+<span class="nc" id="L98">        temperatureDTO_.setValue( temperature.getValue() );</span>
+
+<span class="nc" id="L100">        temperatureDTO_.setType( temperature.getType() );</span>
+
+<span class="nc" id="L102">        return temperatureDTO_;</span>
+    }
+
+    @Override
+
+    public Temperature toEntity(TemperatureDTO temperatureDTO) {
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if ( temperatureDTO == null ) {</span>
+
+<span class="nc" id="L111">            return null;</span>
+        }
+
+<span class="nc" id="L114">        Temperature temperature_ = new Temperature();</span>
+
+<span class="nc" id="L116">        temperature_.setLook( lookMapper.fromId( temperatureDTO.getLookId() ) );</span>
+
+<span class="nc" id="L118">        temperature_.setInspiration( inspirationMapper.fromId( temperatureDTO.getInspirationId() ) );</span>
+
+<span class="nc" id="L120">        temperature_.setId( temperatureDTO.getId() );</span>
+
+<span class="nc" id="L122">        temperature_.setValue( temperatureDTO.getValue() );</span>
+
+<span class="nc" id="L124">        temperature_.setType( temperatureDTO.getType() );</span>
+
+<span class="nc" id="L126">        return temperature_;</span>
+    }
+
+    private Long temperatureLookId(Temperature temperature) {
+
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if ( temperature == null ) {</span>
+
+<span class="nc" id="L133">            return null;</span>
+        }
+
+<span class="nc" id="L136">        Look look = temperature.getLook();</span>
+
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L140">            return null;</span>
+        }
+
+<span class="nc" id="L143">        Long id = look.getId();</span>
+
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L147">            return null;</span>
+        }
+
+<span class="nc" id="L150">        return id;</span>
+    }
+
+    private Long temperatureInspirationId(Temperature temperature) {
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if ( temperature == null ) {</span>
+
+<span class="nc" id="L157">            return null;</span>
+        }
+
+<span class="nc" id="L160">        Inspiration inspiration = temperature.getInspiration();</span>
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">        if ( inspiration == null ) {</span>
+
+<span class="nc" id="L164">            return null;</span>
+        }
+
+<span class="nc" id="L167">        Long id = inspiration.getId();</span>
+
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L171">            return null;</span>
+        }
+
+<span class="nc" id="L174">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

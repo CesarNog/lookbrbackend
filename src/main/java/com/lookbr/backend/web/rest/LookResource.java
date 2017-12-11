@@ -16,6 +16,9 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Look.
@@ -115,4 +118,19 @@ public class LookResource {
         lookService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * SEARCH  /_search/looks?query=:query : search for the look corresponding
+     * to the query.
+     *
+     * @param query the query of the look search
+     * @return the result of the search
+     */
+    @GetMapping("/_search/looks")
+    @Timed
+    public List<LookDTO> searchLooks(@RequestParam String query) {
+        log.debug("REST request to search Looks for query {}", query);
+        return lookService.search(query);
+    }
+
 }

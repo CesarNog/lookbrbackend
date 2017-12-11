@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClosetMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">ClosetMapperImpl.java</span></div><h1>ClosetMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Closet;
+
+import com.lookbr.backend.service.dto.ClosetDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:21-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L27">public class ClosetMapperImpl implements ClosetMapper {</span>
+
+    @Override
+
+    public ClosetDTO toDto(Closet entity) {
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if ( entity == null ) {</span>
+
+<span class="nc" id="L35">            return null;</span>
+        }
+
+<span class="nc" id="L38">        ClosetDTO closetDTO = new ClosetDTO();</span>
+
+<span class="nc" id="L40">        closetDTO.setId( entity.getId() );</span>
+
+<span class="nc" id="L42">        closetDTO.setPage( entity.getPage() );</span>
+
+<span class="nc" id="L44">        return closetDTO;</span>
+    }
+
+    @Override
+
+    public List&lt;Closet&gt; toEntity(List&lt;ClosetDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L53">            return null;</span>
+        }
+
+<span class="nc" id="L56">        List&lt;Closet&gt; list = new ArrayList&lt;Closet&gt;();</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        for ( ClosetDTO closetDTO : dtoList ) {</span>
+
+<span class="nc" id="L60">            list.add( toEntity( closetDTO ) );</span>
+<span class="nc" id="L61">        }</span>
+
+<span class="nc" id="L63">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;ClosetDTO&gt; toDto(List&lt;Closet&gt; entityList) {
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L72">            return null;</span>
+        }
+
+<span class="nc" id="L75">        List&lt;ClosetDTO&gt; list = new ArrayList&lt;ClosetDTO&gt;();</span>
+
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        for ( Closet closet : entityList ) {</span>
+
+<span class="nc" id="L79">            list.add( toDto( closet ) );</span>
+<span class="nc" id="L80">        }</span>
+
+<span class="nc" id="L82">        return list;</span>
+    }
+
+    @Override
+
+    public Closet toEntity(ClosetDTO closetDTO) {
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if ( closetDTO == null ) {</span>
+
+<span class="nc" id="L91">            return null;</span>
+        }
+
+<span class="nc" id="L94">        Closet closet_ = new Closet();</span>
+
+<span class="nc" id="L96">        closet_.setId( closetDTO.getId() );</span>
+
+<span class="nc" id="L98">        closet_.setPage( closetDTO.getPage() );</span>
+
+<span class="nc" id="L100">        return closet_;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

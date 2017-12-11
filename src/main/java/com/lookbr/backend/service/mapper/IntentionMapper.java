@@ -8,12 +8,16 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Intention and its DTO IntentionDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {InspirationMapper.class, LookMapper.class})
 public interface IntentionMapper extends EntityMapper<IntentionDTO, Intention> {
 
-    
+    @Mapping(source = "inspiration.id", target = "inspirationId")
+    @Mapping(source = "look.id", target = "lookId")
+    IntentionDTO toDto(Intention intention); 
 
-    
+    @Mapping(source = "inspirationId", target = "inspiration")
+    @Mapping(source = "lookId", target = "look")
+    Intention toEntity(IntentionDTO intentionDTO);
 
     default Intention fromId(Long id) {
         if (id == null) {

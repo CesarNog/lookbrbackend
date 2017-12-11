@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InspirationResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">InspirationResource.java</span></div><h1>InspirationResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.InspirationService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.service.dto.InspirationDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Inspiration.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class InspirationResource {
+
+<span class="nc" id="L30">    private final Logger log = LoggerFactory.getLogger(InspirationResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;inspiration&quot;;
+
+    private final InspirationService inspirationService;
+
+<span class="nc" id="L36">    public InspirationResource(InspirationService inspirationService) {</span>
+<span class="nc" id="L37">        this.inspirationService = inspirationService;</span>
+<span class="nc" id="L38">    }</span>
+
+    /**
+     * POST  /inspirations : Create a new inspiration.
+     *
+     * @param inspirationDTO the inspirationDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new inspirationDTO, or with status 400 (Bad Request) if the inspiration has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/inspirations&quot;)
+    @Timed
+    public ResponseEntity&lt;InspirationDTO&gt; createInspiration(@RequestBody InspirationDTO inspirationDTO) throws URISyntaxException {
+<span class="nc" id="L50">        log.debug(&quot;REST request to save Inspiration : {}&quot;, inspirationDTO);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (inspirationDTO.getId() != null) {</span>
+<span class="nc" id="L52">            throw new BadRequestAlertException(&quot;A new inspiration cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L54">        InspirationDTO result = inspirationService.save(inspirationDTO);</span>
+<span class="nc" id="L55">        return ResponseEntity.created(new URI(&quot;/api/inspirations/&quot; + result.getId()))</span>
+<span class="nc" id="L56">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L57">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /inspirations : Updates an existing inspiration.
+     *
+     * @param inspirationDTO the inspirationDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated inspirationDTO,
+     * or with status 400 (Bad Request) if the inspirationDTO is not valid,
+     * or with status 500 (Internal Server Error) if the inspirationDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/inspirations&quot;)
+    @Timed
+    public ResponseEntity&lt;InspirationDTO&gt; updateInspiration(@RequestBody InspirationDTO inspirationDTO) throws URISyntaxException {
+<span class="nc" id="L72">        log.debug(&quot;REST request to update Inspiration : {}&quot;, inspirationDTO);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        if (inspirationDTO.getId() == null) {</span>
+<span class="nc" id="L74">            return createInspiration(inspirationDTO);</span>
+        }
+<span class="nc" id="L76">        InspirationDTO result = inspirationService.save(inspirationDTO);</span>
+<span class="nc" id="L77">        return ResponseEntity.ok()</span>
+<span class="nc" id="L78">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, inspirationDTO.getId().toString()))</span>
+<span class="nc" id="L79">            .body(result);</span>
+    }
+
+    /**
+     * GET  /inspirations : get all the inspirations.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of inspirations in body
+     */
+    @GetMapping(&quot;/inspirations&quot;)
+    @Timed
+    public List&lt;InspirationDTO&gt; getAllInspirations() {
+<span class="nc" id="L90">        log.debug(&quot;REST request to get all Inspirations&quot;);</span>
+<span class="nc" id="L91">        return inspirationService.findAll();</span>
+        }
+
+    /**
+     * GET  /inspirations/:id : get the &quot;id&quot; inspiration.
+     *
+     * @param id the id of the inspirationDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the inspirationDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/inspirations/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;InspirationDTO&gt; getInspiration(@PathVariable Long id) {
+<span class="nc" id="L103">        log.debug(&quot;REST request to get Inspiration : {}&quot;, id);</span>
+<span class="nc" id="L104">        InspirationDTO inspirationDTO = inspirationService.findOne(id);</span>
+<span class="nc" id="L105">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(inspirationDTO));</span>
+    }
+
+    /**
+     * DELETE  /inspirations/:id : delete the &quot;id&quot; inspiration.
+     *
+     * @param id the id of the inspirationDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/inspirations/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteInspiration(@PathVariable Long id) {
+<span class="nc" id="L117">        log.debug(&quot;REST request to delete Inspiration : {}&quot;, id);</span>
+<span class="nc" id="L118">        inspirationService.delete(id);</span>
+<span class="nc" id="L119">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/inspirations?query=:query : search for the inspiration corresponding
+     * to the query.
+     *
+     * @param query the query of the inspiration search
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/inspirations&quot;)
+    @Timed
+    public List&lt;InspirationDTO&gt; searchInspirations(@RequestParam String query) {
+<span class="nc" id="L132">        log.debug(&quot;REST request to search Inspirations for query {}&quot;, query);</span>
+<span class="nc" id="L133">        return inspirationService.search(query);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

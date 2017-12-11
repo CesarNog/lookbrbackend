@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.lookbr.backend.repository.CustomAuditEventRepositoryIntTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 26.668 sec - in com.lookbr.backend.repository.CustomAuditEventRepositoryIntTest

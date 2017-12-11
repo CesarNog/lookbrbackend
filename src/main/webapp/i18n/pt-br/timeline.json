@@ -4,7 +4,8 @@
             "home": {
                 "title": "Timelines",
                 "createLabel": "Criar novo Timeline",
-                "createOrEditLabel": "Criar ou editar Timeline"
+                "createOrEditLabel": "Criar ou editar Timeline",
+                "search": "Pesquisar por Timeline"
             },
             "created": "Um novo Timeline foi criado com o identificador {{ param }}",
             "updated": "Um Timeline foi atualizado com o identificador {{ param }}",
@@ -15,7 +16,8 @@
             "detail": {
                 "title": "Timeline"
             },
-            "page": "Page"
+            "page": "Page",
+            "inspirations": "Inspirations"
         }
     }
 }

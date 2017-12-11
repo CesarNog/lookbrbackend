@@ -2,6 +2,7 @@ package com.lookbr.backend.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import com.lookbr.backend.domain.enumeration.LoginType;
 @Entity
 @Table(name = "signup")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "signup")
 public class Signup implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,12 +26,15 @@ public class Signup implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email")
+    private String email;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "login_type")
     private LoginType loginType;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "jhi_password")
+    private String password;
 
     @Column(name = "profile_photo_url")
     private String profilePhotoUrl;
@@ -40,8 +45,8 @@ public class Signup implements Serializable {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "jhi_password")
-    private String password;
+    @Column(name = "token")
+    private String token;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -50,6 +55,19 @@ public class Signup implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Signup email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LoginType getLoginType() {
@@ -65,17 +83,17 @@ public class Signup implements Serializable {
         this.loginType = loginType;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPassword() {
+        return password;
     }
 
-    public Signup email(String email) {
-        this.email = email;
+    public Signup password(String password) {
+        this.password = password;
         return this;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getProfilePhotoUrl() {
@@ -117,17 +135,17 @@ public class Signup implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 
-    public Signup password(String password) {
-        this.password = password;
+    public Signup token(String token) {
+        this.token = token;
         return this;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setToken(String token) {
+        this.token = token;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -155,12 +173,13 @@ public class Signup implements Serializable {
     public String toString() {
         return "Signup{" +
             "id=" + getId() +
-            ", loginType='" + getLoginType() + "'" +
             ", email='" + getEmail() + "'" +
+            ", loginType='" + getLoginType() + "'" +
+            ", password='" + getPassword() + "'" +
             ", profilePhotoUrl='" + getProfilePhotoUrl() + "'" +
             ", profilePhoto='" + getProfilePhoto() + "'" +
             ", username='" + getUsername() + "'" +
-            ", password='" + getPassword() + "'" +
+            ", token='" + getToken() + "'" +
             "}";
     }
 }

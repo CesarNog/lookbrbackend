@@ -13,7 +13,8 @@ public interface ClosetMapper extends EntityMapper<ClosetDTO, Closet> {
 
     
 
-    
+    @Mapping(target = "looks", ignore = true)
+    Closet toEntity(ClosetDTO closetDTO);
 
     default Closet fromId(Long id) {
         if (id == null) {

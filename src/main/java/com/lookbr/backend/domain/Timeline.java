@@ -1,10 +1,14 @@
 package com.lookbr.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 
@@ -14,6 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "timeline")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "timeline")
 public class Timeline implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,6 +29,11 @@ public class Timeline implements Serializable {
 
     @Column(name = "page")
     private Integer page;
+
+    @OneToMany(mappedBy = "timeline")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Inspiration> inspirations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -45,6 +55,31 @@ public class Timeline implements Serializable {
 
     public void setPage(Integer page) {
         this.page = page;
+    }
+
+    public Set<Inspiration> getInspirations() {
+        return inspirations;
+    }
+
+    public Timeline inspirations(Set<Inspiration> inspirations) {
+        this.inspirations = inspirations;
+        return this;
+    }
+
+    public Timeline addInspirations(Inspiration inspiration) {
+        this.inspirations.add(inspiration);
+        inspiration.setTimeline(this);
+        return this;
+    }
+
+    public Timeline removeInspirations(Inspiration inspiration) {
+        this.inspirations.remove(inspiration);
+        inspiration.setTimeline(null);
+        return this;
+    }
+
+    public void setInspirations(Set<Inspiration> inspirations) {
+        this.inspirations = inspirations;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExceptionTranslator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.errors</a> &gt; <span class="el_source">ExceptionTranslator.java</span></div><h1>ExceptionTranslator.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.errors;
+
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.zalando.problem.DefaultProblem;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
+import org.zalando.problem.spring.web.advice.ProblemHandling;
+import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Controller advice to translate the server side exceptions to client-friendly json structures.
+ * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807)
+ */
+@ControllerAdvice
+<span class="fc" id="L30">public class ExceptionTranslator implements ProblemHandling {</span>
+
+    /**
+     * Post-process Problem payload to add the message key for front-end if needed
+     */
+    @Override
+    public ResponseEntity&lt;Problem&gt; process(@Nullable ResponseEntity&lt;Problem&gt; entity, NativeWebRequest request) {
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">        if (entity == null || entity.getBody() == null) {</span>
+<span class="nc" id="L38">            return entity;</span>
+        }
+<span class="fc" id="L40">        Problem problem = entity.getBody();</span>
+<span class="pc bpc" id="L41" title="1 of 4 branches missed.">        if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {</span>
+<span class="fc" id="L42">            return entity;</span>
+        }
+<span class="fc" id="L44">        ProblemBuilder builder = Problem.builder()</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())</span>
+<span class="fc" id="L46">            .withStatus(problem.getStatus())</span>
+<span class="fc" id="L47">            .withTitle(problem.getTitle())</span>
+<span class="fc" id="L48">            .with(&quot;path&quot;, request.getNativeRequest(HttpServletRequest.class).getRequestURI());</span>
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (problem instanceof ConstraintViolationProblem) {</span>
+<span class="nc" id="L51">            builder</span>
+<span class="nc" id="L52">                .with(&quot;violations&quot;, ((ConstraintViolationProblem) problem).getViolations())</span>
+<span class="nc" id="L53">                .with(&quot;message&quot;, ErrorConstants.ERR_VALIDATION);</span>
+<span class="nc" id="L54">            return new ResponseEntity&lt;&gt;(builder.build(), entity.getHeaders(), entity.getStatusCode());</span>
+        } else {
+<span class="fc" id="L56">            builder</span>
+<span class="fc" id="L57">                .withCause(((DefaultProblem) problem).getCause())</span>
+<span class="fc" id="L58">                .withDetail(problem.getDetail())</span>
+<span class="fc" id="L59">                .withInstance(problem.getInstance());</span>
+<span class="fc" id="L60">            problem.getParameters().forEach(builder::with);</span>
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">            if (!problem.getParameters().containsKey(&quot;message&quot;) &amp;&amp; problem.getStatus() != null) {</span>
+<span class="fc" id="L62">                builder.with(&quot;message&quot;, &quot;error.http.&quot; + problem.getStatus().getStatusCode());</span>
+            }
+<span class="fc" id="L64">            return new ResponseEntity&lt;&gt;(builder.build(), entity.getHeaders(), entity.getStatusCode());</span>
+        }
+    }
+
+    @Override
+    public ResponseEntity&lt;Problem&gt; handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+<span class="fc" id="L70">        BindingResult result = ex.getBindingResult();</span>
+<span class="fc" id="L71">        List&lt;FieldErrorVM&gt; fieldErrors = result.getFieldErrors().stream()</span>
+<span class="fc" id="L72">            .map(f -&gt; new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))</span>
+<span class="fc" id="L73">            .collect(Collectors.toList());</span>
+
+<span class="fc" id="L75">        Problem problem = Problem.builder()</span>
+<span class="fc" id="L76">            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)</span>
+<span class="fc" id="L77">            .withTitle(&quot;Method argument not valid&quot;)</span>
+<span class="fc" id="L78">            .withStatus(defaultConstraintViolationStatus())</span>
+<span class="fc" id="L79">            .with(&quot;message&quot;, ErrorConstants.ERR_VALIDATION)</span>
+<span class="fc" id="L80">            .with(&quot;fieldErrors&quot;, fieldErrors)</span>
+<span class="fc" id="L81">            .build();</span>
+<span class="fc" id="L82">        return create(ex, problem, request);</span>
+    }
+
+    @ExceptionHandler(BadRequestAlertException.class)
+    public ResponseEntity&lt;Problem&gt; handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+<span class="fc" id="L87">        return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));</span>
+    }
+
+    @ExceptionHandler(ConcurrencyFailureException.class)
+    public ResponseEntity&lt;Problem&gt; handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
+<span class="fc" id="L92">        Problem problem = Problem.builder()</span>
+<span class="fc" id="L93">            .withStatus(Status.CONFLICT)</span>
+<span class="fc" id="L94">            .with(&quot;message&quot;, ErrorConstants.ERR_CONCURRENCY_FAILURE)</span>
+<span class="fc" id="L95">            .build();</span>
+<span class="fc" id="L96">        return create(ex, problem, request);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

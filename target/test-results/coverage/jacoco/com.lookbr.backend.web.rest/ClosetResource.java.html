@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClosetResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest</a> &gt; <span class="el_source">ClosetResource.java</span></div><h1>ClosetResource.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest;
+
+import com.codahale.metrics.annotation.Timed;
+import com.lookbr.backend.service.ClosetService;
+import com.lookbr.backend.web.rest.errors.BadRequestAlertException;
+import com.lookbr.backend.web.rest.util.HeaderUtil;
+import com.lookbr.backend.web.rest.util.PaginationUtil;
+import com.lookbr.backend.service.dto.ClosetDTO;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
+
+/**
+ * REST controller for managing Closet.
+ */
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class ClosetResource {
+
+<span class="nc" id="L35">    private final Logger log = LoggerFactory.getLogger(ClosetResource.class);</span>
+
+    private static final String ENTITY_NAME = &quot;closet&quot;;
+
+    private final ClosetService closetService;
+
+<span class="nc" id="L41">    public ClosetResource(ClosetService closetService) {</span>
+<span class="nc" id="L42">        this.closetService = closetService;</span>
+<span class="nc" id="L43">    }</span>
+
+    /**
+     * POST  /closets : Create a new closet.
+     *
+     * @param closetDTO the closetDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new closetDTO, or with status 400 (Bad Request) if the closet has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping(&quot;/closets&quot;)
+    @Timed
+    public ResponseEntity&lt;ClosetDTO&gt; createCloset(@RequestBody ClosetDTO closetDTO) throws URISyntaxException {
+<span class="nc" id="L55">        log.debug(&quot;REST request to save Closet : {}&quot;, closetDTO);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (closetDTO.getId() != null) {</span>
+<span class="nc" id="L57">            throw new BadRequestAlertException(&quot;A new closet cannot already have an ID&quot;, ENTITY_NAME, &quot;idexists&quot;);</span>
+        }
+<span class="nc" id="L59">        ClosetDTO result = closetService.save(closetDTO);</span>
+<span class="nc" id="L60">        return ResponseEntity.created(new URI(&quot;/api/closets/&quot; + result.getId()))</span>
+<span class="nc" id="L61">            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))</span>
+<span class="nc" id="L62">            .body(result);</span>
+    }
+
+    /**
+     * PUT  /closets : Updates an existing closet.
+     *
+     * @param closetDTO the closetDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated closetDTO,
+     * or with status 400 (Bad Request) if the closetDTO is not valid,
+     * or with status 500 (Internal Server Error) if the closetDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping(&quot;/closets&quot;)
+    @Timed
+    public ResponseEntity&lt;ClosetDTO&gt; updateCloset(@RequestBody ClosetDTO closetDTO) throws URISyntaxException {
+<span class="nc" id="L77">        log.debug(&quot;REST request to update Closet : {}&quot;, closetDTO);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (closetDTO.getId() == null) {</span>
+<span class="nc" id="L79">            return createCloset(closetDTO);</span>
+        }
+<span class="nc" id="L81">        ClosetDTO result = closetService.save(closetDTO);</span>
+<span class="nc" id="L82">        return ResponseEntity.ok()</span>
+<span class="nc" id="L83">            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, closetDTO.getId().toString()))</span>
+<span class="nc" id="L84">            .body(result);</span>
+    }
+
+    /**
+     * GET  /closets : get all the closets.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of closets in body
+     */
+    @GetMapping(&quot;/closets&quot;)
+    @Timed
+    public ResponseEntity&lt;List&lt;ClosetDTO&gt;&gt; getAllClosets(Pageable pageable) {
+<span class="nc" id="L96">        log.debug(&quot;REST request to get a page of Closets&quot;);</span>
+<span class="nc" id="L97">        Page&lt;ClosetDTO&gt; page = closetService.findAll(pageable);</span>
+<span class="nc" id="L98">        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, &quot;/api/closets&quot;);</span>
+<span class="nc" id="L99">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+    /**
+     * GET  /closets/:id : get the &quot;id&quot; closet.
+     *
+     * @param id the id of the closetDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the closetDTO, or with status 404 (Not Found)
+     */
+    @GetMapping(&quot;/closets/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;ClosetDTO&gt; getCloset(@PathVariable Long id) {
+<span class="nc" id="L111">        log.debug(&quot;REST request to get Closet : {}&quot;, id);</span>
+<span class="nc" id="L112">        ClosetDTO closetDTO = closetService.findOne(id);</span>
+<span class="nc" id="L113">        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(closetDTO));</span>
+    }
+
+    /**
+     * DELETE  /closets/:id : delete the &quot;id&quot; closet.
+     *
+     * @param id the id of the closetDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping(&quot;/closets/{id}&quot;)
+    @Timed
+    public ResponseEntity&lt;Void&gt; deleteCloset(@PathVariable Long id) {
+<span class="nc" id="L125">        log.debug(&quot;REST request to delete Closet : {}&quot;, id);</span>
+<span class="nc" id="L126">        closetService.delete(id);</span>
+<span class="nc" id="L127">        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();</span>
+    }
+
+    /**
+     * SEARCH  /_search/closets?query=:query : search for the closet corresponding
+     * to the query.
+     *
+     * @param query the query of the closet search
+     * @param pageable the pagination information
+     * @return the result of the search
+     */
+    @GetMapping(&quot;/_search/closets&quot;)
+    @Timed
+    public ResponseEntity&lt;List&lt;ClosetDTO&gt;&gt; searchClosets(@RequestParam String query, Pageable pageable) {
+<span class="nc" id="L141">        log.debug(&quot;REST request to search for a page of Closets for query {}&quot;, query);</span>
+<span class="nc" id="L142">        Page&lt;ClosetDTO&gt; page = closetService.search(query, pageable);</span>
+<span class="nc" id="L143">        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, &quot;/api/_search/closets&quot;);</span>
+<span class="nc" id="L144">        return new ResponseEntity&lt;&gt;(page.getContent(), headers, HttpStatus.OK);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

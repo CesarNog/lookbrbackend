@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Closet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">Closet.java</span></div><h1>Closet.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
+
+/**
+ * A Closet.
+ */
+@Entity
+@Table(name = &quot;closet&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = &quot;closet&quot;)
+<span class="nc" id="L22">public class Closet implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;page&quot;)
+    private Integer page;
+
+<span class="nc" id="L33">    @OneToMany(mappedBy = &quot;closet&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Look&gt; looks = new HashSet&lt;&gt;();
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="nc" id="L40">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L44">        this.id = id;</span>
+<span class="nc" id="L45">    }</span>
+
+    public Integer getPage() {
+<span class="nc" id="L48">        return page;</span>
+    }
+
+    public Closet page(Integer page) {
+<span class="nc" id="L52">        this.page = page;</span>
+<span class="nc" id="L53">        return this;</span>
+    }
+
+    public void setPage(Integer page) {
+<span class="nc" id="L57">        this.page = page;</span>
+<span class="nc" id="L58">    }</span>
+
+    public Set&lt;Look&gt; getLooks() {
+<span class="nc" id="L61">        return looks;</span>
+    }
+
+    public Closet looks(Set&lt;Look&gt; looks) {
+<span class="nc" id="L65">        this.looks = looks;</span>
+<span class="nc" id="L66">        return this;</span>
+    }
+
+    public Closet addLook(Look look) {
+<span class="nc" id="L70">        this.looks.add(look);</span>
+<span class="nc" id="L71">        look.setCloset(this);</span>
+<span class="nc" id="L72">        return this;</span>
+    }
+
+    public Closet removeLook(Look look) {
+<span class="nc" id="L76">        this.looks.remove(look);</span>
+<span class="nc" id="L77">        look.setCloset(null);</span>
+<span class="nc" id="L78">        return this;</span>
+    }
+
+    public void setLooks(Set&lt;Look&gt; looks) {
+<span class="nc" id="L82">        this.looks = looks;</span>
+<span class="nc" id="L83">    }</span>
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L89">            return true;</span>
+        }
+<span class="nc bnc" id="L91" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L92">            return false;</span>
+        }
+<span class="nc" id="L94">        Closet closet = (Closet) o;</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">        if (closet.getId() == null || getId() == null) {</span>
+<span class="nc" id="L96">            return false;</span>
+        }
+<span class="nc" id="L98">        return Objects.equals(getId(), closet.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L103">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L108">        return &quot;Closet{&quot; +</span>
+<span class="nc" id="L109">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L110">            &quot;, page=&quot; + getPage() +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

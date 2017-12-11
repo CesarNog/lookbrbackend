@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginVM.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.web.rest.vm</a> &gt; <span class="el_source">LoginVM.java</span></div><h1>LoginVM.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.web.rest.vm;
+
+import com.lookbr.backend.config.Constants;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+/**
+ * View Model object for storing a user's credentials.
+ */
+<span class="fc" id="L11">public class LoginVM {</span>
+
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @NotNull
+    @Size(min = 1, max = 50)
+    private String username;
+
+    @NotNull
+    @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
+    private String password;
+
+    private Boolean rememberMe;
+
+    public String getUsername() {
+<span class="fc" id="L25">        return username;</span>
+    }
+
+    public void setUsername(String username) {
+<span class="fc" id="L29">        this.username = username;</span>
+<span class="fc" id="L30">    }</span>
+
+    public String getPassword() {
+<span class="fc" id="L33">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="fc" id="L37">        this.password = password;</span>
+<span class="fc" id="L38">    }</span>
+
+    public Boolean isRememberMe() {
+<span class="fc" id="L41">        return rememberMe;</span>
+    }
+
+    public void setRememberMe(Boolean rememberMe) {
+<span class="fc" id="L45">        this.rememberMe = rememberMe;</span>
+<span class="fc" id="L46">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L50">        return &quot;LoginVM{&quot; +</span>
+            &quot;username='&quot; + username + '\'' +
+            &quot;, rememberMe=&quot; + rememberMe +
+            '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

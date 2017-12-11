@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Inspiration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.domain</a> &gt; <span class="el_source">Inspiration.java</span></div><h1>Inspiration.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Objects;
+
+
+/**
+ * A Inspiration.
+ */
+@Entity
+@Table(name = &quot;inspiration&quot;)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = &quot;inspiration&quot;)
+<span class="nc" id="L22">public class Inspiration implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;consultant_name&quot;)
+    private String consultantName;
+
+    @Column(name = &quot;consultant_profile_photo_url&quot;)
+    private String consultantProfilePhotoURL;
+
+    @Column(name = &quot;inspiration_url&quot;)
+    private String inspirationURL;
+
+    @Column(name = &quot;page&quot;)
+    private Integer page;
+
+    @ManyToOne
+    private Timeline timeline;
+
+<span class="nc" id="L45">    @OneToMany(mappedBy = &quot;inspiration&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Intention&gt; intentions = new HashSet&lt;&gt;();
+
+<span class="nc" id="L50">    @OneToMany(mappedBy = &quot;inspiration&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Occasion&gt; occasions = new HashSet&lt;&gt;();
+
+<span class="nc" id="L55">    @OneToMany(mappedBy = &quot;inspiration&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;Temperature&gt; temperatures = new HashSet&lt;&gt;();
+
+<span class="nc" id="L60">    @OneToMany(mappedBy = &quot;inspiration&quot;)</span>
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set&lt;DayTime&gt; dayTimes = new HashSet&lt;&gt;();
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Long getId() {
+<span class="nc" id="L67">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L71">        this.id = id;</span>
+<span class="nc" id="L72">    }</span>
+
+    public String getConsultantName() {
+<span class="nc" id="L75">        return consultantName;</span>
+    }
+
+    public Inspiration consultantName(String consultantName) {
+<span class="nc" id="L79">        this.consultantName = consultantName;</span>
+<span class="nc" id="L80">        return this;</span>
+    }
+
+    public void setConsultantName(String consultantName) {
+<span class="nc" id="L84">        this.consultantName = consultantName;</span>
+<span class="nc" id="L85">    }</span>
+
+    public String getConsultantProfilePhotoURL() {
+<span class="nc" id="L88">        return consultantProfilePhotoURL;</span>
+    }
+
+    public Inspiration consultantProfilePhotoURL(String consultantProfilePhotoURL) {
+<span class="nc" id="L92">        this.consultantProfilePhotoURL = consultantProfilePhotoURL;</span>
+<span class="nc" id="L93">        return this;</span>
+    }
+
+    public void setConsultantProfilePhotoURL(String consultantProfilePhotoURL) {
+<span class="nc" id="L97">        this.consultantProfilePhotoURL = consultantProfilePhotoURL;</span>
+<span class="nc" id="L98">    }</span>
+
+    public String getInspirationURL() {
+<span class="nc" id="L101">        return inspirationURL;</span>
+    }
+
+    public Inspiration inspirationURL(String inspirationURL) {
+<span class="nc" id="L105">        this.inspirationURL = inspirationURL;</span>
+<span class="nc" id="L106">        return this;</span>
+    }
+
+    public void setInspirationURL(String inspirationURL) {
+<span class="nc" id="L110">        this.inspirationURL = inspirationURL;</span>
+<span class="nc" id="L111">    }</span>
+
+    public Integer getPage() {
+<span class="nc" id="L114">        return page;</span>
+    }
+
+    public Inspiration page(Integer page) {
+<span class="nc" id="L118">        this.page = page;</span>
+<span class="nc" id="L119">        return this;</span>
+    }
+
+    public void setPage(Integer page) {
+<span class="nc" id="L123">        this.page = page;</span>
+<span class="nc" id="L124">    }</span>
+
+    public Timeline getTimeline() {
+<span class="nc" id="L127">        return timeline;</span>
+    }
+
+    public Inspiration timeline(Timeline timeline) {
+<span class="nc" id="L131">        this.timeline = timeline;</span>
+<span class="nc" id="L132">        return this;</span>
+    }
+
+    public void setTimeline(Timeline timeline) {
+<span class="nc" id="L136">        this.timeline = timeline;</span>
+<span class="nc" id="L137">    }</span>
+
+    public Set&lt;Intention&gt; getIntentions() {
+<span class="nc" id="L140">        return intentions;</span>
+    }
+
+    public Inspiration intentions(Set&lt;Intention&gt; intentions) {
+<span class="nc" id="L144">        this.intentions = intentions;</span>
+<span class="nc" id="L145">        return this;</span>
+    }
+
+    public Inspiration addIntentions(Intention intention) {
+<span class="nc" id="L149">        this.intentions.add(intention);</span>
+<span class="nc" id="L150">        intention.setInspiration(this);</span>
+<span class="nc" id="L151">        return this;</span>
+    }
+
+    public Inspiration removeIntentions(Intention intention) {
+<span class="nc" id="L155">        this.intentions.remove(intention);</span>
+<span class="nc" id="L156">        intention.setInspiration(null);</span>
+<span class="nc" id="L157">        return this;</span>
+    }
+
+    public void setIntentions(Set&lt;Intention&gt; intentions) {
+<span class="nc" id="L161">        this.intentions = intentions;</span>
+<span class="nc" id="L162">    }</span>
+
+    public Set&lt;Occasion&gt; getOccasions() {
+<span class="nc" id="L165">        return occasions;</span>
+    }
+
+    public Inspiration occasions(Set&lt;Occasion&gt; occasions) {
+<span class="nc" id="L169">        this.occasions = occasions;</span>
+<span class="nc" id="L170">        return this;</span>
+    }
+
+    public Inspiration addOccasions(Occasion occasion) {
+<span class="nc" id="L174">        this.occasions.add(occasion);</span>
+<span class="nc" id="L175">        occasion.setInspiration(this);</span>
+<span class="nc" id="L176">        return this;</span>
+    }
+
+    public Inspiration removeOccasions(Occasion occasion) {
+<span class="nc" id="L180">        this.occasions.remove(occasion);</span>
+<span class="nc" id="L181">        occasion.setInspiration(null);</span>
+<span class="nc" id="L182">        return this;</span>
+    }
+
+    public void setOccasions(Set&lt;Occasion&gt; occasions) {
+<span class="nc" id="L186">        this.occasions = occasions;</span>
+<span class="nc" id="L187">    }</span>
+
+    public Set&lt;Temperature&gt; getTemperatures() {
+<span class="nc" id="L190">        return temperatures;</span>
+    }
+
+    public Inspiration temperatures(Set&lt;Temperature&gt; temperatures) {
+<span class="nc" id="L194">        this.temperatures = temperatures;</span>
+<span class="nc" id="L195">        return this;</span>
+    }
+
+    public Inspiration addTemperature(Temperature temperature) {
+<span class="nc" id="L199">        this.temperatures.add(temperature);</span>
+<span class="nc" id="L200">        temperature.setInspiration(this);</span>
+<span class="nc" id="L201">        return this;</span>
+    }
+
+    public Inspiration removeTemperature(Temperature temperature) {
+<span class="nc" id="L205">        this.temperatures.remove(temperature);</span>
+<span class="nc" id="L206">        temperature.setInspiration(null);</span>
+<span class="nc" id="L207">        return this;</span>
+    }
+
+    public void setTemperatures(Set&lt;Temperature&gt; temperatures) {
+<span class="nc" id="L211">        this.temperatures = temperatures;</span>
+<span class="nc" id="L212">    }</span>
+
+    public Set&lt;DayTime&gt; getDayTimes() {
+<span class="nc" id="L215">        return dayTimes;</span>
+    }
+
+    public Inspiration dayTimes(Set&lt;DayTime&gt; dayTimes) {
+<span class="nc" id="L219">        this.dayTimes = dayTimes;</span>
+<span class="nc" id="L220">        return this;</span>
+    }
+
+    public Inspiration addDayTime(DayTime dayTime) {
+<span class="nc" id="L224">        this.dayTimes.add(dayTime);</span>
+<span class="nc" id="L225">        dayTime.setInspiration(this);</span>
+<span class="nc" id="L226">        return this;</span>
+    }
+
+    public Inspiration removeDayTime(DayTime dayTime) {
+<span class="nc" id="L230">        this.dayTimes.remove(dayTime);</span>
+<span class="nc" id="L231">        dayTime.setInspiration(null);</span>
+<span class="nc" id="L232">        return this;</span>
+    }
+
+    public void setDayTimes(Set&lt;DayTime&gt; dayTimes) {
+<span class="nc" id="L236">        this.dayTimes = dayTimes;</span>
+<span class="nc" id="L237">    }</span>
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L243">            return true;</span>
+        }
+<span class="nc bnc" id="L245" title="All 4 branches missed.">        if (o == null || getClass() != o.getClass()) {</span>
+<span class="nc" id="L246">            return false;</span>
+        }
+<span class="nc" id="L248">        Inspiration inspiration = (Inspiration) o;</span>
+<span class="nc bnc" id="L249" title="All 4 branches missed.">        if (inspiration.getId() == null || getId() == null) {</span>
+<span class="nc" id="L250">            return false;</span>
+        }
+<span class="nc" id="L252">        return Objects.equals(getId(), inspiration.getId());</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L257">        return Objects.hashCode(getId());</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L262">        return &quot;Inspiration{&quot; +</span>
+<span class="nc" id="L263">            &quot;id=&quot; + getId() +</span>
+<span class="nc" id="L264">            &quot;, consultantName='&quot; + getConsultantName() + &quot;'&quot; +</span>
+<span class="nc" id="L265">            &quot;, consultantProfilePhotoURL='&quot; + getConsultantProfilePhotoURL() + &quot;'&quot; +</span>
+<span class="nc" id="L266">            &quot;, inspirationURL='&quot; + getInspirationURL() + &quot;'&quot; +</span>
+<span class="nc" id="L267">            &quot;, page=&quot; + getPage() +</span>
+            &quot;}&quot;;
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

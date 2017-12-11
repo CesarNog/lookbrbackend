@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.lookbr.backend.web.rest.errors.ExceptionTranslatorIntTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.036 sec - in com.lookbr.backend.web.rest.errors.ExceptionTranslatorIntTest

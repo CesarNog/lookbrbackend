@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsultantMapperImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lookbrbackend</a> &gt; <a href="index.source.html" class="el_package">com.lookbr.backend.service.mapper</a> &gt; <span class="el_source">ConsultantMapperImpl.java</span></div><h1>ConsultantMapperImpl.java</h1><pre class="source lang-java linenums">package com.lookbr.backend.service.mapper;
+
+import com.lookbr.backend.domain.Consultant;
+
+import com.lookbr.backend.domain.Look;
+
+import com.lookbr.backend.service.dto.ConsultantDTO;
+
+import java.util.ArrayList;
+
+import java.util.List;
+
+import javax.annotation.Generated;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Component;
+
+@Generated(
+
+    value = &quot;org.mapstruct.ap.MappingProcessor&quot;,
+
+    date = &quot;2017-12-06T15:37:22-0200&quot;,
+
+    comments = &quot;version: 1.1.0.Final, compiler: javac, environment: Java 1.8.0_151 (Oracle Corporation)&quot;
+
+)
+
+@Component
+
+<span class="nc" id="L31">public class ConsultantMapperImpl implements ConsultantMapper {</span>
+
+    @Autowired
+
+    private LookMapper lookMapper;
+
+    @Override
+
+    public List&lt;Consultant&gt; toEntity(List&lt;ConsultantDTO&gt; dtoList) {
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if ( dtoList == null ) {</span>
+
+<span class="nc" id="L43">            return null;</span>
+        }
+
+<span class="nc" id="L46">        List&lt;Consultant&gt; list = new ArrayList&lt;Consultant&gt;();</span>
+
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for ( ConsultantDTO consultantDTO : dtoList ) {</span>
+
+<span class="nc" id="L50">            list.add( toEntity( consultantDTO ) );</span>
+<span class="nc" id="L51">        }</span>
+
+<span class="nc" id="L53">        return list;</span>
+    }
+
+    @Override
+
+    public List&lt;ConsultantDTO&gt; toDto(List&lt;Consultant&gt; entityList) {
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if ( entityList == null ) {</span>
+
+<span class="nc" id="L62">            return null;</span>
+        }
+
+<span class="nc" id="L65">        List&lt;ConsultantDTO&gt; list = new ArrayList&lt;ConsultantDTO&gt;();</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for ( Consultant consultant : entityList ) {</span>
+
+<span class="nc" id="L69">            list.add( toDto( consultant ) );</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return list;</span>
+    }
+
+    @Override
+
+    public ConsultantDTO toDto(Consultant consultant) {
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if ( consultant == null ) {</span>
+
+<span class="nc" id="L81">            return null;</span>
+        }
+
+<span class="nc" id="L84">        ConsultantDTO consultantDTO_ = new ConsultantDTO();</span>
+
+<span class="nc" id="L86">        consultantDTO_.setLookId( consultantLookId( consultant ) );</span>
+
+<span class="nc" id="L88">        consultantDTO_.setId( consultant.getId() );</span>
+
+<span class="nc" id="L90">        consultantDTO_.setConsultantId( consultant.getConsultantId() );</span>
+
+<span class="nc" id="L92">        consultantDTO_.setConsultantName( consultant.getConsultantName() );</span>
+
+<span class="nc" id="L94">        consultantDTO_.setConsultantDescription( consultant.getConsultantDescription() );</span>
+
+<span class="nc" id="L96">        consultantDTO_.setConsultantCoverPhotoURL( consultant.getConsultantCoverPhotoURL() );</span>
+
+<span class="nc" id="L98">        consultantDTO_.setConsultantProfilePhotoURL( consultant.getConsultantProfilePhotoURL() );</span>
+
+<span class="nc" id="L100">        consultantDTO_.setCharge( consultant.getCharge() );</span>
+
+<span class="nc" id="L102">        consultantDTO_.setInspirationURL( consultant.getInspirationURL() );</span>
+
+<span class="nc" id="L104">        consultantDTO_.setProfilePhoto( consultant.getProfilePhoto() );</span>
+
+<span class="nc" id="L106">        consultantDTO_.setStatus( consultant.getStatus() );</span>
+
+<span class="nc" id="L108">        consultantDTO_.setPage( consultant.getPage() );</span>
+
+<span class="nc" id="L110">        return consultantDTO_;</span>
+    }
+
+    @Override
+
+    public Consultant toEntity(ConsultantDTO consultantDTO) {
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if ( consultantDTO == null ) {</span>
+
+<span class="nc" id="L119">            return null;</span>
+        }
+
+<span class="nc" id="L122">        Consultant consultant_ = new Consultant();</span>
+
+<span class="nc" id="L124">        consultant_.setLook( lookMapper.fromId( consultantDTO.getLookId() ) );</span>
+
+<span class="nc" id="L126">        consultant_.setId( consultantDTO.getId() );</span>
+
+<span class="nc" id="L128">        consultant_.setConsultantId( consultantDTO.getConsultantId() );</span>
+
+<span class="nc" id="L130">        consultant_.setConsultantName( consultantDTO.getConsultantName() );</span>
+
+<span class="nc" id="L132">        consultant_.setConsultantDescription( consultantDTO.getConsultantDescription() );</span>
+
+<span class="nc" id="L134">        consultant_.setConsultantCoverPhotoURL( consultantDTO.getConsultantCoverPhotoURL() );</span>
+
+<span class="nc" id="L136">        consultant_.setConsultantProfilePhotoURL( consultantDTO.getConsultantProfilePhotoURL() );</span>
+
+<span class="nc" id="L138">        consultant_.setCharge( consultantDTO.getCharge() );</span>
+
+<span class="nc" id="L140">        consultant_.setInspirationURL( consultantDTO.getInspirationURL() );</span>
+
+<span class="nc" id="L142">        consultant_.setProfilePhoto( consultantDTO.getProfilePhoto() );</span>
+
+<span class="nc" id="L144">        consultant_.setStatus( consultantDTO.getStatus() );</span>
+
+<span class="nc" id="L146">        consultant_.setPage( consultantDTO.getPage() );</span>
+
+<span class="nc" id="L148">        return consultant_;</span>
+    }
+
+    private Long consultantLookId(Consultant consultant) {
+
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if ( consultant == null ) {</span>
+
+<span class="nc" id="L155">            return null;</span>
+        }
+
+<span class="nc" id="L158">        Look look = consultant.getLook();</span>
+
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        if ( look == null ) {</span>
+
+<span class="nc" id="L162">            return null;</span>
+        }
+
+<span class="nc" id="L165">        Long id = look.getId();</span>
+
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if ( id == null ) {</span>
+
+<span class="nc" id="L169">            return null;</span>
+        }
+
+<span class="nc" id="L172">        return id;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
