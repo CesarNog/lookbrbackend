@@ -1,0 +1,59 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "timeline",
+            "otherEntityName": "timeline",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "intentions",
+            "otherEntityName": "intention",
+            "otherEntityRelationshipName": "inspiration"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "occasions",
+            "otherEntityName": "occasion",
+            "otherEntityRelationshipName": "inspiration"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "temperature",
+            "otherEntityName": "temperature",
+            "otherEntityRelationshipName": "inspiration"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "dayTime",
+            "otherEntityName": "dayTime",
+            "otherEntityRelationshipName": "inspiration"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "consultantName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantProfilePhotoURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "inspirationURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "page",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20171218183336",
+    "entityTableName": "inspiration",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

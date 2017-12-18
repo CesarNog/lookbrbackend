@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "look",
+            "otherEntityName": "look",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "consultantProfilePhotoUrl",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20171218183340",
+    "entityTableName": "consultant_vote",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

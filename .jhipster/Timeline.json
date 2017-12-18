@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "inspirations",
+            "otherEntityName": "inspiration",
+            "otherEntityRelationshipName": "timeline"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "page",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20171218183332",
+    "entityTableName": "timeline",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "look",
+            "otherEntityName": "look",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "comment",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantProfilePhoto",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateVoted",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "changelogDate": "20171218183339",
+    "entityTableName": "comment",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

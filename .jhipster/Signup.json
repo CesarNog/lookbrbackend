@@ -1,0 +1,41 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "loginType",
+            "fieldType": "LoginType",
+            "fieldValues": "FACEBOOK,EMAIL"
+        },
+        {
+            "fieldName": "password",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "profilePhotoUrl",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "profilePhoto",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "username",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "token",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20171218183331",
+    "entityTableName": "signup",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

@@ -1,0 +1,66 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "socialMedias",
+            "otherEntityName": "socialMedia",
+            "otherEntityRelationshipName": "consultant"
+        },
+        {
+            "relationshipName": "look",
+            "otherEntityName": "look",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "consultantId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantDescription",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantCoverPhotoURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "consultantProfilePhotoURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "charge",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "inspirationURL",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "profilePhoto",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "Status",
+            "fieldValues": "VERDE,AMARELO,VERMELHO"
+        },
+        {
+            "fieldName": "page",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20171218183333",
+    "entityTableName": "consultant",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

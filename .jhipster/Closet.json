@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "look",
+            "otherEntityName": "look",
+            "otherEntityRelationshipName": "closet"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "page",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20171218183341",
+    "entityTableName": "closet",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

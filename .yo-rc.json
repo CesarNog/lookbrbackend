@@ -57,6 +57,21 @@
       "pt-br",
       "en",
       "es"
-    ]
+    ],
+    "aws": {
+      "applicationName": "lookbrbackend",
+      "environmentName": "lookbrbackend-env",
+      "bucketName": "lookbrbackend",
+      "instanceType": "t2.medium",
+      "awsRegion": "sa-east-1",
+      "dbName": "lookbrdbfinal",
+      "dbInstanceClass": "db.t2.medium"
+    },
+    "appsFolders": [
+      "lookbrbackend"
+    ],
+    "directoryPath": "../",
+    "monitoring": "no",
+    "jwtSecretKey": "944ae9239feb9e6a2fae7d08abcf0e82c51808b6"
   }
 }

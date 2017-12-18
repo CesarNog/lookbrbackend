@@ -1,0 +1,75 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "consultantsVotes",
+            "otherEntityName": "consultantVote",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "comments",
+            "otherEntityName": "comment",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "intentions",
+            "otherEntityName": "intention",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "occasions",
+            "otherEntityName": "occasion",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "temperature",
+            "otherEntityName": "temperature",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "consultants",
+            "otherEntityName": "consultant",
+            "otherEntityRelationshipName": "look"
+        },
+        {
+            "relationshipName": "closet",
+            "otherEntityName": "closet",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "userId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "temperature",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dayTime",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "pictureIndex",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "url",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20171218183338",
+    "entityTableName": "look",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

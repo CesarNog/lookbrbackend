@@ -1,0 +1,30 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "userId"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "loginType",
+            "fieldType": "LoginType",
+            "fieldValues": "FACEBOOK,EMAIL"
+        },
+        {
+            "fieldName": "token",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20171218183330",
+    "entityTableName": "login",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}
