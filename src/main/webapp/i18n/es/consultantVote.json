@@ -1,0 +1,22 @@
+{
+    "lookbrbackendApp": {
+        "consultantVote" : {
+            "home": {
+                "title": "Consultant Votes",
+                "createLabel": "Crear nuevo Consultant Vote",
+                "createOrEditLabel": "Crear o editar Consultant Vote"
+            },
+            "created": "Un nuevo Consultant Vote ha sido creado con el identificador {{ param }}",
+            "updated": "Un Consultant Vote ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Consultant Vote ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Consultant Vote {{ id }}?"
+            },
+            "detail": {
+                "title": "Consultant Vote"
+            },
+            "consultantProfilePhotoUrl": "Consultant Profile Photo Url",
+            "look": "Look"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "lookbrbackendApp": {
+        "socialMedia" : {
+            "home": {
+                "title": "Social Medias",
+                "createLabel": "Criar novo Social Media",
+                "createOrEditLabel": "Criar ou editar Social Media"
+            },
+            "created": "Um novo Social Media foi criado com o identificador {{ param }}",
+            "updated": "Um Social Media foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Social Media foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Social Media {{ id }}?"
+            },
+            "detail": {
+                "title": "Social Media"
+            },
+            "type": "Type",
+            "url": "Url",
+            "consultant": "Consultant"
+        }
+    }
+}

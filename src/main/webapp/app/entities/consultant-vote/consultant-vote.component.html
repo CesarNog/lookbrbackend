@@ -1,0 +1,62 @@
+<div>
+    <h2>
+        <span jhiTranslate="lookbrbackendApp.consultantVote.home.title">Consultant Votes</span>
+        <button class="btn btn-primary float-right jh-create-entity create-consultant-vote" [routerLink]="['/', { outlets: { popup: ['consultant-vote-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="lookbrbackendApp.consultantVote.home.createLabel">
+            Create new Consultant Vote
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="consultantVotes">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultantVote.consultantProfilePhotoUrl">Consultant Profile Photo Url</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultantVote.look">Look</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let consultantVote of consultantVotes ;trackBy: trackId">
+                <td><a [routerLink]="['../consultant-vote', consultantVote.id ]">{{consultantVote.id}}</a></td>
+                <td>{{consultantVote.consultantProfilePhotoUrl}}</td>
+                <td>
+                    <div *ngIf="consultantVote.lookId">
+                        <a [routerLink]="['../look', consultantVote.lookId  ]" >{{consultantVote.lookId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../consultant-vote', consultantVote.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'consultant-vote/'+ consultantVote.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'consultant-vote/'+ consultantVote.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

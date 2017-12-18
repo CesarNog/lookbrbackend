@@ -1,0 +1,19 @@
+version: '2'
+services:
+    lookbrbackend-app:
+        image: lookbrbackend
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:mysql://lookbrbackend-mysql:3306/lookbrbackend?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - JHIPSTER_SLEEP=10
+        ports:
+            - 8080:8080
+    lookbrbackend-mysql:
+        image: mysql:5.7.20
+        environment:
+            - MYSQL_USER=root
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+            - MYSQL_DATABASE=lookbrbackend
+        command:             mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8
+            --explicit_defaults_for_timestamp
+    

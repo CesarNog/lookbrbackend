@@ -1,0 +1,24 @@
+{
+    "lookbrbackendApp": {
+        "temperature" : {
+            "home": {
+                "title": "Temperatures",
+                "createLabel": "Criar novo Temperature",
+                "createOrEditLabel": "Criar ou editar Temperature"
+            },
+            "created": "Um novo Temperature foi criado com o identificador {{ param }}",
+            "updated": "Um Temperature foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Temperature foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Temperature {{ id }}?"
+            },
+            "detail": {
+                "title": "Temperature"
+            },
+            "value": "Value",
+            "type": "Type",
+            "inspiration": "Inspiration",
+            "look": "Look"
+        }
+    }
+}

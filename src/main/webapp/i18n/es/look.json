@@ -1,0 +1,32 @@
+{
+    "lookbrbackendApp": {
+        "look" : {
+            "home": {
+                "title": "Looks",
+                "createLabel": "Crear nuevo Look",
+                "createOrEditLabel": "Crear o editar Look"
+            },
+            "created": "Un nuevo Look ha sido creado con el identificador {{ param }}",
+            "updated": "Un Look ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Look ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Look {{ id }}?"
+            },
+            "detail": {
+                "title": "Look"
+            },
+            "userId": "User Id",
+            "temperature": "Temperature",
+            "dayTime": "Day Time",
+            "pictureIndex": "Picture Index",
+            "url": "Url",
+            "consultantsVotes": "Consultants Votes",
+            "comments": "Comments",
+            "intentions": "Intentions",
+            "occasions": "Occasions",
+            "temperature": "Temperature",
+            "consultants": "Consultants",
+            "closet": "Closet"
+        }
+    }
+}

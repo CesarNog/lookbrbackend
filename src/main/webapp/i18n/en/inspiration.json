@@ -1,0 +1,29 @@
+{
+    "lookbrbackendApp": {
+        "inspiration" : {
+            "home": {
+                "title": "Inspirations",
+                "createLabel": "Create a new Inspiration",
+                "createOrEditLabel": "Create or edit a Inspiration"
+            },
+            "created": "A new Inspiration is created with identifier {{ param }}",
+            "updated": "A Inspiration is updated with identifier {{ param }}",
+            "deleted": "A Inspiration is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Inspiration {{ id }}?"
+            },
+            "detail": {
+                "title": "Inspiration"
+            },
+            "consultantName": "Consultant Name",
+            "consultantProfilePhotoURL": "Consultant Profile Photo URL",
+            "inspirationURL": "Inspiration URL",
+            "page": "Page",
+            "timeline": "Timeline",
+            "intentions": "Intentions",
+            "occasions": "Occasions",
+            "temperature": "Temperature",
+            "dayTime": "Day Time"
+        }
+    }
+}

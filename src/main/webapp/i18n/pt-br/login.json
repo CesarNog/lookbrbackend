@@ -1,19 +1,23 @@
 {
-    "login": {
-        "title": "Autenticação",
-        "form": {
-            "password": "Senha",
-            "password.placeholder": "Sua senha",
-            "rememberme": "Manter-me logado",
-            "button": "Entrar"
-        },
-        "messages": {
-            "error": {
-                "authentication": "<strong>Erro de autenticação!</strong> Por favor verifique suas credenciais e tente novamente."
-            }
-        },
-        "password" : {
-            "forgot": "Esqueceu sua senha?"
+    "lookbrbackendApp": {
+        "login" : {
+            "home": {
+                "title": "Logins",
+                "createLabel": "Criar novo Login",
+                "createOrEditLabel": "Criar ou editar Login"
+            },
+            "created": "Um novo Login foi criado com o identificador {{ param }}",
+            "updated": "Um Login foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Login foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Login {{ id }}?"
+            },
+            "detail": {
+                "title": "Login"
+            },
+            "loginType": "Login Type",
+            "token": "Token",
+            "user": "User"
         }
     }
 }

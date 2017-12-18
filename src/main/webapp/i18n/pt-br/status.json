@@ -1,0 +1,10 @@
+{
+    "lookbrbackendApp": {
+        "Status" : {
+            "null": "",
+            "VERDE": "VERDE",
+            "AMARELO": "AMARELO",
+            "VERMELHO": "VERMELHO"
+        }
+    }
+}

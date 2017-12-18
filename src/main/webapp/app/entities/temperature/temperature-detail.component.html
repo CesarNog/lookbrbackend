@@ -1,0 +1,41 @@
+
+<div *ngIf="temperature">
+    <h2><span jhiTranslate="lookbrbackendApp.temperature.detail.title">Temperature</span> {{temperature.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.temperature.value">Value</span></dt>
+        <dd>
+            <span>{{temperature.value}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.temperature.type">Type</span></dt>
+        <dd>
+            <span>{{temperature.type}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.temperature.inspiration">Inspiration</span></dt>
+        <dd>
+            <div *ngIf="temperature.inspirationId">
+                <a [routerLink]="['/inspiration', temperature.inspirationId]">{{temperature.inspirationId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.temperature.look">Look</span></dt>
+        <dd>
+            <div *ngIf="temperature.lookId">
+                <a [routerLink]="['/look', temperature.lookId]">{{temperature.lookId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'temperature/'+ temperature.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

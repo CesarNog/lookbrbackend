@@ -1,0 +1,27 @@
+{
+    "lookbrbackendApp": {
+        "signup" : {
+            "home": {
+                "title": "Signups",
+                "createLabel": "Crear nuevo Signup",
+                "createOrEditLabel": "Crear o editar Signup"
+            },
+            "created": "Un nuevo Signup ha sido creado con el identificador {{ param }}",
+            "updated": "Un Signup ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Signup ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Signup {{ id }}?"
+            },
+            "detail": {
+                "title": "Signup"
+            },
+            "email": "Email",
+            "loginType": "Login Type",
+            "password": "Password",
+            "profilePhotoUrl": "Profile Photo Url",
+            "profilePhoto": "Profile Photo",
+            "username": "Username",
+            "token": "Token"
+        }
+    }
+}

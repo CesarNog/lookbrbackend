@@ -1,0 +1,80 @@
+<div>
+    <h2>
+        <span jhiTranslate="lookbrbackendApp.consultant.home.title">Consultants</span>
+        <button class="btn btn-primary float-right jh-create-entity create-consultant" [routerLink]="['/', { outlets: { popup: ['consultant-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="lookbrbackendApp.consultant.home.createLabel">
+            Create new Consultant
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="consultants">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.consultantId">Consultant Id</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.consultantName">Consultant Name</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.consultantDescription">Consultant Description</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.consultantCoverPhotoURL">Consultant Cover Photo URL</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.consultantProfilePhotoURL">Consultant Profile Photo URL</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.charge">Charge</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.inspirationURL">Inspiration URL</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.profilePhoto">Profile Photo</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.status">Status</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.page">Page</span></th>
+            <th><span jhiTranslate="lookbrbackendApp.consultant.look">Look</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let consultant of consultants ;trackBy: trackId">
+                <td><a [routerLink]="['../consultant', consultant.id ]">{{consultant.id}}</a></td>
+                <td>{{consultant.consultantId}}</td>
+                <td>{{consultant.consultantName}}</td>
+                <td>{{consultant.consultantDescription}}</td>
+                <td>{{consultant.consultantCoverPhotoURL}}</td>
+                <td>{{consultant.consultantProfilePhotoURL}}</td>
+                <td>{{consultant.charge}}</td>
+                <td>{{consultant.inspirationURL}}</td>
+                <td>{{consultant.profilePhoto}}</td>
+                <td jhiTranslate="{{'lookbrbackendApp.Status.' + consultant.status}}">{{consultant.status}}</td>
+                <td>{{consultant.page}}</td>
+                <td>
+                    <div *ngIf="consultant.lookId">
+                        <a [routerLink]="['../look', consultant.lookId  ]" >{{consultant.lookId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../consultant', consultant.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'consultant/'+ consultant.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'consultant/'+ consultant.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

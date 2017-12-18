@@ -1,0 +1,25 @@
+{
+    "lookbrbackendApp": {
+        "comment" : {
+            "home": {
+                "title": "Comments",
+                "createLabel": "Create a new Comment",
+                "createOrEditLabel": "Create or edit a Comment"
+            },
+            "created": "A new Comment is created with identifier {{ param }}",
+            "updated": "A Comment is updated with identifier {{ param }}",
+            "deleted": "A Comment is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Comment {{ id }}?"
+            },
+            "detail": {
+                "title": "Comment"
+            },
+            "comment": "Comment",
+            "consultantProfilePhoto": "Consultant Profile Photo",
+            "consultantName": "Consultant Name",
+            "dateVoted": "Date Voted",
+            "look": "Look"
+        }
+    }
+}

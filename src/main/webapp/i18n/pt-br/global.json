@@ -7,6 +7,20 @@
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entidades",
+                "login": "Login",
+                "signup": "Signup",
+                "timeline": "Timeline",
+                "consultant": "Consultant",
+                "socialMedia": "Social Media",
+                "intention": "Intention",
+                "inspiration": "Inspiration",
+                "occasion": "Occasion",
+                "look": "Look",
+                "comment": "Comment",
+                "consultantVote": "Consultant Vote",
+                "closet": "Closet",
+                "temperature": "Temperature",
+                "dayTime": "Day Time",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

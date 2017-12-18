@@ -1,0 +1,136 @@
+/* ENUMS */
+enum LoginType {
+    FACEBOOK, EMAIL
+}
+
+enum Status {
+	VERDE, AMARELO, VERMELHO
+}
+
+
+/* ENTITIES */ 
+
+entity User {
+    email String,   
+    password String,
+    profilePhotoUrl String,
+    username String,
+    userId String,    
+    token String
+}
+
+entity Login {
+	loginType LoginType, 
+    token String    
+}
+
+entity Signup {
+  email String, 
+  loginType LoginType,  
+  password String
+  profilePhotoUrl String,
+  profilePhoto String,
+  username String,   
+  token String
+}
+
+entity Timeline {
+  page Integer
+}
+
+entity Consultant {
+  consultantId String,
+  consultantName String,
+  consultantDescription String,
+  consultantCoverPhotoURL String,
+  consultantProfilePhotoURL String,
+  charge Integer,
+  inspirationURL String, 
+  profilePhoto String,  
+  status Status,
+  page Integer
+}
+
+entity SocialMedia {
+  type String,
+  url String
+}
+
+entity Intention {
+  page Integer
+}
+
+entity Inspiration {
+  consultantName String,
+  consultantProfilePhotoURL String,
+  inspirationURL String,
+  page Integer
+}
+
+entity Occasion {
+  page Integer
+}
+
+entity Look {  
+  userId String,
+  temperature String, 
+  dayTime LocalDate,
+  pictureIndex Integer,
+  url String
+  
+}
+
+entity Comment {
+	comment String,
+    consultantProfilePhoto String,
+    consultantName String,
+    dateVoted LocalDate
+}
+
+entity ConsultantVote {
+ consultantProfilePhotoUrl String
+}
+
+entity Closet {
+  page Integer
+}
+
+entity Temperature {
+  value String,
+  type String
+}
+
+entity DayTime {
+  value String,
+  type String
+}
+
+/* RELATIONSHIPS */
+relationship OneToMany {
+	Timeline{inspirations} to Inspiration,
+    Inspiration{intentions} to Intention,
+    Inspiration{occasions} to Occasion,
+    Inspiration{temperature} to Temperature,
+    Inspiration{dayTime} to DayTime,
+    Consultant{socialMedias} to SocialMedia,
+    Look{consultantsVotes} to ConsultantVote,
+    Look{comments} to Comment,
+    Look{intentions} to Intention,
+    Look{occasions} to Occasion,
+    Look{temperature} to Temperature
+    Look{consultants} to Consultant
+    Closet{look} to Look
+}
+
+relationship OneToOne {
+	Login{user} to User{userId}
+}
+
+// Set pagination options
+paginate Closet, Timeline with infinite-scroll
+paginate Timeline, Closet with pagination
+
+dto * with mapstruct
+
+// Set service options to all
+service all with serviceImpl

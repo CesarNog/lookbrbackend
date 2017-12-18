@@ -1,0 +1,85 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myConsultantLabel" jhiTranslate="lookbrbackendApp.consultant.home.createOrEditLabel">Create or edit a Consultant</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!consultant.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="consultant.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.consultantId" for="field_consultantId">Consultant Id</label>
+            <input type="text" class="form-control" name="consultantId" id="field_consultantId"
+                [(ngModel)]="consultant.consultantId" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.consultantName" for="field_consultantName">Consultant Name</label>
+            <input type="text" class="form-control" name="consultantName" id="field_consultantName"
+                [(ngModel)]="consultant.consultantName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.consultantDescription" for="field_consultantDescription">Consultant Description</label>
+            <input type="text" class="form-control" name="consultantDescription" id="field_consultantDescription"
+                [(ngModel)]="consultant.consultantDescription" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.consultantCoverPhotoURL" for="field_consultantCoverPhotoURL">Consultant Cover Photo URL</label>
+            <input type="text" class="form-control" name="consultantCoverPhotoURL" id="field_consultantCoverPhotoURL"
+                [(ngModel)]="consultant.consultantCoverPhotoURL" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.consultantProfilePhotoURL" for="field_consultantProfilePhotoURL">Consultant Profile Photo URL</label>
+            <input type="text" class="form-control" name="consultantProfilePhotoURL" id="field_consultantProfilePhotoURL"
+                [(ngModel)]="consultant.consultantProfilePhotoURL" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.charge" for="field_charge">Charge</label>
+            <input type="number" class="form-control" name="charge" id="field_charge"
+                [(ngModel)]="consultant.charge" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.inspirationURL" for="field_inspirationURL">Inspiration URL</label>
+            <input type="text" class="form-control" name="inspirationURL" id="field_inspirationURL"
+                [(ngModel)]="consultant.inspirationURL" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.profilePhoto" for="field_profilePhoto">Profile Photo</label>
+            <input type="text" class="form-control" name="profilePhoto" id="field_profilePhoto"
+                [(ngModel)]="consultant.profilePhoto" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.status" for="field_status">Status</label>
+            <select class="form-control" name="status" [(ngModel)]="consultant.status" id="field_status" >
+                <option value="VERDE">{{'lookbrbackendApp.Status.VERDE' | translate}}</option>
+                <option value="AMARELO">{{'lookbrbackendApp.Status.AMARELO' | translate}}</option>
+                <option value="VERMELHO">{{'lookbrbackendApp.Status.VERMELHO' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.page" for="field_page">Page</label>
+            <input type="number" class="form-control" name="page" id="field_page"
+                [(ngModel)]="consultant.page" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="lookbrbackendApp.consultant.look" for="field_look">Look</label>
+            <select class="form-control" id="field_look" name="look" [(ngModel)]="consultant.lookId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="lookOption.id" *ngFor="let lookOption of looks; trackBy: trackLookById">{{lookOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

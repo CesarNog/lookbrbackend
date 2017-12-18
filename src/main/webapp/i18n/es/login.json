@@ -1,19 +1,23 @@
 {
-    "login": {
-        "title": "Iniciar la sesión",
-        "form": {
-            "password": "Contraseña",
-            "password.placeholder": "Su contraseña",
-            "rememberme": "Iniciar la sesión automáticamente",
-            "button": "Iniciar sesión"
-        },
-        "messages": {
-            "error": {
-                "authentication": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo."
-            }
-        },
-        "password" : {
-            "forgot": "¿Ha olvidado su contraseña?"
+    "lookbrbackendApp": {
+        "login" : {
+            "home": {
+                "title": "Logins",
+                "createLabel": "Crear nuevo Login",
+                "createOrEditLabel": "Crear o editar Login"
+            },
+            "created": "Un nuevo Login ha sido creado con el identificador {{ param }}",
+            "updated": "Un Login ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Login ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Login {{ id }}?"
+            },
+            "detail": {
+                "title": "Login"
+            },
+            "loginType": "Login Type",
+            "token": "Token",
+            "user": "User"
         }
     }
 }

@@ -1,0 +1,43 @@
+
+<div *ngIf="inspiration">
+    <h2><span jhiTranslate="lookbrbackendApp.inspiration.detail.title">Inspiration</span> {{inspiration.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="lookbrbackendApp.inspiration.consultantName">Consultant Name</span></dt>
+        <dd>
+            <span>{{inspiration.consultantName}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.inspiration.consultantProfilePhotoURL">Consultant Profile Photo URL</span></dt>
+        <dd>
+            <span>{{inspiration.consultantProfilePhotoURL}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.inspiration.inspirationURL">Inspiration URL</span></dt>
+        <dd>
+            <span>{{inspiration.inspirationURL}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.inspiration.page">Page</span></dt>
+        <dd>
+            <span>{{inspiration.page}}</span>
+        </dd>
+        <dt><span jhiTranslate="lookbrbackendApp.inspiration.timeline">Timeline</span></dt>
+        <dd>
+            <div *ngIf="inspiration.timelineId">
+                <a [routerLink]="['/timeline', inspiration.timelineId]">{{inspiration.timelineId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'inspiration/'+ inspiration.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

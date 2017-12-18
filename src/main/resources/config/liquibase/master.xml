@@ -5,6 +5,31 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183330_added_entity_Login.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183331_added_entity_Signup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183332_added_entity_Timeline.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183333_added_entity_Consultant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183334_added_entity_SocialMedia.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183335_added_entity_Intention.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183336_added_entity_Inspiration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183337_added_entity_Occasion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183338_added_entity_Look.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183339_added_entity_Comment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183340_added_entity_ConsultantVote.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183341_added_entity_Closet.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183342_added_entity_Temperature.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183343_added_entity_DayTime.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20171218183330_added_entity_constraints_Login.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183333_added_entity_constraints_Consultant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183334_added_entity_constraints_SocialMedia.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183335_added_entity_constraints_Intention.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183336_added_entity_constraints_Inspiration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183337_added_entity_constraints_Occasion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183338_added_entity_constraints_Look.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183339_added_entity_constraints_Comment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183340_added_entity_constraints_ConsultantVote.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183342_added_entity_constraints_Temperature.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20171218183343_added_entity_constraints_DayTime.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

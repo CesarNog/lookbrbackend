@@ -1,0 +1,23 @@
+{
+    "lookbrbackendApp": {
+        "dayTime" : {
+            "home": {
+                "title": "Day Times",
+                "createLabel": "Crear nuevo Day Time",
+                "createOrEditLabel": "Crear o editar Day Time"
+            },
+            "created": "Un nuevo Day Time ha sido creado con el identificador {{ param }}",
+            "updated": "Un Day Time ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Day Time ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Day Time {{ id }}?"
+            },
+            "detail": {
+                "title": "Day Time"
+            },
+            "value": "Value",
+            "type": "Type",
+            "inspiration": "Inspiration"
+        }
+    }
+}
