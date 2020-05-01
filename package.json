@@ -21,7 +21,7 @@
     "bootstrap": "4.0.0-beta.2",
     "core-js": "2.4.1",
     "font-awesome": "4.7.0",
-    "jquery": "3.2.1",
+    "jquery": "3.5.0",
     "ng-jhipster": "0.2.12",
     "ng2-webstorage": "1.8.0",
     "ngx-cookie": "1.0.0",
@@ -34,7 +34,8 @@
     "tether": "1.4.0",
     "uuid": "^3.1.0",
     "webstomp-client": "1.0.6",
-    "zone.js": "0.8.16"
+    "zone.js": "0.8.16",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@angular/cli": "1.4.2",
@@ -124,6 +125,9 @@
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "e2e": "protractor src/test/javascript/protractor.conf.js",
-    "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js"
-  }
+    "postinstall": "webdriver-manager update && node node_modules/phantomjs-prebuilt/install.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
+  },
+  "snyk": true
 }
